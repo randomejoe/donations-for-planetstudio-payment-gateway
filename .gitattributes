@@ -1,0 +1,6 @@
+# Left out of the release zip built by tools/build-zip.sh.
+/tests          export-ignore
+/tools          export-ignore
+/README.md      export-ignore
+/.gitignore     export-ignore
+/.gitattributes export-ignore

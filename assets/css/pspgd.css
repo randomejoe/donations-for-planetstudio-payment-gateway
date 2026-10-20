@@ -1,0 +1,324 @@
+/* ============================================================
+   Donations for PlanetStudio Payment Gateway -- donation form and campaign page
+
+   Every colour, the font and the corner radius come from custom
+   properties. The plugin prints them from Donations > Form Settings
+   (Appearance), and a theme can override any of them with a more
+   specific selector, e.g.
+
+     body .pspgd-donation-form { --pspgd-primary: #0a7d4f; }
+
+   Tokens:
+     --pspgd-primary   buttons, selected options, links, progress bar
+     --pspgd-accent    top borders, focus rings, active step
+     --pspgd-ink       body text
+     --pspgd-font      font-family ("inherit" follows the theme)
+     --pspgd-radius    corner radius
+   Derived tints are mixed from those, so nothing below needs editing
+   to re-brand the form.
+   ============================================================ */
+
+.pspgd-donation-form,
+.pspgd-campaign {
+	--pspgd-primary: #1d4ed8;
+	--pspgd-accent: #93c5fd;
+	--pspgd-ink: #1f2937;
+	--pspgd-font: inherit;
+	--pspgd-radius: 6px;
+	--pspgd-primary-dark: color-mix(in srgb, var(--pspgd-primary) 80%, #000);
+	--pspgd-accent-soft: color-mix(in srgb, var(--pspgd-accent) 22%, #fff);
+	--pspgd-soft: color-mix(in srgb, var(--pspgd-accent) 8%, #fff);
+	--pspgd-line: color-mix(in srgb, var(--pspgd-ink) 14%, #fff);
+	--pspgd-muted: color-mix(in srgb, var(--pspgd-ink) 65%, #fff);
+	--pspgd-outline: color-mix(in srgb, var(--pspgd-primary) 30%, transparent);
+}
+
+.pspgd-donation-form {
+	box-sizing: border-box;
+	max-width: 700px;
+	padding: 38px;
+	border: 0;
+	border-top: 6px solid var(--pspgd-accent);
+	border-radius: var(--pspgd-radius);
+	background: #fff;
+	color: var(--pspgd-ink);
+	font-family: var(--pspgd-font);
+	box-shadow: 0 18px 50px rgba(17, 24, 39, 0.10);
+}
+
+.pspgd-campaign {
+	display: grid;
+	gap: 28px;
+	max-width: 900px;
+	margin: 42px auto 0;
+	font-family: var(--pspgd-font);
+	color: var(--pspgd-ink);
+}
+.pspgd-campaign__image { margin: 0; overflow: hidden; background: var(--pspgd-accent-soft); height: clamp(220px, 42vw, 460px); border-radius: var(--pspgd-radius); }
+.pspgd-campaign__image img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+@media (max-width: 560px) {
+	.pspgd-campaign__image { height: 220px; }
+}
+.pspgd-campaign__progress { padding: 28px; border-top: 6px solid var(--pspgd-accent); border-radius: var(--pspgd-radius); background: var(--pspgd-soft); }
+.pspgd-campaign__eyebrow { margin: 0 0 10px; color: var(--pspgd-primary); font-size: 13px; font-weight: 800; text-transform: uppercase; }
+/* The currency switch is script-driven, so it only shows once the script has
+   wired it up: without JavaScript the visitor gets the goal-currency figures
+   rather than a row of buttons that do nothing. */
+.pspgd-campaign__currency { display: none; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.pspgd-campaign__currency.is-ready { display: flex; }
+.pspgd-campaign__currency-option {
+	min-height: 34px;
+	padding: 0 14px;
+	border: 1px solid var(--pspgd-line);
+	border-radius: var(--pspgd-radius);
+	background: #fff;
+	color: var(--pspgd-ink);
+	font: inherit;
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1.2;
+	cursor: pointer;
+	transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+.pspgd-campaign__currency-option[aria-pressed="true"] { border-color: var(--pspgd-primary); background: var(--pspgd-primary); color: #fff; }
+.pspgd-campaign__currency-option:focus-visible { outline: 3px solid var(--pspgd-accent); outline-offset: 3px; }
+.pspgd-campaign__numbers { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
+.pspgd-campaign__numbers strong { color: var(--pspgd-primary); font-size: 32px; line-height: 1.1; }
+.pspgd-campaign__numbers span, .pspgd-campaign__count, .pspgd-campaign__other-currencies { color: var(--pspgd-muted); }
+.pspgd-campaign__bar { height: 12px; margin: 18px 0 12px; overflow: hidden; background: var(--pspgd-line); border-radius: var(--pspgd-radius); }
+.pspgd-campaign__bar span { display: block; height: 100%; background: var(--pspgd-primary); }
+.pspgd-campaign__content { padding: 0 28px; font-size: 17px; line-height: 1.7; }
+.pspgd-campaign__donors { padding: 28px; background: #fff; border-bottom: 1px solid var(--pspgd-line); }
+.pspgd-campaign__donors h2 { margin: 0 0 16px; font-size: 22px; }
+.pspgd-campaign__donors ul { margin: 0; padding: 0; list-style: none; }
+.pspgd-campaign__donors li { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-top: 1px solid var(--pspgd-line); }
+.pspgd-campaign__donors strong { color: var(--pspgd-primary); }
+.pspgd-campaign__form { margin-top: 0; }
+.pspgd-campaign__closed, .pspgd-donation-form__closed { margin: 0; padding: 28px; background: var(--pspgd-accent-soft); color: var(--pspgd-primary); font-size: 17px; font-weight: 700; line-height: 1.6; text-align: center; border-radius: var(--pspgd-radius); }
+.pspgd-campaign__form .pspgd-donation-form { max-width: 100%; }
+.pspgd-campaign__form-heading { padding: 0 28px; }
+
+.pspgd-donation-form *,
+.pspgd-donation-form *::before,
+.pspgd-donation-form *::after { box-sizing: border-box; }
+
+.pspgd-donation-form__progress {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 10px;
+	margin-bottom: 34px;
+	padding-bottom: 13px;
+	border-bottom: 1px solid var(--pspgd-line);
+	color: var(--pspgd-muted);
+	font-size: 12px;
+	font-weight: 800;
+	letter-spacing: 0;
+	text-transform: uppercase;
+}
+.pspgd-donation-form__progress span { min-width: 0; }
+.pspgd-donation-form__progress .is-active,
+.pspgd-donation-form__progress .is-complete { color: var(--pspgd-primary); }
+.pspgd-donation-form__progress .is-active {
+	border-bottom: 3px solid var(--pspgd-accent);
+	margin-bottom: -15px;
+	padding-bottom: 12px;
+}
+
+.pspgd-donation-form__step { display: grid; gap: 24px; }
+.pspgd-donation-form__step[hidden] { display: none !important; }
+
+.pspgd-donation-form__intro p,
+.pspgd-donation-form__intro h2 { margin: 0; }
+
+.pspgd-donation-form__eyebrow {
+	margin-bottom: 8px !important;
+	color: var(--pspgd-primary);
+	font-size: 16px;
+	font-weight: 800;
+	letter-spacing: 0;
+	text-transform: uppercase;
+}
+
+.pspgd-donation-form__intro h2 {
+	color: var(--pspgd-ink);
+	font-size: 28px;
+	font-weight: 800;
+	line-height: 1.08;
+}
+
+.pspgd-donation-form__choice-group { margin: 0; padding: 0; border: 0; }
+.pspgd-donation-form__choice-group legend,
+.pspgd-donation-form__field > span {
+	display: block;
+	margin-bottom: 9px;
+	color: var(--pspgd-ink);
+	font-size: 16px;
+	font-weight: 800;
+}
+
+.pspgd-donation-form__segmented { display: flex; flex-wrap: wrap; gap: 8px; }
+.pspgd-donation-form__segmented label { position: relative; display: block; flex: 1 1 100px; }
+.pspgd-donation-form__segmented input { position: absolute; opacity: 0; pointer-events: none; }
+.pspgd-donation-form__segmented span,
+.pspgd-donation-form__amount-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 46px;
+	border: 1px solid var(--pspgd-line);
+	border-radius: var(--pspgd-radius);
+	background: #fff;
+	color: var(--pspgd-ink);
+	font: inherit;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.2;
+	cursor: pointer;
+	transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+.pspgd-donation-form__segmented input:checked + span,
+.pspgd-donation-form__amount-button.is-selected {
+	border-color: var(--pspgd-primary);
+	background: var(--pspgd-primary);
+	color: #fff;
+}
+.pspgd-donation-form__segmented input:focus-visible + span,
+.pspgd-donation-form button:focus-visible,
+.pspgd-donation-form input:focus-visible {
+	outline: 3px solid var(--pspgd-accent);
+	outline-offset: 3px;
+}
+
+.pspgd-donation-form__amounts {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 10px;
+}
+
+.pspgd-donation-form__field { display: block; }
+
+.pspgd-donation-form input[type="text"],
+.pspgd-donation-form input[type="email"],
+.pspgd-donation-form input[type="number"] {
+	width: 100%;
+	min-height: 46px;
+	padding: 10px 13px;
+	border: 1px solid var(--pspgd-line);
+	border-radius: var(--pspgd-radius);
+	background: #fff;
+	color: var(--pspgd-ink);
+	font: 16px/1.3 var(--pspgd-font);
+}
+.pspgd-donation-form input::placeholder { color: var(--pspgd-muted); }
+.pspgd-donation-form input:focus,
+.pspgd-donation-form select:focus,
+.pspgd-donation-form textarea:focus {
+	border-color: var(--pspgd-primary);
+	outline: 3px solid var(--pspgd-accent-soft);
+	outline-offset: 1px;
+}
+
+.pspgd-donation-form__field-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+}
+
+.pspgd-donation-form__consent {
+	display: grid;
+	grid-template-columns: 18px minmax(0, 1fr);
+	gap: 10px;
+	align-items: start;
+	color: var(--pspgd-ink);
+	font-size: 16px;
+	line-height: 1.5;
+}
+.pspgd-donation-form__consent input { margin: 3px 0 0; accent-color: var(--pspgd-primary); }
+.pspgd-donation-form__consent a {
+	color: var(--pspgd-primary);
+	font-weight: 800;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.pspgd-donation-form__anonymous { padding-top: 13px; border-top: 1px solid var(--pspgd-line); }
+
+.pspgd-donation-form__review { display: grid; gap: 6px; padding: 22px; border-left: 4px solid var(--pspgd-accent); background: var(--pspgd-soft); }
+.pspgd-donation-form__review span:first-child {
+	color: var(--pspgd-primary);
+	font-size: 16px;
+	font-weight: 800;
+	text-transform: uppercase;
+}
+.pspgd-donation-form__review strong {
+	color: var(--pspgd-ink);
+	font-size: 28px;
+	line-height: 1.2;
+}
+.pspgd-donation-form__review small {
+	margin-top: -4px;
+	color: var(--pspgd-muted);
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.35;
+}
+
+.pspgd-donation-form__payment-image { display: block; width: 100%; max-width: 360px; margin: -2px auto 0; }
+
+.pspgd-donation-form__actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 4px; }
+.pspgd-donation-form__actions button {
+	min-height: 44px;
+	padding: 10px 20px;
+	border: 2px solid var(--pspgd-primary);
+	border-radius: var(--pspgd-radius);
+	background: var(--pspgd-primary);
+	color: #fff;
+	font: 800 16px/1.2 var(--pspgd-font);
+	cursor: pointer;
+	transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+.pspgd-donation-form__actions button:hover {
+	background: var(--pspgd-primary-dark);
+	border-color: var(--pspgd-primary-dark);
+	transform: translateY(-2px);
+}
+.pspgd-donation-form__actions .pspgd-donation-form__back {
+	border-color: var(--pspgd-outline);
+	background: #fff;
+	color: var(--pspgd-primary);
+}
+.pspgd-donation-form__actions .pspgd-donation-form__back:hover {
+	background: var(--pspgd-accent-soft);
+	border-color: var(--pspgd-outline);
+	color: var(--pspgd-primary);
+	transform: translateY(-2px);
+}
+
+@media (max-width: 560px) {
+	.pspgd-donation-form { padding: 26px 18px; }
+	.pspgd-donation-form__progress { font-size: 10px; }
+	.pspgd-donation-form__intro h2 { font-size: 24px; }
+	.pspgd-donation-form__field-grid { grid-template-columns: 1fr; }
+	.pspgd-donation-form__actions { justify-content: stretch; }
+	.pspgd-donation-form__actions button { flex: 1 1 0; padding-right: 12px; padding-left: 12px; }
+}
+
+/* Message shown when a submission comes back rejected, and the honeypot
+   wrapper that keeps a bot-only field out of sight and out of the tab order. */
+.pspgd-donation-form__error {
+	margin: 0 0 18px;
+	padding: 12px 14px;
+	border-left: 4px solid #b3261e;
+	background: #fdecea;
+	color: #7a1b15;
+	font-size: 15px;
+	line-height: 1.5;
+}
+
+.pspgd-donation-form__hp {
+	position: absolute !important;
+	left: -9999px !important;
+	width: 1px !important;
+	height: 1px !important;
+	overflow: hidden !important;
+}

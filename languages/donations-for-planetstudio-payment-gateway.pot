@@ -1,0 +1,1341 @@
+# Copyright (C) Joe Davtian
+# This file is distributed under the same licence as the Donations for PlanetStudio Payment Gateway plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Donations for PlanetStudio Payment Gateway\n"
+"POT-Creation-Date: 2026-10-20 14:25+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: donations-for-planetstudio-payment-gateway\n"
+
+#: includes/admin/class-pspgd-admin.php:533
+msgid "%1$s failed · %2$s abandoned"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:499
+#: includes/admin/class-pspgd-admin.php:508
+msgid "%s donation"
+msgid_plural "%s donations"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/admin/class-pspgd-admin.php:523
+msgid "%s per month"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:669
+msgid "%s unfinished payment attempt is hidden."
+msgid_plural "%s unfinished payment attempts are hidden."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/public/class-pspgd-form.php:528
+msgid "(Shown to staff only: the gateway said \"%s\".)"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:140
+msgid "(all currencies)"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:802
+msgid "-- Choose a bank --"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:910
+msgid "A CSS font-family, e.g. \"Inter, sans-serif\". Leave blank to use the theme's font. The font itself must already be loaded by the theme."
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:57
+msgid "A donation has been received."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:899
+msgid "Accent colour"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:156
+msgid "Accepting donations"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:707
+msgid "Actions"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:513
+msgid "Active supporters"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:96
+msgid "Add New Campaign"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:790
+msgid "Add the form to any page with the %s shortcode. Campaign pages show it automatically."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:706
+msgid "Alerts"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:657
+msgid "All recurring donation subscriptions and their saved-card (binding) status."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:146
+#: includes/admin/class-pspgd-admin.php:414
+#: includes/admin/class-pspgd-admin.php:698
+#: includes/class-pspgd-notifications.php:119
+#: includes/class-pspgd-privacy.php:76
+#: includes/class-pspgd-privacy.php:91
+msgid "Amount"
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:81
+msgid "Amount the bank reported"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:145
+#: includes/admin/class-pspgd-admin.php:420
+#: includes/class-pspgd-notifications.php:124
+msgid "Anonymous"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:327
+msgid "Any campaign"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:308
+msgid "Any currency"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:317
+msgid "Any language"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:290
+msgid "Any status"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:299
+msgid "Any type"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:891
+msgid "Appearance"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1017
+msgid "Ask donors to pass a Turnstile check before donating"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:150
+#: includes/admin/class-pspgd-admin.php:798
+msgid "Bank"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:151
+#: includes/admin/class-pspgd-admin.php:422
+#: includes/class-pspgd-notifications.php:125
+#: includes/class-pspgd-privacy.php:79
+msgid "Bank reference"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:663
+msgid "Be the first to support this campaign."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:702
+msgid "Binding"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:896
+msgid "Buttons, selected options, links and the progress bar. White text sits on it, so pick something dark enough."
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:145
+msgid "By currency"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:148
+#: includes/admin/class-pspgd-admin.php:325
+#: includes/admin/class-pspgd-admin.php:421
+#: includes/admin/class-pspgd-admin.php:700
+#: includes/class-pspgd-campaigns.php:95
+#: includes/class-pspgd-notifications.php:123
+msgid "Campaign"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:632
+msgid "Campaign donation progress"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1173
+msgid "Campaign donation receipt"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:834
+msgid "Campaign goal currency"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1438
+msgid "Campaign receipt body"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1437
+msgid "Campaign receipt heading"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1436
+msgid "Campaign receipt subject"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:111
+msgid "Campaign status"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:94
+msgid "Campaigns"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:753
+msgid "Cancel"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1451
+msgid "Cancel link label"
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:230
+#: includes/class-pspgd-subscriptions.php:231
+msgid "Cancel recurring donation"
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:230
+msgid "Cancel recurring donation?"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:749
+msgid "Cancel this recurring donation?"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:744
+msgid "Check payment URL"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:62
+msgid "Choose the bank that takes donations under Donations > Form Settings. Until then the form refuses donations."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:348
+msgid "Clear"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:987
+msgid "Cloudflare (CF-Connecting-IP header)"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1015
+msgid "Cloudflare Turnstile"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:137
+msgid "Collected"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:920
+msgid "Comma-separated amounts shown as buttons for each currency. The second one is pre-selected."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:529
+msgid "Completed payments"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:914
+msgid "Corner radius"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:681
+msgid "Could not cancel the subscription at the gateway. See the event log for details."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:153
+#: includes/admin/class-pspgd-admin.php:411
+msgid "Created"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:728
+msgid "Created while test mode was on. Its saved card is simulated, so it is never charged automatically."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:815
+msgid "Currencies offered"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:306
+#: includes/admin/class-pspgd-admin.php:415
+msgid "Currency"
+msgstr ""
+
+#: includes/class-pspgd-privacy.php:75
+msgid "Date"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1135
+msgid "Default: %s"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:956
+msgid "Delete all donation data when the plugin is deleted"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:204
+msgid "Details"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:986
+msgid "Direct connection (REMOTE_ADDR)"
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:118
+msgid "Donation"
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:91
+msgid "Donation #%d needs review: the bank reported a different amount"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:788
+#: includes/admin/class-pspgd-admin.php:98
+msgid "Donation Form Settings"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:410
+msgid "Donation ID"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:82
+#: includes/admin/class-pspgd-admin.php:83
+msgid "Donation Log"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:850
+msgid "Donation frequency"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1172
+msgid "Donation receipt"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1435
+msgid "Donation receipt body"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1434
+msgid "Donation receipt heading"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1433
+msgid "Donation receipt subject"
+msgstr ""
+
+#: includes/public/class-pspgd-form.php:214
+msgid "Donation steps"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:73
+#: includes/class-pspgd-privacy.php:72
+msgid "Donations"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:936
+msgid "Donations above these amounts are rejected before payment is sent to the gateway."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:928
+msgid "Donations below these amounts are rejected before payment is sent to the gateway. A donation costs the same in card fees whatever its size, so a very small one costs money to accept -- and a very small one is also what somebody testing a stolen card number sends."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:131
+#: includes/admin/class-pspgd-admin.php:72
+#: includes/class-pspgd-privacy.php:27
+#: includes/class-pspgd-privacy.php:38
+msgid "Donations for PlanetStudio Payment Gateway"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:143
+#: includes/admin/class-pspgd-admin.php:696
+#: includes/class-pspgd-notifications.php:120
+msgid "Donor"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:881
+msgid "Donor languages"
+msgstr ""
+
+#: includes/class-pspgd-privacy.php:57
+msgid "Donor record"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:820
+msgid "Each donation is charged in the currency the donor picks, so the bank must be set up to accept every currency ticked here. With only one ticked, the currency selector is hidden."
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:97
+msgid "Edit Campaign"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1044
+msgid "Edit the outgoing donation and recurring payment emails here. Leave any field blank to fall back to the built-in wording. Each email is built from the subject, heading and body below, plus a details table of the donation itself, which is added automatically."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:418
+#: includes/class-pspgd-notifications.php:121
+#: includes/class-pspgd-privacy.php:62
+msgid "Email"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1040
+#: includes/admin/class-pspgd-admin.php:106
+msgid "Email Templates"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1041
+msgid "Email templates saved."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:107
+msgid "Emails"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:847
+msgid "Enable test mode"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:121
+#: includes/class-pspgd-campaigns.php:155
+msgid "End date"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:201
+msgid "Event"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:195
+msgid "Event log"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:943
+msgid "Event log retention"
+msgstr ""
+
+#: includes/class-pspgd-reconciliation.php:54
+msgid "Every 15 minutes (Donations for PlanetStudio Payment Gateway)"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:811
+msgid "Every donation, recurring charge and card release goes through this bank. Its credentials are set in PlanetStudio Payment Gateway. Recurring donations need a bank that supports saved cards."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:364
+msgid "Export %s donation to CSV"
+msgid_plural "Export %s donations to CSV"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-pspgd-subscriptions.php:433
+msgid "Facebook"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:705
+msgid "Failures"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:346
+msgid "Filter"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:416
+#: includes/class-pspgd-privacy.php:60
+msgid "First name"
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:111
+msgid "First payment of a recurring donation"
+msgstr ""
+
+#: includes/class-pspgd-privacy.php:64
+msgid "First seen"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:907
+msgid "Font"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:99
+msgid "Form Settings"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:858
+msgid "Form options"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:789
+msgid "Form settings saved."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:959
+msgid "Form wording"
+msgstr ""
+
+#: includes/class-pspgd-privacy.php:92
+msgid "Frequency"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:335
+msgid "From"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1066
+msgid "From address"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1062
+msgid "From name"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:110
+msgid "Fundraising details"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:154
+msgid "Goal"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:120
+msgid "Goal amount (%s)"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:176
+msgid "Held: the bank reported a different amount. Left out of every total. Compare the order with your bank, and refund it in PSPG if it should not stand."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:662
+msgid "Hide them"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:142
+#: includes/admin/class-pspgd-admin.php:695
+msgid "ID"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:661
+msgid "Including unfinished payment attempts: a donor opened the payment page and has not completed it. These are discarded automatically 24 hours after they are started."
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:434
+msgid "Instagram"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:699
+msgid "Interval"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:947
+msgid "Keep events for"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:962
+msgid "Label"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:144
+#: includes/admin/class-pspgd-admin.php:315
+#: includes/admin/class-pspgd-admin.php:419
+#: includes/admin/class-pspgd-admin.php:697
+#: includes/class-pspgd-privacy.php:63
+msgid "Language"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:704
+msgid "Last Payment"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:417
+#: includes/class-pspgd-privacy.php:61
+msgid "Last name"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:960
+msgid "Leave a field empty to use the built-in wording, shown greyed out. There is one column per donor language."
+msgstr ""
+
+#: includes/public/class-pspgd-form.php:209
+msgid "Leave this field empty"
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:435
+msgid "LinkedIn"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:870
+msgid "List supporters on campaign pages (first name and last initial, or \"Anonymous donor\")"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1088
+#: includes/admin/class-pspgd-admin.php:1093
+msgid "Logo"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1100
+msgid "Logo for dark mode"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:895
+msgid "Main colour"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:935
+msgid "Maximum donation amounts"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:203
+msgid "Message"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:927
+msgid "Minimum donation amounts"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:853
+msgid "Monthly"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1069
+msgid "Must be an address at this site's own domain, or the mail is likely to be rejected or marked as spam."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:343
+msgid "Name, email or bank reference"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:841
+msgid "New campaign goals are entered in this currency, and donations in other currencies are converted into it for the progress bar. A campaign keeps the currency it was created with if this is changed later."
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:49
+msgid "New donation: %1$s from %2$s"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:861
+msgid "Newsletter opt-in"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:624
+msgid "Next"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:703
+msgid "Next Payment"
+msgstr ""
+
+#: includes/class-pspgd-privacy.php:94
+msgid "Next payment"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:168
+msgid "No"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:160
+msgid "No - end date passed"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:160
+msgid "No - goal reached"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1021
+msgid "No Turnstile keys are saved yet, so the check is not shown even when ticked. Enter them under %s; this form uses the same keys."
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:521
+msgid "No bank order reference is stored for this donation."
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:176
+msgid "No campaign logs yet."
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:1025
+msgid "No donation has been confirmed. Please try again or contact us if you need help."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:158
+msgid "No donations match these filters."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:158
+msgid "No donations yet."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:209
+msgid "No events yet."
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:142
+msgid "No exchange rate available, so currencies are listed separately."
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:268
+msgid "No future payments will be made."
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:230
+msgid "No future recurring payments will be made."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:712
+msgid "No recurring donations yet."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:735
+msgid "No saved card yet"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1080
+msgid "Notify staff"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:957
+msgid "Off by default. When ticked, deleting the plugin from the Plugins screen permanently removes every donor, donation, recurring donation, log entry and setting. Campaign pages are kept either way."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:851
+msgid "Offer recurring donations"
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:110
+msgid "One-time"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:155
+msgid "Ongoing"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:622
+msgid "Ongoing campaign"
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:203
+msgid "Online donations are not set up yet. Please try again later."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1053
+msgid "Only the body may contain formatting: line breaks, links, bold and italic, and lists. Subjects and headings are always plain text."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:178
+msgid "Open the PSPG order"
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:146
+msgid "Open the donation log"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:877
+msgid "Optional. Shown above the Donate button, typically the logos of the cards you accept. Upload it to the media library and paste its URL."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1083
+msgid "Optional. These addresses get a short note for each new donation, and an alert when a payment is held because the bank reported a different amount. Separate several with commas. Leave blank to send none."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:152
+msgid "PSPG Order"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:423
+msgid "PSPG order"
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:509
+msgid "PSPG status sync is not available."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:615
+msgid "Page %1$d of %2$d (%3$s total)"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:874
+msgid "Payment methods image"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:846
+msgid "Payment testing"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:795
+msgid "Payments"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1046
+msgid "Placeholders"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1021
+msgid "PlanetStudio Payment Gateway > Tools"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:60
+msgid "PlanetStudio Payment Gateway is not active, so donations cannot be taken. Install and activate it, or switch on test mode to try the form."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:809
+msgid "PlanetStudio Payment Gateway is not active, so its banks cannot be listed. Enter the bank id by hand, or activate the gateway."
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:204
+msgid "PlanetStudio Payment Gateway is not available."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:608
+msgid "Previous"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:504
+msgid "Raised all time"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:495
+msgid "Raised this month"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:165
+msgid "Recent campaign logs"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:135
+msgid "Recent donation payments created through PSPG."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:196
+msgid "Recent payment, recurring setup, and email events."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:202
+msgid "Record"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:656
+#: includes/admin/class-pspgd-admin.php:90
+#: includes/admin/class-pspgd-admin.php:91
+msgid "Recurring Donations"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1444
+msgid "Recurring activation body"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1443
+msgid "Recurring activation heading"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1442
+msgid "Recurring activation subject"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1450
+msgid "Recurring cancellation body"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1449
+msgid "Recurring cancellation heading"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1448
+msgid "Recurring cancellation subject"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1457
+msgid "Recurring cancelled after failures body"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1456
+msgid "Recurring cancelled after failures heading"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1455
+msgid "Recurring cancelled after failures subject"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1174
+msgid "Recurring charge receipt"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1441
+msgid "Recurring charge receipt body"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1440
+msgid "Recurring charge receipt heading"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1439
+msgid "Recurring charge receipt subject"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1175
+msgid "Recurring donation activated"
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:268
+msgid "Recurring donation cancelled"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1177
+msgid "Recurring donation cancelled after failures"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1180
+msgid "Recurring donation cancelled by donor"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1178
+msgid "Recurring donation ended with its campaign"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:518
+#: includes/class-pspgd-privacy.php:87
+msgid "Recurring donations"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:161
+msgid "Recurring donations to this campaign have been cancelled, and the bank was asked to release their saved cards."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1460
+msgid "Recurring ended with campaign body"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1459
+msgid "Recurring ended with campaign heading"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1458
+msgid "Recurring ended with campaign subject"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1176
+msgid "Recurring payment failed"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1454
+msgid "Recurring payment failed body"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1453
+msgid "Recurring payment failed heading"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1452
+msgid "Recurring payment failed subject"
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:303
+msgid "Recurring payments are not available."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1179
+msgid "Recurring setup failed"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1447
+msgid "Recurring setup failed body"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1446
+msgid "Recurring setup failed heading"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1445
+msgid "Recurring setup failed subject"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:955
+msgid "Removing the plugin"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1073
+msgid "Reply-to address"
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:1052
+msgid "Return to %s"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:988
+msgid "Reverse proxy (X-Real-IP header)"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:989
+msgid "Reverse proxy (last address in X-Forwarded-For)"
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:825
+msgid "Sample campaign"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1141
+msgid "Save email templates"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:974
+msgid "Save form settings"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:733
+msgid "Saved card active"
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:112
+msgid "Scheduled recurring payment"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:342
+msgid "Search donors"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:824
+msgid "Selected by default"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1159
+msgid "Send test email"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1144
+msgid "Send yourself a test"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1059
+msgid "Sending"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1145
+msgid "Sends one email, filled in with sample donation details, to %s. Save your changes first -- the test uses the saved wording."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:863
+msgid "Show a \"subscribe to our newsletter\" checkbox"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:673
+msgid "Show them"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1109
+msgid "Shown as a row of links in the footer of every email. Leave a field blank and that network is left out entirely."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1103
+msgid "Shown on a dark background, so this wants to be the white version. Leave blank to use the same logo in both."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1096
+msgid "Shown on the white background of a normal email, so this wants to be the dark or coloured version of the logo."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1108
+msgid "Social links"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:995
+msgid "Spam protection"
+msgstr ""
+
+#: includes/class-pspgd-privacy.php:90
+msgid "Started"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:149
+#: includes/admin/class-pspgd-admin.php:288
+#: includes/admin/class-pspgd-admin.php:412
+#: includes/admin/class-pspgd-admin.php:701
+#: includes/class-pspgd-privacy.php:78
+#: includes/class-pspgd-privacy.php:93
+msgid "Status"
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:122
+msgid "Stop taking donations when the goal is reached"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:424
+msgid "Subscription ID"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:680
+msgid "Subscription cancelled."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:682
+msgid "Subscription not found."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:919
+msgid "Suggested amounts"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:868
+msgid "Supporters list"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:182
+msgid "Taken while test mode was on. No money moved, so it is left out of the figures above and of campaign totals."
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:437
+msgid "Telegram"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1124
+msgid "Template"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:182
+#: includes/admin/class-pspgd-admin.php:427
+#: includes/admin/class-pspgd-admin.php:728
+msgid "Test"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1042
+msgid "Test email sent to %s."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:848
+msgid "Test mode does not contact the bank. Donations are immediately recorded as paid, marked Test, and left out of every total; recurring schedules receive a simulated saved card that is never charged."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:555
+msgid "Test mode is on. Donations taken while it is on are marked Test and left out of these figures and of campaign totals."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:903
+msgid "Text colour"
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:1020
+msgid "Thank you for your donation."
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:94
+msgid "The bank reported this payment as paid, but for a different amount or currency than the donor chose. It has been left out of every total and no receipt was sent. Compare the order in PlanetStudio Payment Gateway with your bank before doing anything else."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:743
+msgid "The bank returned a payment page URL with an unusual merchant path on a recent charge for this subscription. It may 404 for the donor. See the event log below for details."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:864
+msgid "The checkbox is named mc4wp-subscribe, which Mailchimp for WordPress picks up through its \"other forms\" integration. This plugin does not store the choice itself."
+msgstr ""
+
+#: includes/class-pspgd-privacy.php:139
+msgid "The donor record was anonymised. Donation amounts and dates are kept as financial records, with nothing identifying the donor."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:944
+msgid "The event log records every payment, email and scheduled decision. Older entries are deleted automatically. Set this to 0 to keep everything."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1005
+msgid "The form refuses more than %1$d donation attempts from one address in %2$d minutes. Behind a CDN or reverse proxy every visitor arrives from the proxy's address, so choose the header your proxy writes the real address into. Choose a header only if your proxy sets it: otherwise a visitor can write it themselves."
+msgstr ""
+
+#: includes/class-pspgd-campaigns.php:123
+msgid "The goal is in %s. Donations in other currencies are converted at the daily exchange rate and counted toward it. The campaign stops taking donations when the end date passes, or when the goal is reached if the box above is ticked. Its recurring donations are then cancelled. Pushing the end date out, raising the goal or unticking the box reopens it, but donors already cancelled are not restored. Leave the end date blank for an ongoing campaign."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1089
+msgid "The image at the top of every email. Upload both to the media library and paste the URLs here. A reader whose mail app is in dark mode is shown the dark-mode version; everyone else sees the normal one. Left blank, the theme's logo is used, and with no theme logo the site name is shown instead. Colours and font come from Form Settings > Appearance."
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:361
+msgid "The saved card could not be revoked at the gateway."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1043
+msgid "The test email could not be sent. Check the site mail configuration."
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:227
+msgid "This cancellation link is invalid or has already been used."
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:240
+msgid "This cancellation request is invalid."
+msgstr ""
+
+#: includes/class-pspgd-privacy.php:130
+msgid "This donor has a recurring donation that is still active. Cancel it first -- erasing the record would leave a saved card being charged with no way to contact them about it."
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:247
+msgid "This recurring donation has already been cancelled."
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:439
+msgid "TikTok"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:200
+msgid "Time"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:338
+msgid "To"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:900
+msgid "Top borders, focus rings and soft backgrounds."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:856
+msgid "Turn recurring off while saved-card payments are unavailable at the bank. Donors can still give once."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:884
+msgid "Two-letter codes, comma-separated, e.g. \"en, hy\". Leave blank to follow Polylang, or the site language when Polylang is not installed. Each donor is written to in the language they gave in."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:147
+#: includes/admin/class-pspgd-admin.php:297
+#: includes/admin/class-pspgd-admin.php:413
+#: includes/class-pspgd-notifications.php:122
+#: includes/class-pspgd-privacy.php:77
+msgid "Type"
+msgstr ""
+
+#: includes/class-pspgd-exchange-rates.php:69
+msgid "Unable to retrieve the current exchange rate. Please try again shortly."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1047
+msgid "Use these anywhere in a subject, heading or body. A placeholder with nothing behind it -- a campaign name on a donation that had no campaign -- is replaced with nothing."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:892
+msgid "Used by the donation form, campaign pages, the payment result screen and every email."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1019
+msgid "Uses the Turnstile keys saved in PlanetStudio Payment Gateway. If Cloudflare cannot be reached the donation is refused, so make a test donation after switching this on."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:219
+msgid "View"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:998
+msgid "Visitor address"
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:1029
+msgid "We will email your receipt once the bank confirms the donation."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:854
+msgid "Weekly"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1006
+msgid "What each source holds for your own visit right now -- pick the one that shows your own address:"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1076
+msgid "Where a donor's reply goes. Leave blank and replies go to the from address, which nobody reads."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1120
+msgid "Wording"
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:438
+msgid "X"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:168
+#: includes/class-pspgd-campaigns.php:158
+msgid "Yes"
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:124
+msgid "Yes, do not name them publicly"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1218
+#: includes/admin/class-pspgd-admin.php:1323
+msgid "You do not have permission to change these settings."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1190
+#: includes/admin/class-pspgd-admin.php:1378
+msgid "You do not have permission to do this."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:382
+msgid "You do not have permission to export donations."
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1031
+#: includes/admin/class-pspgd-admin.php:116
+#: includes/admin/class-pspgd-admin.php:638
+#: includes/admin/class-pspgd-admin.php:769
+msgid "You do not have permission to view this page."
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:436
+msgid "YouTube"
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:1021
+msgid "Your payment has been confirmed. A receipt has been sent to your email address."
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:1028
+msgid "Your payment is being confirmed."
+msgstr ""
+
+#: includes/class-pspgd-pspg.php:1024
+msgid "Your payment was not completed."
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:102
+msgid "[Test] "
+msgstr ""
+
+#: includes/class-pspgd-subscriptions.php:854
+msgid "[Test] %s"
+msgstr ""
+
+#: includes/class-pspgd-notifications.php:51
+msgid "a donor"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:950
+msgid "days"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:515
+msgid "gave in the last 12 months"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:526
+msgid "none active yet"
+msgstr ""
+
+#: includes/admin/class-pspgd-admin.php:1009
+msgid "not set"
+msgstr ""
