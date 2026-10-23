@@ -328,71 +328,22 @@ final class PSPGD_Form {
 		// contacted.
 		self::reject_bots( $language );
 
-		$amount        = self::normalize_amount( sanitize_text_field( wp_unslash( $_POST['amount'] ?? '' ) ) );
-		$currency      = strtoupper( sanitize_text_field( wp_unslash( $_POST['currency'] ?? '' ) ) );
-		$bank_id       = PSPGD_PSPG::bank_id();
-		$donation_type = sanitize_key( wp_unslash( $_POST['donation_type'] ?? 'one_time' ) );
-		$campaign_id   = absint( $_POST['campaign_id'] ?? 0 );
-		$first_name    = sanitize_text_field( wp_unslash( $_POST['first_name'] ?? '' ) );
-		$last_name     = sanitize_text_field( wp_unslash( $_POST['last_name'] ?? '' ) );
-		$email         = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) );
-		$is_anonymous  = ! empty( $_POST['is_anonymous'] );
-		$test_mode     = PSPGD_PSPG::donations_test_mode();
-
-		if ( $campaign_id > 0 ) {
-			$campaign = get_post( $campaign_id );
-			if ( ! $campaign || 'pspgd_campaign' !== $campaign->post_type || 'trash' === $campaign->post_status ) {
-				self::fail( self::translate( 'error_campaign_closed', 'This campaign is no longer accepting donations.', $language ) );
-			}
-
-			// A campaign can close between the page rendering and the donor
-			// finishing the form, so the deadline and the goal are checked
-			// again here rather than trusted from the posted page.
-			$campaign_status = PSPGD_Campaigns::status( $campaign_id );
-			if ( empty( $campaign_status['open'] ) ) {
-				self::fail( PSPGD_Campaigns::closed_notice( (string) $campaign_status['reason'], $language ) );
-			}
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized in validate_submission().
+		$check = self::validate_submission( wp_unslash( $_POST ), $language );
+		if ( empty( $check['ok'] ) ) {
+			self::fail( (string) $check['message'] );
 		}
 
-		if ( $amount <= 0 || ! in_array( $currency, PSPGD_PSPG::allowed_currencies(), true ) ) {
-			self::fail( self::translate( 'error_amount', 'Choose or enter a donation amount.', $language ) );
-		}
-
-		$min_amounts = PSPGD_I18n::min_amounts();
-		$min_amount  = isset( $min_amounts[ $currency ] ) ? (float) $min_amounts[ $currency ] : 0.0;
-		if ( $min_amount > 0 && $amount < $min_amount ) {
-			self::fail( sprintf( self::translate( 'error_min', 'The smallest donation we can accept is %s.', $language ), PSPGD_I18n::format_amount( $min_amount, $currency ) ) );
-		}
-
-		$max_amounts = PSPGD_I18n::max_amounts();
-		$max_amount  = isset( $max_amounts[ $currency ] ) ? (float) $max_amounts[ $currency ] : 0.0;
-		if ( $max_amount > 0 && $amount > $max_amount ) {
-			self::fail( sprintf( self::translate( 'error_max', 'The largest donation we can accept online is %s.', $language ), PSPGD_I18n::format_amount( $max_amount, $currency ) ) );
-		}
-
-		if ( '' === $email || ! is_email( $email ) ) {
-			self::fail( self::translate( 'error_email', 'Please enter a valid email address so we can send your receipt.', $language ) );
-		}
-
-		if ( empty( $_POST['consent'] ) ) {
-			self::fail( self::translate( 'error_consent', 'Please agree to payment processing before continuing.', $language ) );
-		}
-
-		if ( ! $test_mode && '' === $bank_id ) {
-			self::fail( self::translate( 'error_not_ready', 'Online donations are not set up yet. Please try again later.', $language ) );
-		}
-
-		if ( ! $test_mode && ! PSPGD_PSPG::bank_supports_currency( $bank_id, $currency ) ) {
-			self::fail( self::translate( 'error_currency', 'Card payment is not available for the selected currency right now.', $language ) );
-		}
-
-		if ( ! in_array( $donation_type, array_merge( array( 'one_time' ), PSPGD_Settings::intervals() ), true ) ) {
-			self::fail( self::translate( 'error_frequency', 'Please choose a donation frequency.', $language ) );
-		}
-
-		if ( 'one_time' !== $donation_type && ( ! self::recurring_enabled() || ( ! $test_mode && ! PSPGD_PSPG::bank_supports_recurring( $bank_id ) ) ) ) {
-			self::fail( self::translate( 'error_recurring', 'Recurring donations are not available right now. Please choose a one-time donation.', $language ) );
-		}
+		$amount        = (float) $check['amount'];
+		$currency      = (string) $check['currency'];
+		$bank_id       = (string) $check['bank_id'];
+		$donation_type = (string) $check['donation_type'];
+		$campaign_id   = (int) $check['campaign_id'];
+		$first_name    = (string) $check['first_name'];
+		$last_name     = (string) $check['last_name'];
+		$email         = (string) $check['email'];
+		$is_anonymous  = (bool) $check['is_anonymous'];
+		$test_mode     = (bool) $check['test_mode'];
 
 		if ( PSPGD_Security::turnstile_active() ) {
 			$turnstile_token = sanitize_text_field( wp_unslash( $_POST['cf-turnstile-response'] ?? '' ) );
@@ -507,6 +458,109 @@ final class PSPGD_Form {
 
 		PSPGD_Repository::update_donation_status( $donation_id, 'failed' );
 		self::fail( self::bank_refusal_message( $result, $language ) );
+	}
+
+	/**
+	 * Check a submitted donation against the site's settings, before anything
+	 * is written or the bank is contacted.
+	 *
+	 * Reads settings and the campaign, and nothing else: no request, no
+	 * redirect. handle_submit() turns a refusal into fail(), after the nonce,
+	 * the throttle and the bot checks; the tests call it directly.
+	 *
+	 * @param array<string, mixed> $post Posted fields, already unslashed.
+	 * @return array<string, mixed> ok=true with the cleaned fields, or
+	 *                              ok=false with an error key and the
+	 *                              message for the donor.
+	 */
+	public static function validate_submission( array $post, string $language ): array {
+		$field = static function ( string $key ) use ( $post ): string {
+			return isset( $post[ $key ] ) && is_scalar( $post[ $key ] ) ? (string) $post[ $key ] : '';
+		};
+		$refuse = static function ( string $error, string $message ): array {
+			return array(
+				'ok'      => false,
+				'error'   => $error,
+				'message' => $message,
+			);
+		};
+
+		$amount        = self::normalize_amount( sanitize_text_field( $field( 'amount' ) ) );
+		$currency      = strtoupper( sanitize_text_field( $field( 'currency' ) ) );
+		$bank_id       = PSPGD_PSPG::bank_id();
+		$donation_type = sanitize_key( isset( $post['donation_type'] ) ? $field( 'donation_type' ) : 'one_time' );
+		$campaign_id   = absint( $field( 'campaign_id' ) );
+		$test_mode     = PSPGD_PSPG::donations_test_mode();
+
+		if ( $campaign_id > 0 ) {
+			$campaign = get_post( $campaign_id );
+			if ( ! $campaign || 'pspgd_campaign' !== $campaign->post_type || 'trash' === $campaign->post_status ) {
+				return $refuse( 'error_campaign_closed', self::translate( 'error_campaign_closed', 'This campaign is no longer accepting donations.', $language ) );
+			}
+
+			// A campaign can close between the page rendering and the donor
+			// finishing the form, so the deadline and the goal are checked
+			// again here rather than trusted from the posted page.
+			$campaign_status = PSPGD_Campaigns::status( $campaign_id );
+			if ( empty( $campaign_status['open'] ) ) {
+				return $refuse( 'error_campaign_closed', PSPGD_Campaigns::closed_notice( (string) $campaign_status['reason'], $language ) );
+			}
+		}
+
+		if ( $amount <= 0 || ! in_array( $currency, PSPGD_PSPG::allowed_currencies(), true ) ) {
+			return $refuse( 'error_amount', self::translate( 'error_amount', 'Choose or enter a donation amount.', $language ) );
+		}
+
+		$min_amounts = PSPGD_I18n::min_amounts();
+		$min_amount  = isset( $min_amounts[ $currency ] ) ? (float) $min_amounts[ $currency ] : 0.0;
+		if ( $min_amount > 0 && $amount < $min_amount ) {
+			return $refuse( 'error_min', sprintf( self::translate( 'error_min', 'The smallest donation we can accept is %s.', $language ), PSPGD_I18n::format_amount( $min_amount, $currency ) ) );
+		}
+
+		$max_amounts = PSPGD_I18n::max_amounts();
+		$max_amount  = isset( $max_amounts[ $currency ] ) ? (float) $max_amounts[ $currency ] : 0.0;
+		if ( $max_amount > 0 && $amount > $max_amount ) {
+			return $refuse( 'error_max', sprintf( self::translate( 'error_max', 'The largest donation we can accept online is %s.', $language ), PSPGD_I18n::format_amount( $max_amount, $currency ) ) );
+		}
+
+		$email = sanitize_email( $field( 'email' ) );
+		if ( '' === $email || ! is_email( $email ) ) {
+			return $refuse( 'error_email', self::translate( 'error_email', 'Please enter a valid email address so we can send your receipt.', $language ) );
+		}
+
+		if ( '' === $field( 'consent' ) || '0' === $field( 'consent' ) ) {
+			return $refuse( 'error_consent', self::translate( 'error_consent', 'Please agree to payment processing before continuing.', $language ) );
+		}
+
+		if ( ! $test_mode && '' === $bank_id ) {
+			return $refuse( 'error_not_ready', self::translate( 'error_not_ready', 'Online donations are not set up yet. Please try again later.', $language ) );
+		}
+
+		if ( ! $test_mode && ! PSPGD_PSPG::bank_supports_currency( $bank_id, $currency ) ) {
+			return $refuse( 'error_currency', self::translate( 'error_currency', 'Card payment is not available for the selected currency right now.', $language ) );
+		}
+
+		if ( ! in_array( $donation_type, array_merge( array( 'one_time' ), PSPGD_Settings::intervals() ), true ) ) {
+			return $refuse( 'error_frequency', self::translate( 'error_frequency', 'Please choose a donation frequency.', $language ) );
+		}
+
+		if ( 'one_time' !== $donation_type && ( ! self::recurring_enabled() || ( ! $test_mode && ! PSPGD_PSPG::bank_supports_recurring( $bank_id ) ) ) ) {
+			return $refuse( 'error_recurring', self::translate( 'error_recurring', 'Recurring donations are not available right now. Please choose a one-time donation.', $language ) );
+		}
+
+		return array(
+			'ok'            => true,
+			'amount'        => $amount,
+			'currency'      => $currency,
+			'bank_id'       => $bank_id,
+			'donation_type' => $donation_type,
+			'campaign_id'   => $campaign_id,
+			'first_name'    => sanitize_text_field( $field( 'first_name' ) ),
+			'last_name'     => sanitize_text_field( $field( 'last_name' ) ),
+			'email'         => $email,
+			'is_anonymous'  => '' !== $field( 'is_anonymous' ) && '0' !== $field( 'is_anonymous' ),
+			'test_mode'     => $test_mode,
+		);
 	}
 
 	/**

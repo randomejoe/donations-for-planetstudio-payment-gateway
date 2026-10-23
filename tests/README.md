@@ -18,6 +18,10 @@ campaign closing, email composition in the donor's language, form hardening
 languages, colours and logo all come from settings and that no shipped file
 carries another organisation's name or design.
 
+`form-validation-test.php` covers every refusal the donation form can give
+before anything is written, and `settings-save-test.php` what each field of
+the two settings screens is stored as.
+
 `version-test.php` checks that the version and requirements agree across the
 plugin header, `PSPGD_VERSION`, `readme.txt` and `README.md`.
 

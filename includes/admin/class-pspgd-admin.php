@@ -1236,101 +1236,11 @@ final class PSPGD_Admin {
 			wp_die( esc_html__( 'You do not have permission to change these settings.', 'donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 		check_admin_referer( 'pspgd_save_form_settings' );
-		update_option( 'pspgd_test_mode', empty( $_POST['test_mode'] ) ? '0' : '1', false );
-		update_option( 'pspgd_recurring_enabled', empty( $_POST['recurring_enabled'] ) ? '0' : '1', false );
 
-		// Payments. Currencies are saved first: everything per-currency below
-		// is read back against the list just chosen.
-		update_option( 'pspgd_bank_id', sanitize_key( wp_unslash( $_POST['bank_id'] ?? '' ) ), false );
-
-		$known      = PSPGD_Settings::known_currencies();
-		$posted     = isset( $_POST['currencies'] ) && is_array( $_POST['currencies'] ) ? array_map( 'strtoupper', array_map( 'sanitize_text_field', wp_unslash( $_POST['currencies'] ) ) ) : array();
-		$currencies = array_values( array_intersect( $known, $posted ) );
-		update_option( 'pspgd_currencies', $currencies ? $currencies : array( PSPGD_Settings::default_currency() ), false );
-
-		update_option( 'pspgd_default_currency', strtoupper( sanitize_text_field( wp_unslash( $_POST['default_currency'] ?? '' ) ) ), false );
-		update_option( 'pspgd_goal_currency', strtoupper( sanitize_text_field( wp_unslash( $_POST['goal_currency'] ?? '' ) ) ), false );
-
-		$intervals = isset( $_POST['intervals'] ) && is_array( $_POST['intervals'] ) ? array_map( 'sanitize_key', wp_unslash( $_POST['intervals'] ) ) : array();
-		update_option( 'pspgd_intervals', array_values( array_intersect( array( 'monthly', 'weekly' ), $intervals ) ), false );
-
-		// Form options.
-		update_option( 'pspgd_newsletter_optin', empty( $_POST['newsletter_optin'] ) ? '0' : '1', false );
-		update_option( 'pspgd_show_supporters', empty( $_POST['show_supporters'] ) ? '0' : '1', false );
-		update_option( 'pspgd_payment_image_url', esc_url_raw( wp_unslash( $_POST['payment_image_url'] ?? '' ) ), false );
-
-		// Spam protection.
-		$ip_source = sanitize_key( wp_unslash( $_POST['client_ip_source'] ?? '' ) );
-		update_option( 'pspgd_client_ip_source', in_array( $ip_source, PSPGD_Security::IP_SOURCES, true ) ? $ip_source : 'remote_addr', false );
-		update_option( 'pspgd_turnstile', empty( $_POST['turnstile'] ) ? '0' : '1', false );
-
-		$languages = array_filter( array_map( array( 'PSPGD_I18n', 'language_code' ), explode( ',', sanitize_text_field( wp_unslash( $_POST['languages'] ?? '' ) ) ) ) );
-		update_option( 'pspgd_languages', array_values( array_unique( $languages ) ), false );
-
-		// Appearance.
-		$posted_colors = isset( $_POST['colors'] ) && is_array( $_POST['colors'] ) ? wp_unslash( $_POST['colors'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each value is sanitized below.
-		$colors        = array();
-		foreach ( array( 'primary', 'accent', 'text' ) as $key ) {
-			$color = PSPGD_Settings::sanitize_hex( (string) ( $posted_colors[ $key ] ?? '' ) );
-			if ( '' !== $color ) {
-				$colors[ $key ] = $color;
-			}
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized in form_settings_from_post().
+		foreach ( self::form_settings_from_post( wp_unslash( $_POST ) ) as $option => $value ) {
+			update_option( $option, $value, false );
 		}
-		update_option( 'pspgd_colors', $colors, false );
-		update_option( 'pspgd_font_family', sanitize_text_field( wp_unslash( $_POST['font_family'] ?? '' ) ), false );
-		update_option( 'pspgd_radius', max( 0, min( 32, absint( $_POST['radius'] ?? 6 ) ) ), false );
-
-		// Wording, one column per donor language.
-		$known_labels = array_keys( PSPGD_I18n::english_labels() );
-		$posted       = isset( $_POST['labels'] ) && is_array( $_POST['labels'] ) ? wp_unslash( $_POST['labels'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each value is sanitized below.
-		$labels       = (array) get_option( 'pspgd_form_labels', array() );
-		foreach ( PSPGD_I18n::supported_locales() as $locale ) {
-			$labels[ $locale ] = array();
-			foreach ( $known_labels as $key ) {
-				$labels[ $locale ][ $key ] = sanitize_text_field( $posted[ $locale ][ $key ] ?? '' );
-			}
-		}
-		update_option( 'pspgd_form_labels', $labels, false );
-
-		// Per-currency amounts. Only the currencies shown on the screen are
-		// touched, so switching a currency off and on again keeps its values.
-		$shown = PSPGD_Settings::currencies();
-
-		$posted_presets = isset( $_POST['presets'] ) && is_array( $_POST['presets'] ) ? wp_unslash( $_POST['presets'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each value is sanitized below.
-		$presets        = (array) get_option( 'pspgd_amount_presets', array() );
-		foreach ( $shown as $currency ) {
-			if ( ! isset( $posted_presets[ $currency ] ) ) {
-				continue;
-			}
-			$values = array_filter( array_map( 'trim', explode( ',', (string) $posted_presets[ $currency ] ) ) );
-			$values = array_values( array_filter( array_map( 'floatval', $values ), static function ( float $value ): bool { return $value > 0; } ) );
-			if ( ! empty( $values ) ) {
-				$presets[ $currency ] = array_slice( $values, 0, 8 );
-			} else {
-				unset( $presets[ $currency ] );
-			}
-		}
-		update_option( 'pspgd_amount_presets', $presets, false );
-
-		foreach ( array( 'min_amounts', 'max_amounts' ) as $field ) {
-			$posted_amounts = isset( $_POST[ $field ] ) && is_array( $_POST[ $field ] ) ? wp_unslash( $_POST[ $field ] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each value is sanitized below.
-			$amounts        = (array) get_option( 'pspgd_' . $field, array() );
-			foreach ( $shown as $currency ) {
-				if ( ! isset( $posted_amounts[ $currency ] ) ) {
-					continue;
-				}
-				$value = (float) $posted_amounts[ $currency ];
-				if ( $value > 0 ) {
-					$amounts[ $currency ] = $value;
-				} else {
-					unset( $amounts[ $currency ] );
-				}
-			}
-			update_option( 'pspgd_' . $field, $amounts, false );
-		}
-
-		update_option( 'pspgd_event_retention_days', max( 0, absint( $_POST['event_retention_days'] ?? 180 ) ), false );
-		update_option( 'pspgd_delete_data_on_uninstall', empty( $_POST['delete_data_on_uninstall'] ) ? '0' : '1', false );
 
 		wp_safe_redirect( add_query_arg( array( 'page' => 'pspgd-form-settings', 'updated' => '1' ), admin_url( 'admin.php' ) ) );
 		exit;
@@ -1342,48 +1252,184 @@ final class PSPGD_Admin {
 		}
 		check_admin_referer( 'pspgd_save_email_settings' );
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field is sanitized in email_settings_from_post().
+		foreach ( self::email_settings_from_post( wp_unslash( $_POST ) ) as $option => $value ) {
+			update_option( $option, $value, false );
+		}
+
+		wp_safe_redirect( add_query_arg( array( 'page' => 'pspgd-email-settings', 'updated' => '1' ), admin_url( 'admin.php' ) ) );
+		exit;
+	}
+
+	/**
+	 * The options the Form Settings screen saves, cleaned from what was
+	 * posted, as option name => value. Reads the current settings where a
+	 * field only updates part of a stored value; writes nothing.
+	 *
+	 * @param array<string, mixed> $post Posted fields, already unslashed.
+	 * @return array<string, mixed>
+	 */
+	public static function form_settings_from_post( array $post ): array {
+		$text = static function ( string $key, string $default = '' ) use ( $post ): string {
+			return isset( $post[ $key ] ) ? ( is_scalar( $post[ $key ] ) ? (string) $post[ $key ] : '' ) : $default;
+		};
+		$list = static function ( string $key ) use ( $post ): array {
+			return isset( $post[ $key ] ) && is_array( $post[ $key ] ) ? $post[ $key ] : array();
+		};
+
+		$options = array(
+			'pspgd_test_mode'         => empty( $post['test_mode'] ) ? '0' : '1',
+			'pspgd_recurring_enabled' => empty( $post['recurring_enabled'] ) ? '0' : '1',
+			'pspgd_bank_id'           => sanitize_key( $text( 'bank_id' ) ),
+		);
+
+		// Everything per-currency below is read against the currencies just
+		// chosen, not the ones stored before this save.
+		$posted     = array_map( 'strtoupper', array_map( 'sanitize_text_field', array_filter( $list( 'currencies' ), 'is_scalar' ) ) );
+		$currencies = array_values( array_intersect( PSPGD_Settings::known_currencies(), $posted ) );
+		$currencies = $currencies ? $currencies : array( PSPGD_Settings::default_currency() );
+
+		$options['pspgd_currencies']       = $currencies;
+		$options['pspgd_default_currency'] = strtoupper( sanitize_text_field( $text( 'default_currency' ) ) );
+		$options['pspgd_goal_currency']    = strtoupper( sanitize_text_field( $text( 'goal_currency' ) ) );
+
+		$intervals                  = array_map( 'sanitize_key', array_filter( $list( 'intervals' ), 'is_scalar' ) );
+		$options['pspgd_intervals'] = array_values( array_intersect( array( 'monthly', 'weekly' ), $intervals ) );
+
+		// Form options.
+		$options['pspgd_newsletter_optin']  = empty( $post['newsletter_optin'] ) ? '0' : '1';
+		$options['pspgd_show_supporters']   = empty( $post['show_supporters'] ) ? '0' : '1';
+		$options['pspgd_payment_image_url'] = esc_url_raw( $text( 'payment_image_url' ) );
+
+		// Spam protection.
+		$ip_source                         = sanitize_key( $text( 'client_ip_source' ) );
+		$options['pspgd_client_ip_source'] = in_array( $ip_source, PSPGD_Security::IP_SOURCES, true ) ? $ip_source : 'remote_addr';
+		$options['pspgd_turnstile']        = empty( $post['turnstile'] ) ? '0' : '1';
+
+		$languages                  = array_filter( array_map( array( 'PSPGD_I18n', 'language_code' ), explode( ',', sanitize_text_field( $text( 'languages' ) ) ) ) );
+		$options['pspgd_languages'] = array_values( array_unique( $languages ) );
+
+		// Appearance.
+		$posted_colors = $list( 'colors' );
+		$colors        = array();
+		foreach ( array( 'primary', 'accent', 'text' ) as $key ) {
+			$color = PSPGD_Settings::sanitize_hex( is_scalar( $posted_colors[ $key ] ?? '' ) ? (string) ( $posted_colors[ $key ] ?? '' ) : '' );
+			if ( '' !== $color ) {
+				$colors[ $key ] = $color;
+			}
+		}
+		$options['pspgd_colors']      = $colors;
+		$options['pspgd_font_family'] = sanitize_text_field( $text( 'font_family' ) );
+		$options['pspgd_radius']      = max( 0, min( 32, absint( $text( 'radius', '6' ) ) ) );
+
+		// Wording, one column per donor language.
+		$known_labels = array_keys( PSPGD_I18n::english_labels() );
+		$posted       = $list( 'labels' );
+		$labels       = (array) get_option( 'pspgd_form_labels', array() );
+		foreach ( PSPGD_I18n::supported_locales() as $locale ) {
+			$labels[ $locale ] = array();
+			foreach ( $known_labels as $key ) {
+				$value                     = $posted[ $locale ][ $key ] ?? '';
+				$labels[ $locale ][ $key ] = is_scalar( $value ) ? sanitize_text_field( (string) $value ) : '';
+			}
+		}
+		$options['pspgd_form_labels'] = $labels;
+
+		// Per-currency amounts. Only the currencies shown on the screen are
+		// touched, so switching a currency off and on again keeps its values.
+		$posted_presets = $list( 'presets' );
+		$presets        = (array) get_option( 'pspgd_amount_presets', array() );
+		foreach ( $currencies as $currency ) {
+			if ( ! isset( $posted_presets[ $currency ] ) || ! is_scalar( $posted_presets[ $currency ] ) ) {
+				continue;
+			}
+			$values = array_filter( array_map( 'trim', explode( ',', (string) $posted_presets[ $currency ] ) ) );
+			$values = array_values( array_filter( array_map( 'floatval', $values ), static function ( float $value ): bool { return $value > 0; } ) );
+			if ( ! empty( $values ) ) {
+				$presets[ $currency ] = array_slice( $values, 0, 8 );
+			} else {
+				unset( $presets[ $currency ] );
+			}
+		}
+		$options['pspgd_amount_presets'] = $presets;
+
+		foreach ( array( 'min_amounts', 'max_amounts' ) as $field ) {
+			$posted_amounts = $list( $field );
+			$amounts        = (array) get_option( 'pspgd_' . $field, array() );
+			foreach ( $currencies as $currency ) {
+				if ( ! isset( $posted_amounts[ $currency ] ) || ! is_scalar( $posted_amounts[ $currency ] ) ) {
+					continue;
+				}
+				$value = (float) $posted_amounts[ $currency ];
+				if ( $value > 0 ) {
+					$amounts[ $currency ] = $value;
+				} else {
+					unset( $amounts[ $currency ] );
+				}
+			}
+			$options[ 'pspgd_' . $field ] = $amounts;
+		}
+
+		$options['pspgd_event_retention_days']     = max( 0, absint( $text( 'event_retention_days', '180' ) ) );
+		$options['pspgd_delete_data_on_uninstall'] = empty( $post['delete_data_on_uninstall'] ) ? '0' : '1';
+
+		return $options;
+	}
+
+	/**
+	 * The options the Emails screen saves, cleaned from what was posted, as
+	 * option name => value. Writes nothing.
+	 *
+	 * @param array<string, mixed> $post Posted fields, already unslashed.
+	 * @return array<string, mixed>
+	 */
+	public static function email_settings_from_post( array $post ): array {
+		$text = static function ( string $key ) use ( $post ): string {
+			return isset( $post[ $key ] ) && is_scalar( $post[ $key ] ) ? (string) $post[ $key ] : '';
+		};
+
 		$known_templates = array_keys( PSPGD_Subscriptions::default_templates() );
-		$posted          = isset( $_POST['templates'] ) && is_array( $_POST['templates'] ) ? wp_unslash( $_POST['templates'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each value is sanitized below.
+		$posted          = isset( $post['templates'] ) && is_array( $post['templates'] ) ? $post['templates'] : array();
 		$templates       = (array) get_option( 'pspgd_email_templates', array() );
 		foreach ( PSPGD_I18n::supported_locales() as $locale ) {
 			$templates[ $locale ] = array();
 			foreach ( $known_templates as $key ) {
 				$raw_value = $posted[ $locale ][ $key ] ?? '';
+				$raw_value = is_scalar( $raw_value ) ? (string) $raw_value : '';
 
 				// Only the body is rendered as markup, so only the body keeps
 				// its tags -- that is what lets an editor use a line break or a
 				// link. Subjects go into a mail header and headings are escaped
 				// into the layout, so both stay single-line plain text.
 				$templates[ $locale ][ $key ] = '_body' === substr( $key, -5 )
-					? wp_kses( (string) $raw_value, PSPGD_Subscriptions::allowed_body_html() )
+					? wp_kses( $raw_value, PSPGD_Subscriptions::allowed_body_html() )
 					: sanitize_text_field( $raw_value );
 			}
 		}
-		update_option( 'pspgd_email_templates', $templates, false );
-
-		update_option( 'pspgd_email_from_name', sanitize_text_field( wp_unslash( $_POST['from_name'] ?? '' ) ), false );
-		update_option( 'pspgd_email_from_address', sanitize_email( wp_unslash( $_POST['from_address'] ?? '' ) ), false );
-		update_option( 'pspgd_email_reply_to', sanitize_email( wp_unslash( $_POST['reply_to'] ?? '' ) ), false );
-		update_option( 'pspgd_staff_notify_emails', self::sanitize_email_list( sanitize_textarea_field( wp_unslash( $_POST['staff_notify_emails'] ?? '' ) ) ), false );
-
-		update_option( 'pspgd_email_logo_light', esc_url_raw( wp_unslash( $_POST['logo_light'] ?? '' ) ), false );
-		update_option( 'pspgd_email_logo_dark', esc_url_raw( wp_unslash( $_POST['logo_dark'] ?? '' ) ), false );
 
 		// Only the networks the plugin knows about are stored, and each value is
 		// reduced to a URL: the footer renders these as links, so an unchecked
 		// value here would be an injection point in every email that goes out.
-		$posted_social = isset( $_POST['social'] ) && is_array( $_POST['social'] ) ? wp_unslash( $_POST['social'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each value is sanitized below.
+		$posted_social = isset( $post['social'] ) && is_array( $post['social'] ) ? $post['social'] : array();
 		$social        = array();
 		foreach ( array_keys( PSPGD_Subscriptions::social_networks() ) as $network ) {
-			$url = esc_url_raw( trim( (string) ( $posted_social[ $network ] ?? '' ) ) );
+			$value = $posted_social[ $network ] ?? '';
+			$url   = esc_url_raw( trim( is_scalar( $value ) ? (string) $value : '' ) );
 			if ( '' !== $url && in_array( wp_parse_url( $url, PHP_URL_SCHEME ), array( 'http', 'https' ), true ) ) {
 				$social[ $network ] = $url;
 			}
 		}
-		update_option( 'pspgd_social_links', $social, false );
 
-		wp_safe_redirect( add_query_arg( array( 'page' => 'pspgd-email-settings', 'updated' => '1' ), admin_url( 'admin.php' ) ) );
-		exit;
+		return array(
+			'pspgd_email_templates'     => $templates,
+			'pspgd_email_from_name'     => sanitize_text_field( $text( 'from_name' ) ),
+			'pspgd_email_from_address'  => sanitize_email( $text( 'from_address' ) ),
+			'pspgd_email_reply_to'      => sanitize_email( $text( 'reply_to' ) ),
+			'pspgd_staff_notify_emails' => self::sanitize_email_list( sanitize_textarea_field( $text( 'staff_notify_emails' ) ) ),
+			'pspgd_email_logo_light'    => esc_url_raw( $text( 'logo_light' ) ),
+			'pspgd_email_logo_dark'     => esc_url_raw( $text( 'logo_dark' ) ),
+			'pspgd_social_links'        => $social,
+		);
 	}
 
 	/**
