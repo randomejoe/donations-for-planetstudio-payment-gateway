@@ -25,6 +25,7 @@ define( 'PSPGD_URL', plugin_dir_url( __FILE__ ) );
 
 require_once PSPGD_DIR . 'includes/class-pspgd-clock.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-settings.php';
+require_once PSPGD_DIR . 'includes/class-pspgd-capability.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-installer.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-repository.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-stats.php';
@@ -34,6 +35,7 @@ require_once PSPGD_DIR . 'includes/class-pspgd-exchange-rates.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-i18n.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-campaigns.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-subscriptions.php';
+require_once PSPGD_DIR . 'includes/class-pspgd-cancel-links.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-emails.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-notifications.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-recurring.php';
@@ -57,7 +59,7 @@ add_action(
 		// and WordPress loads them itself. Donor-facing wording is in the
 		// locale packs under includes/locales/.
 		PSPGD_Installer::maybe_upgrade();
-		PSPGD_Admin::register_capability();
+		PSPGD_Capability::register();
 
 		if ( is_admin() ) {
 			PSPGD_Admin::init();

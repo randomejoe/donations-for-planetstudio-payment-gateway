@@ -32,6 +32,7 @@ $GLOBALS['test_site_locale'] = 'en_US';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-i18n.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-cancel-links.php';
 
 run_tests(
 	array(

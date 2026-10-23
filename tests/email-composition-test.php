@@ -40,6 +40,7 @@ function get_post( int $id ) {
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-i18n.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-cancel-links.php';
 
 /** @param array<string, mixed> $fields */
 function sub( array $fields = array() ): object {
@@ -64,8 +65,8 @@ function sub( array $fields = array() ): object {
 run_tests(
 	array(
 		'the cancel link is the same in every email' => static function (): void {
-			$first  = PSPGD_Subscriptions::cancel_url( sub() );
-			$second = PSPGD_Subscriptions::cancel_url( sub() );
+			$first  = PSPGD_Cancel_Links::url( sub() );
+			$second = PSPGD_Cancel_Links::url( sub() );
 
 			assert_same( $first, $second, 'Re-issuing the token used to invalidate the link in every email already sent.' );
 			assert_contains( 'pspgd_cancel=7', $first, 'The link must identify the subscription.' );
@@ -73,17 +74,27 @@ run_tests(
 		},
 
 		'two subscriptions never share a cancel token' => static function (): void {
-			$one = PSPGD_Subscriptions::cancel_url( sub( array( 'id' => 7 ) ) );
-			$two = PSPGD_Subscriptions::cancel_url( sub( array( 'id' => 8 ) ) );
+			$one = PSPGD_Cancel_Links::url( sub( array( 'id' => 7 ) ) );
+			$two = PSPGD_Cancel_Links::url( sub( array( 'id' => 8 ) ) );
 
 			assert_true( $one !== $two, 'A token that did not depend on the subscription would cancel the wrong donation.' );
 		},
 
 		'the token depends on the signup time as well as the id' => static function (): void {
-			$one = PSPGD_Subscriptions::cancel_url( sub( array( 'created_at' => '2026-01-04 09:00:00' ) ) );
-			$two = PSPGD_Subscriptions::cancel_url( sub( array( 'created_at' => '2026-06-04 09:00:00' ) ) );
+			$one = PSPGD_Cancel_Links::url( sub( array( 'created_at' => '2026-01-04 09:00:00' ) ) );
+			$two = PSPGD_Cancel_Links::url( sub( array( 'created_at' => '2026-06-04 09:00:00' ) ) );
 
 			assert_true( $one !== $two, 'Reusing a database id must not resurrect an old cancel link.' );
+		},
+
+		'the token in the link is the one that cancels' => static function (): void {
+			parse_str( (string) wp_parse_url( PSPGD_Cancel_Links::url( sub() ), PHP_URL_QUERY ), $query );
+			$token = rawurldecode( (string) $query['token'] );
+
+			assert_true( PSPGD_Cancel_Links::is_valid( sub(), $token ), 'The link in the email must cancel the donation it was sent for.' );
+			assert_false( PSPGD_Cancel_Links::is_valid( sub( array( 'id' => 8 ) ), $token ), 'And no other.' );
+			assert_false( PSPGD_Cancel_Links::is_valid( sub(), '' ), 'An empty token cancels nothing.' );
+			assert_false( PSPGD_Cancel_Links::is_valid( null, $token ), 'Nor does a link for a subscription that is gone.' );
 		},
 
 		'a scheduled charge gets its own wording, not the first-donation receipt' => static function (): void {

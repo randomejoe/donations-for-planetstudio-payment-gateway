@@ -27,6 +27,8 @@ require_once dirname( __DIR__ ) . '/includes/class-pspgd-i18n.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-security.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-cancel-links.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-capability.php';
 require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin.php';
 require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-form-settings.php';
 require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-email-settings.php';

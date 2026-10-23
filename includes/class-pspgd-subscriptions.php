@@ -5,8 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * The donor's side of a recurring donation: switching it on once the bank
- * has saved their card, and the cancel link every email carries. The emails
- * themselves are PSPGD_Emails.
+ * has saved their card, and cancelling it from the link every email
+ * carries (see PSPGD_Cancel_Links). The emails themselves are PSPGD_Emails.
  */
 final class PSPGD_Subscriptions {
 
@@ -33,7 +33,7 @@ final class PSPGD_Subscriptions {
 		}
 		$subscription = PSPGD_Repository::find_subscription( absint( $_GET['pspgd_cancel'] ) );
 		$token        = sanitize_text_field( wp_unslash( $_GET['token'] ) );
-		if ( ! self::valid_token( $subscription, $token ) || 'active' !== $subscription->status ) {
+		if ( ! PSPGD_Cancel_Links::is_valid( $subscription, $token ) || 'active' !== $subscription->status ) {
 			wp_die( esc_html__( 'This cancellation link is invalid or has already been used.', 'donations-for-planetstudio-payment-gateway' ), 404 );
 		}
 		wp_die(
@@ -46,7 +46,7 @@ final class PSPGD_Subscriptions {
 	public static function handle_cancel(): void {
 		$subscription = PSPGD_Repository::find_subscription( absint( $_POST['subscription_id'] ?? 0 ) );
 		$token        = sanitize_text_field( wp_unslash( $_POST['token'] ?? '' ) );
-		if ( ! $subscription || ! isset( $_POST['pspgd_cancel_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['pspgd_cancel_nonce'] ) ), 'pspgd_donation_cancel_' . $subscription->id ) || ! self::valid_token( $subscription, $token ) ) {
+		if ( ! $subscription || ! isset( $_POST['pspgd_cancel_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['pspgd_cancel_nonce'] ) ), 'pspgd_donation_cancel_' . $subscription->id ) || ! PSPGD_Cancel_Links::is_valid( $subscription, $token ) ) {
 			wp_die( esc_html__( 'This cancellation request is invalid.', 'donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 
@@ -64,50 +64,4 @@ final class PSPGD_Subscriptions {
 		PSPGD_Emails::notify_recurring_cancelled( $subscription );
 		wp_die( '<h1>' . esc_html__( 'Recurring donation cancelled', 'donations-for-planetstudio-payment-gateway' ) . '</h1><p>' . esc_html__( 'No future payments will be made.', 'donations-for-planetstudio-payment-gateway' ) . '</p>', esc_html__( 'Recurring donation cancelled', 'donations-for-planetstudio-payment-gateway' ), array( 'response' => 200 ) );
 	}
-
-	// -----------------------------------------------------------------
-	// Cancel links
-	// -----------------------------------------------------------------
-	public static function cancel_url( object $subscription ): string {
-		return add_query_arg(
-			array(
-				'pspgd_cancel' => (int) $subscription->id,
-				'token'            => rawurlencode( self::cancel_token( $subscription ) ),
-			),
-			home_url( '/' )
-		);
-	}
-
-	/**
-	 * The donor's cancel token.
-	 *
-	 * Derived from the subscription rather than generated and stored, so that
-	 * every email carries the same working link. Regenerating it on each send
-	 * would silently invalidate the link in every email the donor had already
-	 * received -- including the activation email, the one most likely to
-	 * still be in their inbox months later. A donor who cannot self-cancel
-	 * becomes a support ticket, or a chargeback.
-	 *
-	 * Same construction as the payment return token in PSPGD_PSPG:
-	 * unguessable without the site's auth salt, and nothing secret is stored.
-	 */
-	private static function cancel_token( object $subscription ): string {
-		return hash_hmac(
-			'sha256',
-			'pspgd_cancel|' . (int) $subscription->id . '|' . (string) $subscription->created_at,
-			wp_salt( 'auth' )
-		);
-	}
-
-	private static function valid_token( ?object $subscription, string $token ): bool {
-		if ( ! $subscription || '' === $token ) {
-			return false;
-		}
-
-		return hash_equals( self::cancel_token( $subscription ), $token );
-	}
-
-	// -----------------------------------------------------------------
-	// Composition
-	// -----------------------------------------------------------------
 }

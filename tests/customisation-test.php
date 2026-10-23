@@ -49,6 +49,8 @@ require_once dirname( __DIR__ ) . '/includes/class-pspgd-i18n.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-campaigns.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-cancel-links.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-capability.php';
 require_once dirname( __DIR__ ) . '/includes/public/class-pspgd-form.php';
 
 /** A fresh install: none of the settings the other tests start from. */

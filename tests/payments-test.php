@@ -23,6 +23,7 @@ require_once dirname( __DIR__ ) . '/includes/class-pspgd-exchange-rates.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-campaigns.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-cancel-links.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-notifications.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-pspg.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-payments.php';

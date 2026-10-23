@@ -32,7 +32,7 @@ final class PSPGD_Emails {
 				'next_payment' => self::format_date( $next_payment_at ),
 			),
 			self::template_value( 'recurring_cancel_label', array(), $locale ),
-			PSPGD_Subscriptions::cancel_url( $subscription )
+			PSPGD_Cancel_Links::url( $subscription )
 		);
 
 		PSPGD_Repository::log_event( 'subscription', (int) $subscription->id, $sent ? 'recurring_activation_email_sent' : 'recurring_activation_email_failed' );
@@ -80,7 +80,7 @@ final class PSPGD_Emails {
 				'attempts_left' => (string) $remaining,
 			),
 			self::template_value( 'recurring_cancel_label', array(), $locale ),
-			PSPGD_Subscriptions::cancel_url( $subscription )
+			PSPGD_Cancel_Links::url( $subscription )
 		);
 
 		PSPGD_Repository::log_event( 'subscription', (int) $subscription->id, $sent ? 'recurring_payment_failed_email_sent' : 'recurring_payment_failed_email_failed' );
@@ -180,7 +180,7 @@ final class PSPGD_Emails {
 		$cta_url   = '';
 		if ( self::is_live( $subscription ) ) {
 			$cta_label = self::template_value( 'recurring_cancel_label', array(), $locale );
-			$cta_url   = PSPGD_Subscriptions::cancel_url( $subscription );
+			$cta_url   = PSPGD_Cancel_Links::url( $subscription );
 		}
 
 		// A scheduled charge has to read differently from a donation the donor
@@ -556,7 +556,7 @@ final class PSPGD_Emails {
 				'next_payment_at'       => '' !== $next_payment_at ? self::format_date( $next_payment_at ) : '',
 				'transaction_reference' => '',
 				'remaining'             => '',
-				'cancel_url'            => PSPGD_Subscriptions::cancel_url( $subscription ),
+				'cancel_url'            => PSPGD_Cancel_Links::url( $subscription ),
 			)
 		);
 	}
@@ -580,7 +580,7 @@ final class PSPGD_Emails {
 				'next_payment_at'       => self::next_payment_date( $subscription ),
 				'transaction_reference' => (string) $donation->transaction_reference,
 				'remaining'             => '',
-				'cancel_url'            => $subscription ? PSPGD_Subscriptions::cancel_url( $subscription ) : '',
+				'cancel_url'            => $subscription ? PSPGD_Cancel_Links::url( $subscription ) : '',
 			)
 		);
 	}

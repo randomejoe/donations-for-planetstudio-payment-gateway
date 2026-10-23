@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class PSPGD_Admin_Donations {
 
 	public static function render_donations_page(): void {
-		if ( ! current_user_can( PSPGD_Admin::CAPABILITY ) ) {
+		if ( ! current_user_can( PSPGD_Capability::MANAGE_DONATIONS ) ) {
 			wp_die( esc_html__( 'You do not have permission to view this page.', 'donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 
@@ -277,7 +277,7 @@ final class PSPGD_Admin_Donations {
 	 * PHP happens to have.
 	 */
 	public static function handle_export_csv(): void {
-		if ( ! current_user_can( PSPGD_Admin::CAPABILITY ) ) {
+		if ( ! current_user_can( PSPGD_Capability::MANAGE_DONATIONS ) ) {
 			wp_die( esc_html__( 'You do not have permission to export donations.', 'donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 		check_admin_referer( 'pspgd_export_csv' );

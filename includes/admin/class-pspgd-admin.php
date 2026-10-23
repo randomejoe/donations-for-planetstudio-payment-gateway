@@ -8,31 +8,6 @@ final class PSPGD_Admin {
 	/** Rows per page on the donation log and the recurring list. */
 	public const PER_PAGE = 20;
 
-	/**
-	 * Reading the donation log, exporting it, and seeing and cancelling
-	 * recurring donations. Every administrator has it. A role editor can
-	 * give it to staff who should see donations without being able to
-	 * change the bank or the settings, which stay with manage_options.
-	 */
-	public const CAPABILITY = 'pspgd_manage_donations';
-
-	/** Registered on every request, not only in wp-admin: the form checks it too. */
-	public static function register_capability(): void {
-		add_filter( 'user_has_cap', array( __CLASS__, 'grant_capability' ) );
-	}
-
-	/**
-	 * @param array<string, bool> $allcaps
-	 * @return array<string, bool>
-	 */
-	public static function grant_capability( array $allcaps ): array {
-		if ( ! empty( $allcaps['manage_options'] ) ) {
-			$allcaps[ self::CAPABILITY ] = true;
-		}
-
-		return $allcaps;
-	}
-
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
 		add_action( 'admin_post_pspgd_save_form_settings', array( 'PSPGD_Admin_Form_Settings', 'save_form_settings' ) );
@@ -89,7 +64,7 @@ final class PSPGD_Admin {
 		add_menu_page(
 			__( 'Donations for PlanetStudio Payment Gateway', 'donations-for-planetstudio-payment-gateway' ),
 			__( 'Donations', 'donations-for-planetstudio-payment-gateway' ),
-			self::CAPABILITY,
+			PSPGD_Capability::MANAGE_DONATIONS,
 			'pspgd',
 			array( 'PSPGD_Admin_Donations', 'render_donations_page' ),
 			'dashicons-heart',
@@ -99,7 +74,7 @@ final class PSPGD_Admin {
 			'pspgd',
 			__( 'Donation Log', 'donations-for-planetstudio-payment-gateway' ),
 			__( 'Donation Log', 'donations-for-planetstudio-payment-gateway' ),
-			self::CAPABILITY,
+			PSPGD_Capability::MANAGE_DONATIONS,
 			'pspgd',
 			array( 'PSPGD_Admin_Donations', 'render_donations_page' )
 		);
@@ -107,7 +82,7 @@ final class PSPGD_Admin {
 			'pspgd',
 			__( 'Recurring Donations', 'donations-for-planetstudio-payment-gateway' ),
 			__( 'Recurring Donations', 'donations-for-planetstudio-payment-gateway' ),
-			self::CAPABILITY,
+			PSPGD_Capability::MANAGE_DONATIONS,
 			'pspgd-recurring',
 			array( 'PSPGD_Admin_Recurring', 'render_recurring_page' )
 		);

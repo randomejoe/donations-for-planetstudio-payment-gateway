@@ -53,6 +53,20 @@ run_tests(
 			}
 		},
 
+		'nothing outside the admin screens depends on them' => static function (): void {
+			$root = dirname( __DIR__ ) . '/';
+			foreach ( load_test_include_files() as $file ) {
+				if ( 0 === strpos( $file, 'includes/admin/' ) ) {
+					continue;
+				}
+
+				assert_false(
+					(bool) preg_match( '/\bPSPGD_Admin\w*\s*::/', (string) file_get_contents( $root . $file ) ),
+					$file . ' calls an admin class. The admin screens are loaded on every request today, but nothing the donor reaches should need them.'
+				);
+			}
+		},
+
 		'every class the plugin calls is declared in a file the main file loads' => static function (): void {
 			$root     = dirname( __DIR__ ) . '/';
 			$declared = array();

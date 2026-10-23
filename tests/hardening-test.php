@@ -83,18 +83,16 @@ require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-email-setti
 		},
 
 		'every administrator can manage donations, and nobody else unless granted' => static function (): void {
-			require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin.php';
-require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-donations.php';
-require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-email-settings.php';
+			require_once dirname( __DIR__ ) . '/includes/class-pspgd-capability.php';
 
-			$admin = PSPGD_Admin::grant_capability( array( 'manage_options' => true, 'edit_posts' => true ) );
-			assert_true( ! empty( $admin[ PSPGD_Admin::CAPABILITY ] ), 'An administrator sees the donation log without a role editor.' );
+			$admin = PSPGD_Capability::grant( array( 'manage_options' => true, 'edit_posts' => true ) );
+			assert_true( ! empty( $admin[ PSPGD_Capability::MANAGE_DONATIONS ] ), 'An administrator sees the donation log without a role editor.' );
 
-			$editor = PSPGD_Admin::grant_capability( array( 'edit_posts' => true ) );
-			assert_false( ! empty( $editor[ PSPGD_Admin::CAPABILITY ] ), 'An editor does not see donor details by default.' );
+			$editor = PSPGD_Capability::grant( array( 'edit_posts' => true ) );
+			assert_false( ! empty( $editor[ PSPGD_Capability::MANAGE_DONATIONS ] ), 'An editor does not see donor details by default.' );
 
-			$staff = PSPGD_Admin::grant_capability( array( 'read' => true, PSPGD_Admin::CAPABILITY => true ) );
-			assert_true( ! empty( $staff[ PSPGD_Admin::CAPABILITY ] ), 'A role given the capability keeps it.' );
+			$staff = PSPGD_Capability::grant( array( 'read' => true, PSPGD_Capability::MANAGE_DONATIONS => true ) );
+			assert_true( ! empty( $staff[ PSPGD_Capability::MANAGE_DONATIONS ] ), 'A role given the capability keeps it.' );
 			assert_false( ! empty( $staff['manage_options'] ), 'And gets nothing more: the settings stay with administrators.' );
 		},
 

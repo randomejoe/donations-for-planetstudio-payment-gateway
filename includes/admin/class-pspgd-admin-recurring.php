@@ -16,7 +16,7 @@ final class PSPGD_Admin_Recurring {
 	 * works right after setup, without waiting for the next scheduled run).
 	 */
 	public static function render_recurring_page(): void {
-		if ( ! current_user_can( PSPGD_Admin::CAPABILITY ) ) {
+		if ( ! current_user_can( PSPGD_Capability::MANAGE_DONATIONS ) ) {
 			wp_die( esc_html__( 'You do not have permission to view this page.', 'donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 
@@ -151,7 +151,7 @@ final class PSPGD_Admin_Recurring {
 	 * auto-cancel-after-failures path in PSPGD_Recurring.
 	 */
 	public static function handle_cancel_subscription(): void {
-		if ( ! current_user_can( PSPGD_Admin::CAPABILITY ) ) {
+		if ( ! current_user_can( PSPGD_Capability::MANAGE_DONATIONS ) ) {
 			wp_die( esc_html__( 'You do not have permission to do this.', 'donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 

@@ -578,7 +578,7 @@ final class PSPGD_Form {
 		$message = self::translate( 'error_generic', 'Your donation could not be started. Please check the form and try again.', $language );
 		$detail  = trim( wp_strip_all_tags( (string) ( $result['message'] ?? '' ) ) );
 
-		if ( '' !== $detail && current_user_can( PSPGD_Admin::CAPABILITY ) ) {
+		if ( '' !== $detail && current_user_can( PSPGD_Capability::MANAGE_DONATIONS ) ) {
 			$message .= ' ' . sprintf(
 				/* translators: %s: the error message the payment gateway returned. */
 				__( '(Shown to staff only: the gateway said "%s".)', 'donations-for-planetstudio-payment-gateway' ),

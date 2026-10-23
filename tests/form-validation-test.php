@@ -30,6 +30,7 @@ require_once dirname( __DIR__ ) . '/includes/class-pspgd-pspg.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-payments.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-i18n.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-campaigns.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-capability.php';
 require_once dirname( __DIR__ ) . '/includes/public/class-pspgd-form.php';
 
 global $wpdb;
