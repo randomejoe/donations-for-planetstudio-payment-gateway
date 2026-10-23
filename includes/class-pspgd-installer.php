@@ -6,6 +6,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class PSPGD_Installer {
 
 	/**
+	 * Every scheduled event this plugin creates. Deactivation and
+	 * uninstall both clear exactly this list, so a job added later is
+	 * cleared by adding it here.
+	 *
+	 * @return string[]
+	 */
+	public static function cron_hooks(): array {
+		return array(
+			PSPGD_Exchange_Rates::CRON_HOOK,
+			PSPGD_Recurring::HOOK,
+			PSPGD_Reconciliation::HOOK,
+			PSPGD_Campaigns::CRON_HOOK,
+		);
+	}
+
+	public static function activate(): void {
+		self::install();
+		PSPGD_Campaigns::register_post_type();
+		PSPGD_Exchange_Rates::schedule_daily_refresh();
+		PSPGD_Campaigns::ensure_schedule();
+		flush_rewrite_rules();
+	}
+
+	/**
+	 * Stop every scheduled job. They are scheduled again on the first
+	 * request after the plugin is reactivated.
+	 */
+	public static function deactivate(): void {
+		foreach ( self::cron_hooks() as $hook ) {
+			wp_clear_scheduled_hook( $hook );
+		}
+	}
+
+	/**
 	 * Bring the tables up to date after an update.
 	 *
 	 * Checked on every request, not only in wp-admin: WordPress updates

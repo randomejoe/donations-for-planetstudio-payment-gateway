@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * most once per currency per day.
  */
 final class PSPGD_Exchange_Rates {
-	private const CRON_HOOK = 'pspgd_refresh_exchange_rates';
+	public const CRON_HOOK = 'pspgd_refresh_exchange_rates';
 
 	/**
 	 * Every rate is stored against one pivot currency and any other pair is

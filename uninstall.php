@@ -26,10 +26,17 @@ global $wpdb;
 // ---------------------------------------------------------------------
 // 1. Unschedule cron events.
 // ---------------------------------------------------------------------
-wp_clear_scheduled_hook( 'pspgd_refresh_exchange_rates' );
-wp_clear_scheduled_hook( 'pspgd_process_recurring' );
-wp_clear_scheduled_hook( 'pspgd_reconcile' );
-wp_clear_scheduled_hook( 'pspgd_close_campaigns' );
+// WordPress does not load the plugin to uninstall it, so the classes that
+// name the events are loaded here; they only declare classes.
+require_once __DIR__ . '/includes/class-pspgd-installer.php';
+require_once __DIR__ . '/includes/class-pspgd-exchange-rates.php';
+require_once __DIR__ . '/includes/class-pspgd-recurring.php';
+require_once __DIR__ . '/includes/class-pspgd-reconciliation.php';
+require_once __DIR__ . '/includes/class-pspgd-campaigns.php';
+
+foreach ( PSPGD_Installer::cron_hooks() as $pspgd_hook ) {
+	wp_clear_scheduled_hook( $pspgd_hook );
+}
 
 if ( '1' !== (string) get_option( 'pspgd_delete_data_on_uninstall', '0' ) ) {
 	return;

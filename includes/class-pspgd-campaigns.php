@@ -258,10 +258,6 @@ final class PSPGD_Campaigns {
 		}
 	}
 
-	public static function clear_schedule(): void {
-		wp_clear_scheduled_hook( self::CRON_HOOK );
-	}
-
 	/**
 	 * Whether a campaign is still taking donations, and if not, why.
 	 *

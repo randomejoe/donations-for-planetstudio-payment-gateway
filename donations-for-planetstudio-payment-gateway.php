@@ -41,24 +41,8 @@ require_once PSPGD_DIR . 'includes/class-pspgd-security.php';
 require_once PSPGD_DIR . 'includes/public/class-pspgd-form.php';
 require_once PSPGD_DIR . 'includes/admin/class-pspgd-admin.php';
 
-register_activation_hook(
-	__FILE__,
-	static function (): void {
-		PSPGD_Installer::install();
-		PSPGD_Campaigns::register_post_type();
-		PSPGD_Exchange_Rates::schedule_daily_refresh();
-		PSPGD_Campaigns::ensure_schedule();
-		flush_rewrite_rules();
-	}
-);
-
-register_deactivation_hook(
-	__FILE__,
-	static function (): void {
-		PSPGD_Exchange_Rates::clear_schedule();
-		PSPGD_Campaigns::clear_schedule();
-	}
-);
+register_activation_hook( __FILE__, array( 'PSPGD_Installer', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'PSPGD_Installer', 'deactivate' ) );
 
 add_action(
 	'plugins_loaded',

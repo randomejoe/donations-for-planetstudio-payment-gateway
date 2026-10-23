@@ -523,6 +523,28 @@ if ( ! function_exists( 'wp_clear_scheduled_hook' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_get_scheduled_event' ) ) {
+	/** @return object|false */
+	function wp_get_scheduled_event( string $hook ) {
+		if ( ! isset( $GLOBALS['test_cron'][ $hook ] ) ) {
+			return false;
+		}
+
+		return (object) array(
+			'hook'      => $hook,
+			'timestamp' => $GLOBALS['test_cron'][ $hook ],
+			'schedule'  => $GLOBALS['test_cron_recurrence'][ $hook ] ?? false,
+		);
+	}
+}
+
+if ( ! function_exists( 'wp_unschedule_event' ) ) {
+	function wp_unschedule_event( int $timestamp, string $hook ): bool {
+		wp_clear_scheduled_hook( $hook );
+		return true;
+	}
+}
+
 function test_reset_cron(): void {
 	$GLOBALS['test_cron'] = array();
 	$GLOBALS['test_cron_recurrence'] = array();

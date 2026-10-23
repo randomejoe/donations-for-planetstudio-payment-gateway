@@ -4,6 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 final class PSPGD_Recurring {
+	public const HOOK = 'pspgd_process_recurring';
+
 	private const LOCK_KEY = 'pspgd_recurring_lock';
 	private const LOCK_TTL = 15 * MINUTE_IN_SECONDS;
 
@@ -26,17 +28,17 @@ final class PSPGD_Recurring {
 
 	public static function init(): void {
 		add_action( 'init', array( __CLASS__, 'ensure_schedule' ) );
-		add_action( 'pspgd_process_recurring', array( __CLASS__, 'process_due_subscriptions' ) );
+		add_action( self::HOOK, array( __CLASS__, 'process_due_subscriptions' ) );
 	}
 
 	public static function ensure_schedule(): void {
-		$event = wp_get_scheduled_event( 'pspgd_process_recurring' );
+		$event = wp_get_scheduled_event( self::HOOK );
 		if ( $event && 'hourly' !== $event->schedule ) {
-			wp_unschedule_event( $event->timestamp, 'pspgd_process_recurring' );
+			wp_unschedule_event( $event->timestamp, self::HOOK );
 			$event = false;
 		}
 		if ( ! $event ) {
-			wp_schedule_event( time() + HOUR_IN_SECONDS, 'hourly', 'pspgd_process_recurring' );
+			wp_schedule_event( time() + HOUR_IN_SECONDS, 'hourly', self::HOOK );
 		}
 	}
 

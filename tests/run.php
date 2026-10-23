@@ -20,6 +20,7 @@ $tests = array(
 	'payment-outcome-test.php',
 	'form-validation-test.php',
 	'settings-save-test.php',
+	'lifecycle-test.php',
 	'version-test.php',
 	'pspg-compat-test.php',
 	'pspg-contract-test.php',
