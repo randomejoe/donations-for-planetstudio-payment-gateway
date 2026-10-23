@@ -18,6 +18,7 @@ $tests = array(
 	'customisation-test.php',
 	'timezone-test.php',
 	'payment-outcome-test.php',
+	'version-test.php',
 );
 $failures = 0;
 foreach ( $tests as $test ) {

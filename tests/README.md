@@ -17,3 +17,6 @@ campaign closing, email composition in the donor's language, form hardening
 -- plus `customisation-test.php`, which checks that the bank, currencies,
 languages, colours and logo all come from settings and that no shipped file
 carries another organisation's name or design.
+
+`version-test.php` checks that the version and requirements agree across the
+plugin header, `PSPGD_VERSION`, `readme.txt` and `README.md`.

@@ -48,6 +48,8 @@ sh tools/build-zip.sh
 
 It packs the last commit, not the working tree, into `dist/`, and leaves out everything marked `export-ignore` in `.gitattributes` (tests, tools, this README). `python3 tools/make-pot.py` regenerates `languages/donations-for-planetstudio-payment-gateway.pot` after changing translatable strings.
 
+[RELEASING.md](RELEASING.md) has the steps for a new version.
+
 ## License
 
 GPLv3. See [LICENSE](LICENSE).
