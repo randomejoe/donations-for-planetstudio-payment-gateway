@@ -10,7 +10,8 @@
  *  - the first test payment of a recurring donation activates it on a
  *    simulated card;
  *  - a donation is only failed from pending, so a confirmation that got
- *    there first wins.
+ *    there first wins;
+ *  - nothing but PSPGD_Payments changes a donation status.
  *
  * Run from the plugin folder: php tests/payments-test.php
  */
@@ -246,6 +247,34 @@ run_tests(
 			assert_false( PSPGD_Payments::mark_failed( 101, 'browser_return_failed', 'Declined.' ), 'The row is no longer pending.' );
 			assert_same( 1, count( payments_writes( 'pspgd_donations' ) ), 'Nothing is written after the claim fails.' );
 			assert_same( 0, count( payments_event_types() ), 'And nothing is logged.' );
+		},
+
+		// -------------------------------------------------------------
+		// One owner
+		// -------------------------------------------------------------
+
+		'only PSPGD_Payments changes a donation status' => static function (): void {
+			$root    = dirname( __DIR__ ) . '/';
+			$sources = array( 'donations-for-planetstudio-payment-gateway.php', 'uninstall.php' );
+			$items   = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $root . 'includes', FilesystemIterator::SKIP_DOTS ) );
+			foreach ( $items as $file ) {
+				if ( '.php' === substr( (string) $file, -4 ) ) {
+					$sources[] = substr( (string) $file, strlen( $root ) );
+				}
+			}
+
+			foreach ( $sources as $source ) {
+				if ( 'includes/class-pspgd-payments.php' === $source ) {
+					continue;
+				}
+
+				preg_match_all( '/PSPGD_Repository\s*::\s*(update_donation_status|transition_donation_status|mark_donation_processing)\s*\(/', (string) file_get_contents( $root . $source ), $matches );
+				assert_same(
+					array(),
+					$matches[1],
+					$source . ' changes a donation status itself. Go through PSPGD_Payments, so every change is guarded and is followed by the same receipt, figures, campaign check and hook.'
+				);
+			}
 		},
 	)
 );

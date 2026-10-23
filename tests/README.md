@@ -18,8 +18,9 @@ campaign closing, email composition in the donor's language, form hardening
 languages, colours and logo all come from settings and that no shipped file
 carries another organisation's name or design.
 
-`payments-test.php` covers the donation lifecycle in `PSPGD_Payments`, and
-that a test-mode payment takes the same path as one the bank confirms.
+`payments-test.php` covers the donation lifecycle in `PSPGD_Payments`,
+that a test-mode payment takes the same path as one the bank confirms, and
+that no other class changes a donation status.
 
 `form-validation-test.php` covers every refusal the donation form can give
 before anything is written, and `settings-save-test.php` what each field of
