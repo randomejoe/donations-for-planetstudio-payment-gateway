@@ -119,17 +119,22 @@ run_tests(
 		},
 
 		'deleting the plugin with its data removes every option it stores' => static function (): void {
-			$root      = dirname( __DIR__ ) . '/';
-			$uninstall = (string) file_get_contents( $root . 'uninstall.php' );
+			$root = dirname( __DIR__ ) . '/';
+			require_once $root . 'includes/class-pspgd-installer.php';
+			$method    = new ReflectionMethod( 'PSPGD_Installer', 'uninstall_site' );
+			$lines     = file( (string) $method->getFileName() );
+			$uninstall = implode( '', array_slice( $lines, $method->getStartLine() - 1, $method->getEndLine() - $method->getStartLine() + 1 ) );
 
 			foreach ( array_merge( array( 'donations-for-planetstudio-payment-gateway.php' ), load_test_include_files() ) as $file ) {
-				preg_match_all( "/(?:get|update|add)_option\\(\\s*'(pspgd_[a-z_]+)'/", (string) file_get_contents( $root . $file ), $matches );
+				// Options written directly, and those the settings screens
+				// collect in an $options map before saving.
+				preg_match_all( "/(?:(?:get|update|add)_option\\(\\s*|\\\$options\\[\\s*)'(pspgd_[a-z_]+)'/", (string) file_get_contents( $root . $file ), $matches );
 				foreach ( array_unique( $matches[1] ) as $option ) {
 					// Exchange-rate caches are removed by prefix.
 					if ( 0 === strpos( $option, 'pspgd_exchange_rate_' ) ) {
 						continue;
 					}
-					assert_contains( "'" . $option . "'", $uninstall, $file . ' stores ' . $option . ', which uninstall.php leaves behind.' );
+					assert_contains( "'" . $option . "'", $uninstall, $file . ' stores ' . $option . ', which uninstalling leaves behind.' );
 				}
 			}
 		},
