@@ -47,6 +47,49 @@ jobs:
           PSPGD_PSPG_SOURCE: ${{ runner.temp }}/pspg/planetstudio-payment-gateway
         run: php tests/run.php
 
+  # The plugin's SQL on a real database: tests/integration/db-test.php.
+  # The oldest supported WordPress on the oldest supported PHP, and the
+  # newest of both.
+  database:
+    name: Database (WordPress ${{ matrix.wp }}, PHP ${{ matrix.php }}, MySQL 8.0)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - wp: '6.5'
+            php: '7.4'
+          - wp: 'latest'
+            php: '8.4'
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli
+          tools: wp-cli
+          coverage: none
+
+      - name: Install WordPress and run the database tests
+        env:
+          DB_HOST: 127.0.0.1:3306
+          DB_NAME: wordpress
+          DB_USER: root
+          DB_PASS: root
+          WP_VERSION: ${{ matrix.wp }}
+        run: sh tests/integration/run.sh "$RUNNER_TEMP/wordpress"
+
   plugin-check:
     name: Plugin Check
     runs-on: ubuntu-latest

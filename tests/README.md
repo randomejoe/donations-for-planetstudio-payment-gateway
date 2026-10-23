@@ -31,3 +31,20 @@ release:
 ```sh
 PSPGD_PSPG_SOURCE=/path/to/planetstudio-payment-gateway php tests/run.php
 ```
+
+## Database tests
+
+`integration/db-test.php` runs the plugin's SQL on a real MySQL or MariaDB
+database: the guarded updates that let only one path confirm a payment or
+claim a subscription, the queries the scheduled jobs select rows with, the
+reports, and a payment confirmed twice. Each test runs in a transaction that
+is rolled back, on emptied plugin tables, and the file refuses to run on
+anything but a localhost site with the plugin's test mode on. Run it with WP-CLI
+on a site where the plugin is active:
+
+```sh
+wp eval-file tests/integration/db-test.php
+```
+
+`integration/run.sh` installs a throwaway WordPress with the plugin and PSPG
+and runs it there; CI does that on MySQL 8.0.
