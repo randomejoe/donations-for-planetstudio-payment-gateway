@@ -230,6 +230,58 @@ function it_event_types( string $object_type, int $object_id ): array {
 	);
 }
 
+/**
+ * The fields a browser would post from the first form on a page that saves
+ * plugin settings: ticked boxes, chosen options, every other named field.
+ *
+ * @return array<string, mixed>
+ */
+function it_posted_fields( string $html ): array {
+	$doc = new DOMDocument();
+	libxml_use_internal_errors( true );
+	$doc->loadHTML( '<?xml encoding="utf-8"?>' . $html );
+	libxml_clear_errors();
+
+	$pairs = array();
+	$xpath = new DOMXPath( $doc );
+	foreach ( $xpath->query( '//form[.//input[@name="action" and starts-with(@value, "pspgd_save_")]]//*[@name]' ) as $field ) {
+		$name = rawurlencode( $field->getAttribute( 'name' ) );
+		$tag  = strtolower( $field->nodeName );
+		$type = strtolower( $field->getAttribute( 'type' ) );
+
+		if ( 'select' === $tag ) {
+			$chosen = null;
+			foreach ( $field->getElementsByTagName( 'option' ) as $option ) {
+				if ( null === $chosen || $option->hasAttribute( 'selected' ) ) {
+					$chosen = $option;
+				}
+			}
+			$pairs[] = $name . '=' . rawurlencode( $chosen ? $chosen->getAttribute( 'value' ) : '' );
+		} elseif ( 'textarea' === $tag ) {
+			$pairs[] = $name . '=' . rawurlencode( $field->textContent );
+		} elseif ( in_array( $type, array( 'checkbox', 'radio' ), true ) ) {
+			if ( $field->hasAttribute( 'checked' ) ) {
+				$pairs[] = $name . '=' . rawurlencode( $field->hasAttribute( 'value' ) ? $field->getAttribute( 'value' ) : 'on' );
+			}
+		} elseif ( 'input' === $tag && ! in_array( $type, array( 'submit', 'button' ), true ) ) {
+			$pairs[] = $name . '=' . rawurlencode( $field->getAttribute( 'value' ) );
+		}
+	}
+
+	parse_str( implode( '&', $pairs ), $post );
+
+	return $post;
+}
+
+/** Numbers compared by value, whether the database handed them back as strings or not. @param mixed $value @return mixed */
+function it_normalise( $value ) {
+	if ( is_array( $value ) ) {
+		return array_map( 'it_normalise', $value );
+	}
+
+	return is_numeric( $value ) ? (float) $value : $value;
+}
+
 // ---------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------
@@ -609,6 +661,74 @@ it_run(
 			PSPGD_Repository::log_event( 'donation', $donation, 'payment_redirect_url_anomaly', 'Odd path.' );
 
 			it_same( array( $flagged ), PSPGD_Repository::subscriptions_with_flagged_redirect_url( array( $flagged, $clean ) ), 'Only the flagged one.' );
+		},
+
+		// --- The settings screens ------------------------------------------
+
+		'saving a settings screen without changing anything changes no setting' => static function (): void {
+			// Every field set away from its default, so a field the screen
+			// shows but its save handler drops -- or the other way round --
+			// shows up as a change.
+			$banks = array_keys( PSPGD_PSPG::bank_choices() );
+			$seed  = array(
+				'pspgd_test_mode'                => '1',
+				'pspgd_recurring_enabled'        => '0',
+				'pspgd_bank_id'                  => (string) end( $banks ),
+				'pspgd_currencies'               => array( 'AMD', 'USD', 'EUR' ),
+				'pspgd_default_currency'         => 'USD',
+				'pspgd_goal_currency'            => 'EUR',
+				'pspgd_intervals'                => array( 'monthly' ),
+				'pspgd_newsletter_optin'         => '1',
+				'pspgd_show_supporters'          => '0',
+				'pspgd_payment_image_url'        => 'https://example.org/cards.png',
+				'pspgd_client_ip_source'         => 'cloudflare',
+				'pspgd_turnstile'                => '1',
+				'pspgd_languages'                => array( 'hy', 'en' ),
+				'pspgd_colors'                   => array( 'primary' => '#112233', 'accent' => '#abc', 'text' => '#000000' ),
+				'pspgd_font_family'              => 'Georgia, serif',
+				'pspgd_radius'                   => 12,
+				'pspgd_amount_presets'           => array( 'AMD' => array( 1000.0, 2500.5 ), 'USD' => array( 10.0, 25.0 ), 'EUR' => array( 20.0 ) ),
+				'pspgd_min_amounts'              => array( 'AMD' => 700.0, 'USD' => 5.0, 'EUR' => 3.0 ),
+				'pspgd_max_amounts'              => array( 'AMD' => 900000.0, 'USD' => 2000.0, 'EUR' => 900.0 ),
+				'pspgd_event_retention_days'     => 30,
+				'pspgd_delete_data_on_uninstall' => '1',
+				'pspgd_email_from_name'          => 'Test Org',
+				'pspgd_email_from_address'       => 'donations@example.org',
+				'pspgd_email_reply_to'           => 'reply@example.org',
+				'pspgd_staff_notify_emails'      => 'a@example.org, b@example.org',
+				'pspgd_email_logo_light'         => 'https://example.org/light.png',
+				'pspgd_email_logo_dark'          => 'https://example.org/dark.png',
+				'pspgd_social_links'             => array( 'facebook' => 'https://facebook.com/example', 'telegram' => 'https://t.me/example' ),
+			);
+			foreach ( $seed as $option => $value ) {
+				update_option( $option, $value, false );
+			}
+			update_option( 'pspgd_form_labels', PSPGD_Admin::form_settings_from_post( array( 'labels' => array( 'en' => array( 'amount' => 'Sum' ), 'hy' => array( 'amount' => 'Գումար' ) ) ) )['pspgd_form_labels'], false );
+			update_option( 'pspgd_email_templates', PSPGD_Admin::email_settings_from_post( array( 'templates' => array( 'en' => array( 'donation_receipt_subject' => 'Thanks & more', 'donation_receipt_body' => 'Hello <a href="https://example.org">there</a><br>Line two' ) ) ) )['pspgd_email_templates'], false );
+			wp_cache_flush();
+
+			require_once ABSPATH . 'wp-admin/includes/admin.php';
+			$admins = get_users( array( 'role' => 'administrator', 'number' => 1, 'fields' => 'ID' ) );
+			wp_set_current_user( (int) $admins[0] );
+
+			$screens = array(
+				'pspgd-form-settings'  => array( 'render_form_settings_page', 'form_settings_from_post' ),
+				'pspgd-email-settings' => array( 'render_email_settings_page', 'email_settings_from_post' ),
+			);
+			foreach ( $screens as $page => $calls ) {
+				$_GET['page'] = $page;
+				ob_start();
+				call_user_func( array( 'PSPGD_Admin', $calls[0] ) );
+				$posted = it_posted_fields( (string) ob_get_clean() );
+				it_true( count( $posted ) > 5, "The {$page} form must be found on the page before it can be checked." );
+
+				foreach ( call_user_func( array( 'PSPGD_Admin', $calls[1] ), $posted ) as $option => $value ) {
+					it_same( it_normalise( get_option( $option ) ), it_normalise( $value ), "Saving {$page} unchanged must leave {$option} as it was." );
+				}
+			}
+
+			wp_set_current_user( 0 );
+			unset( $_GET['page'] );
 		},
 
 		// --- A whole payment path -----------------------------------------
