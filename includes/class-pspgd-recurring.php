@@ -201,7 +201,7 @@ final class PSPGD_Recurring {
 			// Paid, but with no PSPG order to confirm it against.
 			$outcome = 'unknown';
 		} elseif ( 'failed' === $outcome ) {
-			PSPGD_Repository::update_donation_status( $donation_id, 'failed' );
+			PSPGD_Payments::mark_failed( $donation_id );
 		}
 
 		if ( 'failed' === $outcome ) {

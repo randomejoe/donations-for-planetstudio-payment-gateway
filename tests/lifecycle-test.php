@@ -12,6 +12,7 @@
 require_once __DIR__ . '/bootstrap.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-installer.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-pspg.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-payments.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-exchange-rates.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-recurring.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-reconciliation.php';

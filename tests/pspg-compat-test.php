@@ -13,6 +13,7 @@
 
 require_once __DIR__ . '/bootstrap.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-pspg.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-payments.php';
 require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin.php';
 
 if ( ! function_exists( 'current_user_can' ) ) {

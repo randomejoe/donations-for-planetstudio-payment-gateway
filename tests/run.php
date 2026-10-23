@@ -18,6 +18,7 @@ $tests = array(
 	'customisation-test.php',
 	'timezone-test.php',
 	'payment-outcome-test.php',
+	'payments-test.php',
 	'form-validation-test.php',
 	'settings-save-test.php',
 	'lifecycle-test.php',

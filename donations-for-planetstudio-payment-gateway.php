@@ -29,6 +29,7 @@ require_once PSPGD_DIR . 'includes/class-pspgd-installer.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-repository.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-stats.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-pspg.php';
+require_once PSPGD_DIR . 'includes/class-pspgd-payments.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-exchange-rates.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-i18n.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-campaigns.php';

@@ -43,6 +43,7 @@ function wp_get_attachment_image_url( int $id, string $size = 'thumbnail' ) {
 
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-repository.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-pspg.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-payments.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-exchange-rates.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-i18n.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-campaigns.php';

@@ -456,7 +456,7 @@ final class PSPGD_Form {
 			exit;
 		}
 
-		PSPGD_Repository::update_donation_status( $donation_id, 'failed' );
+		PSPGD_Payments::mark_failed( $donation_id );
 		self::fail( self::bank_refusal_message( $result, $language ) );
 	}
 

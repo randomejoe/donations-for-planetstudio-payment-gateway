@@ -23,6 +23,7 @@ require_once dirname( __DIR__ ) . '/includes/class-pspgd-campaigns.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-pspg.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-payments.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-recurring.php';
 
 function determine_locale(): string {
@@ -255,7 +256,10 @@ run_tests(
 			$mail = test_sent_mail();
 			assert_same( 1, count( $mail ), 'The donor hears that the payment did not go through.' );
 			assert_contains( 'could not process', (string) $mail[0]['subject'], 'With the failed-payment email.' );
-			assert_same( 'failed', (string) ( outcome_status_writes()[0]['data']['status'] ?? '' ), 'The donation row records the decline.' );
+			$writes = outcome_status_writes();
+			assert_same( 'processing', (string) ( $writes[0]['data']['status'] ?? '' ), 'The decline claims the row from pending first, so a confirmation racing it wins.' );
+			assert_same( 'pending', (string) ( $writes[0]['where']['status'] ?? '' ), 'Only from pending.' );
+			assert_same( 'failed', (string) ( end( $writes )['data']['status'] ?? '' ), 'The donation row records the decline.' );
 		},
 
 		'a charge with no reported outcome is neither retried nor counted' => static function (): void {

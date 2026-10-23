@@ -218,19 +218,25 @@ final class PSPGD_PSPG {
 
 	public static function create_initial_payment( int $donation_id, array $data ): array {
 		if ( self::donations_test_mode() ) {
+			// The bank is simulated, not the donation: a test payment is
+			// applied exactly as a real one would be, so test mode shows what
+			// a live site does -- the receipt, the campaign closing at its
+			// goal, the figures, the staff email and the hook.
 			$donation = PSPGD_Repository::find_donation( $donation_id );
 			if ( $donation ) {
-				PSPGD_Repository::update_donation_status( $donation_id, 'paid', 'pspgd-test-' . $donation_id );
-				if ( 'recurring_initial' === $donation->type && (int) $donation->subscription_id > 0 ) {
-					$subscription = PSPGD_Repository::find_subscription( (int) $donation->subscription_id );
-					if ( $subscription ) {
-						PSPGD_Subscriptions::activate( $subscription, 'pspgd-test-binding-' . $subscription->id );
-					}
-				} else {
-					PSPGD_Emails::send_receipt( $donation );
-				}
-				PSPGD_Repository::log_event( 'donation', $donation_id, 'test_payment_paid', 'Test payment completed without contacting the bank.' );
-				self::after_paid( $donation, 'pspgd-test-' . $donation_id );
+				PSPGD_Payments::apply_report(
+					$donation,
+					array(
+						'status'        => 'paid',
+						'reference'     => 'pspgd-test-' . $donation_id,
+						'binding_id'    => (int) $donation->subscription_id > 0 ? 'pspgd-test-binding-' . (int) $donation->subscription_id : '',
+						'problem'       => '',
+						'settled'       => null,
+						'pspg_order_id' => 0,
+						'bank_result'   => array( 'test_mode' => true ),
+					),
+					array( 'channel' => 'test_mode' )
+				);
 			}
 
 			return array(
@@ -453,7 +459,7 @@ final class PSPGD_PSPG {
 			// it appends an order reference, the redirect itself is a
 			// statement that the payment did not go through.
 			if ( $failed_return ) {
-				self::mark_donation_failed( $donation_id, 'browser_return_failed', 'The donor returned through the gateway fail URL without an order reference.' );
+				PSPGD_Payments::mark_failed( $donation_id, 'browser_return_failed','The donor returned through the gateway fail URL without an order reference.' );
 				self::render_return_status( 'failed' );
 			}
 
@@ -599,19 +605,6 @@ final class PSPGD_PSPG {
 	}
 
 	/**
-	 * Mark a donation failed, but only while it is still pending, so a
-	 * confirmation that arrives at the same moment always wins.
-	 */
-	private static function mark_donation_failed( int $donation_id, string $event_type, string $message ): void {
-		if ( ! PSPGD_Repository::mark_donation_processing( $donation_id ) ) {
-			return;
-		}
-
-		PSPGD_Repository::update_donation_status( $donation_id, 'failed' );
-		PSPGD_Repository::log_event( 'donation', $donation_id, $event_type, $message );
-	}
-
-	/**
 	 * The address the bank sends a donor back to.
 	 *
 	 * @param array<string, string> $extra_args
@@ -700,9 +693,8 @@ final class PSPGD_PSPG {
 	 * Apply what the bank reported about a payment to its donation.
 	 *
 	 * Runs for PSPG callbacks, browser returns, reconciliation and scheduled
-	 * charges. Before anything is marked paid the report is checked against
-	 * the donation: it must be about this donation's own bank order, and --
-	 * where the bank states it -- for this donation's amount and currency.
+	 * charges. The report is read here and applied by PSPGD_Payments, which
+	 * checks it against the donation before anything is marked paid.
 	 *
 	 * @param mixed $order_number PSPG order number.
 	 * @param mixed $bank_result  Normalised bank result.
@@ -714,165 +706,32 @@ final class PSPGD_PSPG {
 			return;
 		}
 
-		$bank_result = is_array( $bank_result ) ? $bank_result : array();
-		$status      = self::normalize_status( $bank_result );
-		$reference   = self::extract_reference( $bank_result );
-		$problem     = self::verification_problem( $donation, $bank_result );
-
-		if ( 'order_mismatch' === $problem ) {
-			// A report about some other bank order, delivered against this
-			// donation's PSPG order number. Acting on it would confirm or
-			// fail the wrong donation, so it is recorded and nothing else.
-			PSPGD_Repository::log_event(
-				'security',
-				(int) $donation->id,
-				'payment_order_mismatch',
-				'A payment report named a different bank order than the one this donation registered, so it was ignored.',
-				array(
-					'pspg_order_id' => (int) $order_number,
-					'order_id'      => (string) ( $donation->bank_order_id ?? '' ),
-					'bank_ids'      => isset( $bank_result['bank_ids'] ) && is_array( $bank_result['bank_ids'] ) ? $bank_result['bank_ids'] : array(),
-				)
-			);
-			return;
-		}
-
-		if ( ! PSPGD_Repository::mark_donation_processing( (int) $donation->id ) ) {
-			return;
-		}
-
-		if ( 'paid' === $status && 'amount_mismatch' === $problem ) {
-			self::hold_for_review( $donation, $bank_result, $reference, (int) $order_number );
-			return;
-		}
-
-		PSPGD_Repository::update_donation_status( (int) $donation->id, $status, $reference );
-
-		if ( 'paid' === $status && 'recurring_initial' === $donation->type && (int) $donation->subscription_id > 0 ) {
-			$binding_id   = self::extract_binding_id( $bank_result );
-			$subscription = PSPGD_Repository::find_subscription( (int) $donation->subscription_id );
-			if ( '' !== $binding_id && $subscription ) {
-				PSPGD_Subscriptions::activate( $subscription, $binding_id );
-			} elseif ( $subscription ) {
-				if ( ! PSPGD_Repository::event_exists( 'subscription', (int) $subscription->id, 'recurring_binding_missing' ) ) {
-					// The donor was charged, so this is not an abandoned signup
-					// and must never be swept up by the abandonment purge -- it
-					// needs a person to follow up with them instead.
-					PSPGD_Repository::mark_subscription_setup_failed( (int) $subscription->id );
-					PSPGD_Repository::log_event(
-						'subscription',
-						(int) $subscription->id,
-						'recurring_binding_missing',
-						'Payment was confirmed, but the bank did not return a reusable card binding.',
-						$bank_result
-					);
-					PSPGD_Emails::notify_recurring_setup_failed( $subscription );
-				}
-			}
-		}
-
-		// A scheduled recurring charge sends its own receipt once it has
-		// released the subscription and moved it on to its next date; see
-		// PSPGD_Recurring::charge_once(). Sending from here would compose the
-		// email mid-charge, with the row still claimed and still pointed at
-		// the payment being confirmed.
-		$defer_receipt = is_array( $request ) && ! empty( $request['defer_receipt'] );
-
-		if ( 'paid' === $status && 'recurring_initial' !== $donation->type && ! $defer_receipt ) {
-			PSPGD_Emails::send_receipt( $donation );
-		}
-		// The donation just changed state, so the figures above the donation
-		// log are stale; drop them rather than showing a confirmed payment
-		// as missing for the rest of the cache window.
-		PSPGD_Stats::flush();
-
-		if ( 'paid' === $status && (int) $donation->campaign_id > 0 ) {
-			// This payment may be the one that finishes the campaign, and the
-			// next visitor should not be offered a form for a funded goal.
-			// Cancelling its recurring donors is left to the hourly sweep:
-			// unbinding cards and sending email does not belong in the
-			// request the bank is waiting on.
-			PSPGD_Campaigns::close_if_finished( (int) $donation->campaign_id, false );
-		}
-
-		PSPGD_Repository::log_event(
-			'donation',
-			(int) $donation->id,
-			'payment_' . $status,
-			'PSPG payment callback processed.',
-			array(
-				'pspg_order_id' => (int) $order_number,
-				'bank_result'   => $bank_result,
-			)
+		PSPGD_Payments::apply_report(
+			$donation,
+			self::read_report( $donation, is_array( $bank_result ) ? $bank_result : array(), (int) $order_number ),
+			is_array( $request ) ? $request : array()
 		);
-
-		if ( 'paid' === $status ) {
-			self::after_paid( $donation, $reference );
-		}
 	}
 
 	/**
-	 * Park a payment the bank reported as paid, but for a different amount
-	 * or currency than the donation asked for.
-	 *
-	 * It is not "paid": every figure, receipt and campaign total would quote
-	 * a sum the bank did not take. It is not "failed" either -- money moved.
-	 * 'review' keeps it out of every total until a person has compared the
-	 * PSPG order with the bank.
+	 * A PSPG result read into the report PSPGD_Payments applies: the
+	 * donation status it means, the reference a donor can find on their
+	 * statement, the card binding, and whether it describes this donation's
+	 * payment at all.
 	 *
 	 * @param array<string, mixed> $bank_result
+	 * @return array<string, mixed>
 	 */
-	private static function hold_for_review( object $donation, array $bank_result, string $reference, int $order_number ): void {
-		$settled = self::settled_amount( (string) $donation->bank_id, $bank_result );
-
-		PSPGD_Repository::update_donation_status( (int) $donation->id, 'review', $reference );
-		PSPGD_Stats::flush();
-
-		PSPGD_Repository::log_event(
-			'security',
-			(int) $donation->id,
-			'payment_amount_mismatch',
-			sprintf(
-				'The bank reported this payment as paid for %1$s, but the donation asked for %2$s. It is held for review and left out of every total.',
-				$settled ? PSPGD_I18n::format_amount( $settled['amount'], '' !== $settled['currency'] ? $settled['currency'] : (string) $donation->currency ) : '?',
-				PSPGD_I18n::format_amount( (float) $donation->amount, (string) $donation->currency )
-			),
-			array(
-				'pspg_order_id' => $order_number,
-				'amount'        => (string) $donation->amount,
-				'currency'      => (string) $donation->currency,
-				'bank_result'   => $bank_result,
-			)
+	public static function read_report( object $donation, array $bank_result, int $pspg_order_id ): array {
+		return array(
+			'status'        => self::normalize_status( $bank_result ),
+			'reference'     => self::extract_reference( $bank_result ),
+			'binding_id'    => self::extract_binding_id( $bank_result ),
+			'problem'       => self::verification_problem( $donation, $bank_result ),
+			'settled'       => self::settled_amount( (string) ( $donation->bank_id ?? '' ), $bank_result ),
+			'pspg_order_id' => $pspg_order_id,
+			'bank_result'   => $bank_result,
 		);
-
-		$held                        = clone $donation;
-		$held->status                = 'review';
-		$held->transaction_reference = '' !== $reference ? $reference : (string) $donation->transaction_reference;
-
-		PSPGD_Notifications::donation_held_for_review( $held, $settled );
-	}
-
-	/**
-	 * Everything that follows a donation becoming paid, wherever that
-	 * happened: the staff notification and the public hook.
-	 */
-	private static function after_paid( object $donation, string $reference ): void {
-		$paid         = clone $donation;
-		$paid->status = 'paid';
-		if ( '' !== $reference ) {
-			$paid->transaction_reference = $reference;
-		}
-
-		PSPGD_Notifications::donation_received( $paid );
-
-		/**
-		 * Fires once when a donation becomes paid: one-time donations, the
-		 * first payment of a recurring donation, and every scheduled charge.
-		 * Test-mode donations fire it too; check `$donation->is_test`.
-		 *
-		 * @param object $donation The donation row, with its new status.
-		 */
-		do_action( 'pspgd_donation_paid', $paid );
 	}
 
 	/**
@@ -1010,18 +869,7 @@ final class PSPGD_PSPG {
 		$bank_status = is_array( $sync_result ) ? strtolower( (string) ( $sync_result['status'] ?? '' ) ) : '';
 
 		if ( in_array( $bank_status, array( 'refunded', 'voided' ), true ) ) {
-			if ( PSPGD_Repository::transition_donation_status( (int) $donation->id, array( 'paid', 'review' ), 'refunded' ) ) {
-				PSPGD_Stats::flush();
-				PSPGD_Repository::log_event(
-					'donation',
-					(int) $donation->id,
-					'payment_refunded',
-					'void' === $kind
-						? 'The payment was voided in PlanetStudio Payment Gateway, so the donation is marked refunded and left out of every total.'
-						: 'The payment was refunded in PlanetStudio Payment Gateway, so the donation is marked refunded and left out of every total.',
-					array( 'pspg_order_id' => $order_number )
-				);
-			}
+			PSPGD_Payments::mark_refunded( $donation, $kind, $order_number );
 			return;
 		}
 

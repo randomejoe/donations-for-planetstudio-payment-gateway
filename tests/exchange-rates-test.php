@@ -12,6 +12,7 @@
 require_once __DIR__ . '/bootstrap.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-repository.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-pspg.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-payments.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-exchange-rates.php';
 
 const RATES_USD_BODY = '{"date":"2026-09-12","usd":{"amd":400,"eur":0.9}}';
