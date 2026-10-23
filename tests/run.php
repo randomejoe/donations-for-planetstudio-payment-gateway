@@ -19,6 +19,8 @@ $tests = array(
 	'timezone-test.php',
 	'payment-outcome-test.php',
 	'version-test.php',
+	'pspg-compat-test.php',
+	'pspg-contract-test.php',
 );
 $failures = 0;
 foreach ( $tests as $test ) {

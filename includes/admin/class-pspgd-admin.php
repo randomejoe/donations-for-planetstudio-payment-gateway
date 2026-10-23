@@ -44,15 +44,32 @@ final class PSPGD_Admin {
 
 	/**
 	 * Say plainly when the form cannot take money yet, on this plugin's own
-	 * screens only: no bank chosen, or the gateway plugin missing.
+	 * screens only: no bank chosen, or the gateway plugin missing. A PSPG
+	 * that lacks parts this plugin calls is reported in test mode too, so it
+	 * is seen before the switch to real payments.
 	 */
 	public static function setup_notice(): void {
-		if ( ! current_user_can( 'manage_options' ) || PSPGD_PSPG::donations_test_mode() ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
 		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 		if ( 0 !== strpos( $page, 'pspgd' ) ) {
+			return;
+		}
+
+		$missing = PSPGD_PSPG::missing_pspg_parts();
+		if ( $missing ) {
+			$message = sprintf(
+				/* translators: 1: PlanetStudio Payment Gateway version, 2: comma-separated list of PHP function and class names. */
+				__( 'This version of PlanetStudio Payment Gateway (%1$s) is missing parts this plugin relies on: %2$s. Payments may not be confirmed, checked or cancelled correctly. Update both plugins, and check the donation log before relying on it.', 'donations-for-planetstudio-payment-gateway' ),
+				defined( 'PSPG_VERSION' ) ? (string) PSPG_VERSION : '?',
+				implode( ', ', $missing )
+			);
+			echo '<div class="notice notice-error"><p>' . esc_html( $message ) . '</p></div>';
+		}
+
+		if ( PSPGD_PSPG::donations_test_mode() ) {
 			return;
 		}
 

@@ -24,7 +24,10 @@ in `README.md`. When a new WordPress version has been tested, update
 
 - Regenerate the translation template if any translatable string changed:
   `python3 tools/make-pot.py`
-- `php tests/run.php` passes.
+- `php tests/run.php` passes. Run it once with `PSPGD_PSPG_SOURCE` set to
+  the latest PSPG, unpacked, so the PSPG contract test runs too (see
+  `tests/README.md`). The release notes name the PSPG version it was
+  tested against.
 - Commit, then push `main` (step 4) and wait for CI to go green: tests on
   every supported PHP version, and Plugin Check with no errors.
 - Build the zip (step 3), install it on a test site with the plugin's test

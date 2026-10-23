@@ -20,3 +20,14 @@ carries another organisation's name or design.
 
 `version-test.php` checks that the version and requirements agree across the
 plugin header, `PSPGD_VERSION`, `readme.txt` and `README.md`.
+
+`pspg-compat-test.php` checks that a PSPG missing a part this plugin calls
+is named in an admin notice. `pspg-contract-test.php` reads the PSPG hooks,
+functions, classes and methods this plugin uses from its own code and looks
+for each in a real copy of PSPG. It runs only when `PSPGD_PSPG_SOURCE` names
+an unpacked PSPG plugin folder; CI points it at the latest WordPress.org
+release:
+
+```sh
+PSPGD_PSPG_SOURCE=/path/to/planetstudio-payment-gateway php tests/run.php
+```

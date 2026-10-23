@@ -7,6 +7,10 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Weekly, so a PSPG release that breaks the contract test is caught even
+  # when nothing here changes.
+  schedule:
+    - cron: '0 6 * * 1'
 
 permissions:
   contents: read
@@ -31,7 +35,16 @@ jobs:
       - name: Lint
         run: find . -name '*.php' -not -path './dist/*' -print0 | xargs -0 -n1 php -l > /dev/null
 
+      # tests/pspg-contract-test.php checks this plugin's calls into PSPG
+      # against the latest PSPG release on WordPress.org.
+      - name: Download the latest PSPG
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/pspg.zip" https://downloads.wordpress.org/plugin/planetstudio-payment-gateway.zip
+          unzip -q "$RUNNER_TEMP/pspg.zip" -d "$RUNNER_TEMP/pspg"
+
       - name: Tests
+        env:
+          PSPGD_PSPG_SOURCE: ${{ runner.temp }}/pspg/planetstudio-payment-gateway
         run: php tests/run.php
 
   plugin-check:

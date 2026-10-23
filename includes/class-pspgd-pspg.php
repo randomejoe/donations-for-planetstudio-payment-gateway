@@ -40,6 +40,51 @@ final class PSPGD_PSPG {
 		add_filter( 'pspg_idram_fail_redirect_url', array( __CLASS__, 'wallet_fail_url' ), 10, 3 );
 	}
 
+	/**
+	 * The PSPG functions, methods and classes this plugin calls that the
+	 * active PSPG does not have, as short names for an admin notice.
+	 *
+	 * Every call site checks its piece and quietly falls back when it is
+	 * missing -- no test-mode reading, no bank list, no card release, no
+	 * bank-order check on a browser return -- so a PSPG update that renames
+	 * one would otherwise go unnoticed. Empty when PSPG is not active at
+	 * all; the setup notice covers that.
+	 *
+	 * @return string[]
+	 */
+	public static function missing_pspg_parts(): array {
+		if ( ! function_exists( 'pspg_create_payment' ) ) {
+			return array();
+		}
+
+		$missing = array();
+		foreach ( array( 'pspg_core', 'pspg_get_bank', 'pspg_sync_status', 'pspg_charge_saved_card' ) as $function ) {
+			if ( ! function_exists( $function ) ) {
+				$missing[] = $function . '()';
+			}
+		}
+
+		$core = function_exists( 'pspg_core' ) ? pspg_core() : null;
+		foreach ( array( 'config' => 'get', 'banks' => 'all', 'orders' => 'get' ) as $service => $method ) {
+			$object = is_object( $core ) && method_exists( $core, $service ) ? $core->$service() : null;
+			if ( ! is_object( $object ) || ! method_exists( $object, $method ) ) {
+				$missing[] = 'pspg_core()->' . $service . '()->' . $method . '()';
+			}
+		}
+
+		if ( ! interface_exists( 'PSPG_Bank_Interface' ) || ! method_exists( 'PSPG_Bank_Interface', 'unbind_saved_card' ) ) {
+			$missing[] = 'PSPG_Bank_Interface::unbind_saved_card()';
+		}
+		if ( ! class_exists( 'PSPG_Bank_ArCa' ) ) {
+			$missing[] = 'PSPG_Bank_ArCa';
+		}
+		if ( ! class_exists( 'PSPG_Bot_Protection' ) || ! method_exists( 'PSPG_Bot_Protection', 'get_settings' ) ) {
+			$missing[] = 'PSPG_Bot_Protection::get_settings()';
+		}
+
+		return $missing;
+	}
+
 	/** Whether the gateway is active and a bank has been chosen for donations. */
 	public static function is_ready(): bool {
 		return function_exists( 'pspg_create_payment' ) && function_exists( 'pspg_get_bank' ) && '' !== self::bank_id();
