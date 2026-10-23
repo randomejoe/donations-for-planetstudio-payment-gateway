@@ -651,6 +651,7 @@ final class PSPGD_Repository {
 			'binding_id', 'bindingId', 'client_id', 'is_binding',
 			'redirect_url', 'payment_url', 'url', 'form_url',
 			'interval_key', 'campaign_id', 'is_test', 'created_at', 'db_error', 'table',
+			'rate', 'last_rate',
 		);
 	}
 

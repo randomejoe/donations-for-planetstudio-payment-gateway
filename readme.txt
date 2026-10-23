@@ -114,6 +114,7 @@ Available properties: `--pspgd-primary`, `--pspgd-accent`, `--pspgd-ink`, `--psp
 * `pspgd_client_ip` -- the visitor address the throttle uses.
 * `pspgd_load_assets` -- whether the form's script and stylesheet load in the page head.
 * `pspgd_fetch_exchange_rates`, `pspgd_exchange_rate_sources`, `pspgd_exchange_rate_max_age` -- the exchange-rate source.
+* `pspgd_exchange_rate_max_change` -- how far a newly fetched rate may move from the last known one before it is refused and logged (default 0.25, a 25% move; 0 turns the check off).
 
 == External services ==
 

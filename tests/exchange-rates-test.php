@@ -10,11 +10,14 @@
  */
 
 require_once __DIR__ . '/bootstrap.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-repository.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-pspg.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-exchange-rates.php';
 
 const RATES_USD_BODY = '{"date":"2026-09-12","usd":{"amd":400,"eur":0.9}}';
 const RATES_EUR_BODY = '{"date":"2026-09-12","eur":{"amd":440,"usd":1.1}}';
+
+$wpdb = new PSPGD_Test_WPDB();
 
 /** Seed the cache the way a successful refresh would have left it. */
 function rates_seed( array $rates, int $age = 0 ): void {
@@ -33,6 +36,23 @@ function rates_reset(): void {
 	test_reset_http();
 	test_reset_filters();
 	test_reset_cron();
+	$GLOBALS['wpdb']->inserts = array();
+}
+
+/** @return array<int, array<string, mixed>> */
+function rates_events(): array {
+	$events = array();
+	foreach ( $GLOBALS['wpdb']->inserts as $insert ) {
+		if ( false !== strpos( (string) $insert['table'], 'pspgd_events' ) ) {
+			$events[] = $insert['data'];
+		}
+	}
+
+	return $events;
+}
+
+function rates_usd_body( float $amd ): string {
+	return '{"date":"2026-09-13","usd":{"amd":' . $amd . '}}';
 }
 
 run_tests(
@@ -198,6 +218,78 @@ run_tests(
 			PSPGD_Exchange_Rates::maybe_refresh();
 
 			assert_same( 0, count( test_http_requests() ), 'Cached rates are reused for the day; the cron job refreshes them.' );
+		},
+		'a rate that jumps too far is refused, logged and the last one kept' => static function (): void {
+			rates_reset();
+			rates_seed( array( 'usd' => 400.0, 'eur' => 440.0 ), DAY_IN_SECONDS );
+			// A slipped decimal point, served by both mirrors of the feed.
+			test_queue_http( 'cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd', 200, rates_usd_body( 4000.0 ) );
+			test_queue_http( 'currency-api.pages.dev/v1/currencies/usd', 200, rates_usd_body( 4000.0 ) );
+			test_queue_http( '/eur.min.json', 200, RATES_EUR_BODY );
+
+			PSPGD_Exchange_Rates::refresh_rates();
+
+			assert_same( 400.0, PSPGD_Exchange_Rates::rate( 'USD', 'AMD' ), 'A tenfold jump must not reach the campaign totals that close campaigns.' );
+			$events = rates_events();
+			assert_same( 2, count( $events ), 'Each refused figure is in the event log, once per source.' );
+			assert_same( 'exchange_rate_rejected', (string) $events[0]['event_type'], 'The log says what happened.' );
+			$context = json_decode( (string) $events[0]['context'], true );
+			assert_same( array( 'USD', 4000, 400 ), array( $context['currency'], $context['rate'], $context['last_rate'] ), 'The log keeps both figures, so a person can judge which is right.' );
+			assert_true( (bool) get_transient( 'pspgd_exchange_rate_retry' ), 'A refused rate counts as a failed refresh.' );
+		},
+
+		'a bad figure from one source falls through to the other' => static function (): void {
+			rates_reset();
+			rates_seed( array( 'usd' => 400.0, 'eur' => 440.0 ), DAY_IN_SECONDS );
+			test_queue_http( 'cdn.jsdelivr.net', 200, rates_usd_body( 40.0 ) );
+			test_queue_http( 'currency-api.pages.dev', 200, rates_usd_body( 405.0 ) );
+			test_queue_http( '/eur.min.json', 200, RATES_EUR_BODY );
+
+			PSPGD_Exchange_Rates::refresh_rates();
+
+			assert_same( 405.0, PSPGD_Exchange_Rates::rate( 'USD', 'AMD' ), 'The backup source is asked when the first one gives an implausible figure.' );
+		},
+
+		'an ordinary move is accepted, up to the bound either way' => static function (): void {
+			foreach ( array( 500.0, 320.0 ) as $fetched ) {
+				rates_reset();
+				rates_seed( array( 'usd' => 400.0, 'eur' => 440.0 ), DAY_IN_SECONDS );
+				test_queue_http( '/usd.min.json', 200, rates_usd_body( $fetched ) );
+				test_queue_http( '/eur.min.json', 200, RATES_EUR_BODY );
+
+				PSPGD_Exchange_Rates::refresh_rates();
+
+				assert_same( $fetched, PSPGD_Exchange_Rates::rate( 'USD', 'AMD' ), 'A 25% move up, or the matching move down, is still believed.' );
+				assert_same( array(), rates_events(), 'An accepted rate logs nothing.' );
+			}
+		},
+
+		'a large real move is taken once the old rate has aged out' => static function (): void {
+			rates_reset();
+			rates_seed( array( 'usd' => 400.0, 'eur' => 440.0 ), 31 * DAY_IN_SECONDS );
+			test_queue_http( '/usd.min.json', 200, rates_usd_body( 700.0 ) );
+			test_queue_http( '/eur.min.json', 200, RATES_EUR_BODY );
+
+			PSPGD_Exchange_Rates::refresh_rates();
+
+			assert_same( 700.0, PSPGD_Exchange_Rates::rate( 'USD', 'AMD' ), 'With nothing current to compare against, the fetched rate stands.' );
+		},
+
+		'the bound can be changed or switched off by a filter' => static function (): void {
+			rates_reset();
+			rates_seed( array( 'usd' => 400.0, 'eur' => 440.0 ), DAY_IN_SECONDS );
+			test_set_filter(
+				'pspgd_exchange_rate_max_change',
+				static function () {
+					return 0;
+				}
+			);
+			test_queue_http( '/usd.min.json', 200, rates_usd_body( 4000.0 ) );
+			test_queue_http( '/eur.min.json', 200, RATES_EUR_BODY );
+
+			PSPGD_Exchange_Rates::refresh_rates();
+
+			assert_same( 4000.0, PSPGD_Exchange_Rates::rate( 'USD', 'AMD' ), 'A site that sets the bound to 0 has asked for no check.' );
 		},
 	)
 );

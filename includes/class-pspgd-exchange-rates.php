@@ -39,6 +39,13 @@ final class PSPGD_Exchange_Rates {
 	 */
 	private const RETRY_INTERVAL = HOUR_IN_SECONDS;
 
+	/**
+	 * The furthest a fetched rate may move from the last known one, either
+	 * way, before it is refused: 0.25 accepts anything from 1/1.25 to 1.25
+	 * times the old rate. See rate_is_plausible().
+	 */
+	private const MAX_CHANGE = 0.25;
+
 	public static function init(): void {
 		add_action( self::CRON_HOOK, array( __CLASS__, 'refresh_rates' ) );
 		add_action( 'init', array( __CLASS__, 'ensure_schedule' ) );
@@ -326,7 +333,7 @@ final class PSPGD_Exchange_Rates {
 			}
 			$data = json_decode( (string) wp_remote_retrieve_body( $response ), true );
 			$rate = is_array( $data ) && isset( $data[ $currency ][ $pivot ] ) ? (float) $data[ $currency ][ $pivot ] : 0.0;
-			if ( $rate > 0 ) {
+			if ( $rate > 0 && self::rate_is_plausible( $currency, $rate, (string) $url ) ) {
 				update_option(
 					self::fallback_rate_key( $currency ),
 					array( 'rate' => $rate, 'fetched_at' => time() ),
@@ -335,6 +342,50 @@ final class PSPGD_Exchange_Rates {
 				return true;
 			}
 		}
+
+		return false;
+	}
+
+	/**
+	 * Whether a fetched rate is close enough to the last known one to be
+	 * believed.
+	 *
+	 * Converted totals decide when a campaign closes at its goal, and closing
+	 * cancels its recurring donors for good. One bad figure from a free feed
+	 * -- a slipped decimal point, a broken mirror -- must not be able to do
+	 * that, so a rate that moves further than MAX_CHANGE in one step is
+	 * refused and logged, and the last known rate stays in use. A real move
+	 * that large is accepted once the last known rate has aged out (MAX_AGE);
+	 * until then campaigns go on using the old rate.
+	 */
+	private static function rate_is_plausible( string $currency, float $rate, string $source ): bool {
+		$last = self::stored_rate( $currency );
+		if ( ! $last ) {
+			return true;
+		}
+
+		$max_change = (float) apply_filters( 'pspgd_exchange_rate_max_change', self::MAX_CHANGE, strtoupper( $currency ) );
+		if ( $max_change <= 0 ) {
+			return true;
+		}
+
+		$ratio = $rate / $last['rate'];
+		if ( $ratio <= 1 + $max_change && $ratio >= 1 / ( 1 + $max_change ) ) {
+			return true;
+		}
+
+		PSPGD_Repository::log_event(
+			'exchange_rate',
+			0,
+			'exchange_rate_rejected',
+			sprintf( 'A fetched %s rate moved too far from the last known one, so it was ignored and the last known rate kept.', strtoupper( $currency ) ),
+			array(
+				'currency'  => strtoupper( $currency ),
+				'rate'      => $rate,
+				'last_rate' => $last['rate'],
+				'url'       => $source,
+			)
+		);
 
 		return false;
 	}
