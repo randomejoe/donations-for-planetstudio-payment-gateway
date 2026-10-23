@@ -162,6 +162,10 @@ In PlanetStudio Payment Gateway > Orders. After a full refund or a void the dona
 
 Donations > Form Settings > Appearance. The defaults are a neutral blue.
 
+= Does it work on multisite? =
+
+Yes, activated on one site or for the whole network. Each site has its own donations, settings, bank and scheduled jobs, and its own choice in Form Settings about whether its donation data is deleted with the plugin. PlanetStudio Payment Gateway has to be active on the same sites.
+
 == Changelog ==
 
 = 1.0.0 =
