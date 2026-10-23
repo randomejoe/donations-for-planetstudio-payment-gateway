@@ -71,17 +71,21 @@ run_tests(
 
 		'a donor name cannot become a spreadsheet formula in the export' => static function (): void {
 			require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin.php';
+require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-donations.php';
+require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-email-settings.php';
 
 			foreach ( array( '=HYPERLINK("https://example.test","x")', '+1', '-2+3', '@SUM(A1)', "\t=1", "\r=1" ) as $typed ) {
-				assert_same( "'" . $typed, PSPGD_Admin::csv_text( $typed ), 'A cell starting with ' . json_encode( $typed[0] ) . ' is a formula to Excel.' );
+				assert_same( "'" . $typed, PSPGD_Admin_Donations::csv_text( $typed ), 'A cell starting with ' . json_encode( $typed[0] ) . ' is a formula to Excel.' );
 			}
-			assert_same( 'Anna', PSPGD_Admin::csv_text( 'Anna' ), 'An ordinary name is left alone.' );
-			assert_same( 'Ann-Marie', PSPGD_Admin::csv_text( 'Ann-Marie' ), 'Only the first character matters.' );
-			assert_same( '', PSPGD_Admin::csv_text( '' ), 'An empty cell stays empty.' );
+			assert_same( 'Anna', PSPGD_Admin_Donations::csv_text( 'Anna' ), 'An ordinary name is left alone.' );
+			assert_same( 'Ann-Marie', PSPGD_Admin_Donations::csv_text( 'Ann-Marie' ), 'Only the first character matters.' );
+			assert_same( '', PSPGD_Admin_Donations::csv_text( '' ), 'An empty cell stays empty.' );
 		},
 
 		'every administrator can manage donations, and nobody else unless granted' => static function (): void {
 			require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin.php';
+require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-donations.php';
+require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-email-settings.php';
 
 			$admin = PSPGD_Admin::grant_capability( array( 'manage_options' => true, 'edit_posts' => true ) );
 			assert_true( ! empty( $admin[ PSPGD_Admin::CAPABILITY ] ), 'An administrator sees the donation log without a role editor.' );
@@ -96,13 +100,15 @@ run_tests(
 
 		'the staff address list keeps only real addresses, once each' => static function (): void {
 			require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin.php';
+require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-donations.php';
+require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-email-settings.php';
 
 			assert_same(
 				'one@example.test, two@example.test',
-				PSPGD_Admin::sanitize_email_list( " one@example.test;not-an-address,\ntwo@example.test  one@example.test " ),
+				PSPGD_Admin_Email_Settings::sanitize_email_list( " one@example.test;not-an-address,\ntwo@example.test  one@example.test " ),
 				'Commas, semicolons, spaces and new lines all separate addresses.'
 			);
-			assert_same( '', PSPGD_Admin::sanitize_email_list( '' ), 'Blank means no staff emails.' );
+			assert_same( '', PSPGD_Admin_Email_Settings::sanitize_email_list( '' ), 'Blank means no staff emails.' );
 		},
 
 		'a freshly rendered form reads as just-opened' => static function (): void {

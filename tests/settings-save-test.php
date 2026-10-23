@@ -2,7 +2,7 @@
 /**
  * What the two settings screens store, from what an administrator posts.
  *
- * PSPGD_Admin::form_settings_from_post() and email_settings_from_post()
+ * PSPGD_Admin_Form_Settings::form_settings_from_post() and email_settings_from_post()
  * clean every field into the option it is saved as; the save handlers only
  * check the nonce and capability, write the result and redirect. A value
  * that is not on the screen's list -- a currency, a frequency, a network --
@@ -27,6 +27,8 @@ require_once dirname( __DIR__ ) . '/includes/class-pspgd-security.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
 require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin.php';
+require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-form-settings.php';
+require_once dirname( __DIR__ ) . '/includes/admin/class-pspgd-admin-email-settings.php';
 
 function settings_reset(): void {
 	test_reset_options();
@@ -35,7 +37,7 @@ function settings_reset(): void {
 
 /** @return array<string, mixed> */
 function settings_form( array $post ): array {
-	return PSPGD_Admin::form_settings_from_post( $post );
+	return PSPGD_Admin_Form_Settings::form_settings_from_post( $post );
 }
 
 run_tests(
@@ -160,7 +162,7 @@ run_tests(
 		'email bodies keep their allowed markup; subjects and headings are plain text' => static function (): void {
 			settings_reset();
 
-			$options   = PSPGD_Admin::email_settings_from_post(
+			$options   = PSPGD_Admin_Email_Settings::email_settings_from_post(
 				array(
 					'templates' => array(
 						'en' => array(
@@ -182,7 +184,7 @@ run_tests(
 		'social links are web addresses for known networks only' => static function (): void {
 			settings_reset();
 
-			$options = PSPGD_Admin::email_settings_from_post(
+			$options = PSPGD_Admin_Email_Settings::email_settings_from_post(
 				array(
 					'social' => array(
 						'facebook'  => ' https://facebook.com/example ',
@@ -199,7 +201,7 @@ run_tests(
 		'sender and staff addresses are cleaned' => static function (): void {
 			settings_reset();
 
-			$options = PSPGD_Admin::email_settings_from_post(
+			$options = PSPGD_Admin_Email_Settings::email_settings_from_post(
 				array(
 					'from_address'        => 'not an address',
 					'reply_to'            => 'hello@example.org',

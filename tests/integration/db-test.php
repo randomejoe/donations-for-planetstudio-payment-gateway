@@ -703,8 +703,8 @@ it_run(
 			foreach ( $seed as $option => $value ) {
 				update_option( $option, $value, false );
 			}
-			update_option( 'pspgd_form_labels', PSPGD_Admin::form_settings_from_post( array( 'labels' => array( 'en' => array( 'amount' => 'Sum' ), 'hy' => array( 'amount' => 'Գումար' ) ) ) )['pspgd_form_labels'], false );
-			update_option( 'pspgd_email_templates', PSPGD_Admin::email_settings_from_post( array( 'templates' => array( 'en' => array( 'donation_receipt_subject' => 'Thanks & more', 'donation_receipt_body' => 'Hello <a href="https://example.org">there</a><br>Line two' ) ) ) )['pspgd_email_templates'], false );
+			update_option( 'pspgd_form_labels', PSPGD_Admin_Form_Settings::form_settings_from_post( array( 'labels' => array( 'en' => array( 'amount' => 'Sum' ), 'hy' => array( 'amount' => 'Գումար' ) ) ) )['pspgd_form_labels'], false );
+			update_option( 'pspgd_email_templates', PSPGD_Admin_Email_Settings::email_settings_from_post( array( 'templates' => array( 'en' => array( 'donation_receipt_subject' => 'Thanks & more', 'donation_receipt_body' => 'Hello <a href="https://example.org">there</a><br>Line two' ) ) ) )['pspgd_email_templates'], false );
 			wp_cache_flush();
 
 			require_once ABSPATH . 'wp-admin/includes/admin.php';
@@ -712,17 +712,18 @@ it_run(
 			wp_set_current_user( (int) $admins[0] );
 
 			$screens = array(
-				'pspgd-form-settings'  => array( 'render_form_settings_page', 'form_settings_from_post' ),
-				'pspgd-email-settings' => array( 'render_email_settings_page', 'email_settings_from_post' ),
+				'pspgd-form-settings'  => array( 'PSPGD_Admin_Form_Settings', 'render_form_settings_page', 'form_settings_from_post' ),
+				'pspgd-email-settings' => array( 'PSPGD_Admin_Email_Settings', 'render_email_settings_page', 'email_settings_from_post' ),
 			);
-			foreach ( $screens as $page => $calls ) {
-				$_GET['page'] = $page;
+			foreach ( $screens as $page => $screen ) {
+				list( $class, $render, $clean ) = $screen;
+				$_GET['page']                   = $page;
 				ob_start();
-				call_user_func( array( 'PSPGD_Admin', $calls[0] ) );
+				call_user_func( array( $class, $render ) );
 				$posted = it_posted_fields( (string) ob_get_clean() );
 				it_true( count( $posted ) > 5, "The {$page} form must be found on the page before it can be checked." );
 
-				foreach ( call_user_func( array( 'PSPGD_Admin', $calls[1] ), $posted ) as $option => $value ) {
+				foreach ( call_user_func( array( $class, $clean ), $posted ) as $option => $value ) {
 					it_same( it_normalise( get_option( $option ) ), it_normalise( $value ), "Saving {$page} unchanged must leave {$option} as it was." );
 				}
 			}

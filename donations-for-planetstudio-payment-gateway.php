@@ -41,6 +41,10 @@ require_once PSPGD_DIR . 'includes/class-pspgd-privacy.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-security.php';
 require_once PSPGD_DIR . 'includes/public/class-pspgd-form.php';
 require_once PSPGD_DIR . 'includes/admin/class-pspgd-admin.php';
+require_once PSPGD_DIR . 'includes/admin/class-pspgd-admin-donations.php';
+require_once PSPGD_DIR . 'includes/admin/class-pspgd-admin-recurring.php';
+require_once PSPGD_DIR . 'includes/admin/class-pspgd-admin-form-settings.php';
+require_once PSPGD_DIR . 'includes/admin/class-pspgd-admin-email-settings.php';
 
 register_activation_hook( __FILE__, array( 'PSPGD_Installer', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'PSPGD_Installer', 'deactivate' ) );
