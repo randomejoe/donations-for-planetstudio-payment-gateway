@@ -1,0 +1,54 @@
+# Tests on every PHP version the plugin claims to support, and Plugin Check
+# on exactly what ships: the tree git archive produces, so files marked
+# export-ignore in .gitattributes are left out as they are from the zip.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 7.4 is the "Requires PHP" in readme.txt and the plugin header.
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Lint
+        run: find . -name '*.php' -not -path './dist/*' -print0 | xargs -0 -n1 php -l > /dev/null
+
+      - name: Tests
+        run: php tests/run.php
+
+  plugin-check:
+    name: Plugin Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the shipped tree
+        run: |
+          mkdir -p build
+          git archive --format=tar --prefix=donations-for-planetstudio-payment-gateway/ HEAD | tar -x -C build
+
+      # Errors fail the job; warnings are shown as annotations. 1.0.0 has
+      # 56 warnings, mostly nonce checks on read-only GET parameters and the
+      # plugin's own direct queries on its tables.
+      - uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: build/donations-for-planetstudio-payment-gateway
+          ignore-warnings: true
