@@ -47,6 +47,7 @@ require_once dirname( __DIR__ ) . '/includes/class-pspgd-exchange-rates.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-i18n.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-campaigns.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
 require_once dirname( __DIR__ ) . '/includes/public/class-pspgd-form.php';
 
 /** A fresh install: none of the settings the other tests start from. */
@@ -172,7 +173,7 @@ run_tests(
 
 			assert_same( 'Նվիրաբերել', PSPGD_I18n::t( 'donate', 'Donate', 'hy' ), 'The bundled pack supplies the label.' );
 			assert_same( 'Ամսաթիվ', PSPGD_I18n::email_label( 'date', 'hy' ), 'And the email structure.' );
-			assert_true( '' !== PSPGD_Subscriptions::default_template( 'donation_receipt_subject', 'hy' ), 'And the email wording.' );
+			assert_true( '' !== PSPGD_Emails::default_template( 'donation_receipt_subject', 'hy' ), 'And the email wording.' );
 		},
 
 		'another plugin can add a language pack' => static function (): void {
@@ -185,7 +186,7 @@ run_tests(
 			);
 
 			assert_same( 'Spenden', PSPGD_I18n::t( 'donate', 'Donate', 'de' ), 'A filtered pack supplies labels.' );
-			assert_same( 'Danke für Ihre Spende', PSPGD_Subscriptions::template_value( 'donation_receipt_subject', array(), 'de' ), 'And templates.' );
+			assert_same( 'Danke für Ihre Spende', PSPGD_Emails::template_value( 'donation_receipt_subject', array(), 'de' ), 'And templates.' );
 			assert_same( 'Continue', PSPGD_I18n::t( 'continue', 'Continue', 'de' ), 'Keys the pack leaves out fall back to English.' );
 		},
 
@@ -213,20 +214,20 @@ run_tests(
 		'an email with no logo set uses the theme logo, and with none shows the site name' => static function (): void {
 			customisation_fresh_install( array( 'pspgd_colors' => array( 'primary' => '#0a7d4f' ) ) );
 
-			$email = PSPGD_Subscriptions::compose( 'donation_receipt', 'en', array( 'first_name' => 'Alex' ), array(), 'Cancel', 'https://example.org/cancel' );
+			$email = PSPGD_Emails::compose( 'donation_receipt', 'en', array( 'first_name' => 'Alex' ), array(), 'Cancel', 'https://example.org/cancel' );
 			assert_not_contains( '<img', $email['html'], 'No logo configured and none in the theme: no image at all.' );
 			assert_contains( 'Example Charity', $email['html'], 'The site name stands in for the logo.' );
 			assert_contains( 'background:#0a7d4f', $email['html'], 'The button uses the brand colour.' );
 
 			$GLOBALS['test_custom_logo'] = 42;
-			$email = PSPGD_Subscriptions::compose( 'donation_receipt', 'en', array(), array() );
+			$email = PSPGD_Emails::compose( 'donation_receipt', 'en', array(), array() );
 			assert_contains( 'logo-42.png', $email['html'], 'The theme logo is used when the plugin has none of its own.' );
 		},
 
 		'mail is sent from an address at the site\'s own domain' => static function (): void {
 			customisation_fresh_install();
 
-			assert_same( 'wordpress@example.test', PSPGD_Subscriptions::from_address(), 'The fallback sender is at the site domain, like WordPress core.' );
+			assert_same( 'wordpress@example.test', PSPGD_Emails::from_address(), 'The fallback sender is at the site domain, like WordPress core.' );
 		},
 
 		'a single-currency site never calls the exchange-rate service' => static function (): void {

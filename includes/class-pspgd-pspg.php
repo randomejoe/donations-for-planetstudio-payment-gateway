@@ -227,7 +227,7 @@ final class PSPGD_PSPG {
 						PSPGD_Subscriptions::activate( $subscription, 'pspgd-test-binding-' . $subscription->id );
 					}
 				} else {
-					PSPGD_Subscriptions::send_receipt( $donation );
+					PSPGD_Emails::send_receipt( $donation );
 				}
 				PSPGD_Repository::log_event( 'donation', $donation_id, 'test_payment_paid', 'Test payment completed without contacting the bank.' );
 				self::after_paid( $donation, 'pspgd-test-' . $donation_id );
@@ -766,7 +766,7 @@ final class PSPGD_PSPG {
 						'Payment was confirmed, but the bank did not return a reusable card binding.',
 						$bank_result
 					);
-					PSPGD_Subscriptions::notify_recurring_setup_failed( $subscription );
+					PSPGD_Emails::notify_recurring_setup_failed( $subscription );
 				}
 			}
 		}
@@ -779,7 +779,7 @@ final class PSPGD_PSPG {
 		$defer_receipt = is_array( $request ) && ! empty( $request['defer_receipt'] );
 
 		if ( 'paid' === $status && 'recurring_initial' !== $donation->type && ! $defer_receipt ) {
-			PSPGD_Subscriptions::send_receipt( $donation );
+			PSPGD_Emails::send_receipt( $donation );
 		}
 		// The donation just changed state, so the figures above the donation
 		// log are stale; drop them rather than showing a confirmed payment

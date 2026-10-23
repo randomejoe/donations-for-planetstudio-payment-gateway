@@ -39,6 +39,7 @@ function get_post( int $id ) {
 
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-i18n.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
 
 /** @param array<string, mixed> $fields */
 function sub( array $fields = array() ): object {
@@ -88,8 +89,8 @@ run_tests(
 		'a scheduled charge gets its own wording, not the first-donation receipt' => static function (): void {
 			test_reset_options();
 
-			$recurring = PSPGD_Subscriptions::template_value( 'recurring_receipt_heading', array(), 'en' );
-			$one_time  = PSPGD_Subscriptions::template_value( 'donation_receipt_heading', array(), 'en' );
+			$recurring = PSPGD_Emails::template_value( 'recurring_receipt_heading', array(), 'en' );
+			$one_time  = PSPGD_Emails::template_value( 'donation_receipt_heading', array(), 'en' );
 
 			assert_true( $recurring !== $one_time, 'A donor not at their keyboard needs to be told which recurring donation this was.' );
 			assert_same( 'Your recurring donation was received', $recurring, 'The recurring receipt must exist.' );
@@ -98,7 +99,7 @@ run_tests(
 		'a composed email carries the donation details, not just the wording' => static function (): void {
 			test_reset_options();
 
-			$composed = PSPGD_Subscriptions::compose(
+			$composed = PSPGD_Emails::compose(
 				'donation_receipt',
 				'en',
 				array( 'first_name' => 'Anna', 'amount_formatted' => '10,000 AMD' ),
@@ -119,7 +120,7 @@ run_tests(
 		'details with nothing in them are left out rather than rendered blank' => static function (): void {
 			test_reset_options();
 
-			$composed = PSPGD_Subscriptions::compose(
+			$composed = PSPGD_Emails::compose(
 				'donation_receipt',
 				'en',
 				array( 'first_name' => 'Anna' ),
@@ -133,7 +134,7 @@ run_tests(
 		'an email with no donor name skips the greeting instead of greeting nobody' => static function (): void {
 			test_reset_options();
 
-			$composed = PSPGD_Subscriptions::compose( 'donation_receipt', 'en', array( 'first_name' => '' ) );
+			$composed = PSPGD_Emails::compose( 'donation_receipt', 'en', array( 'first_name' => '' ) );
 
 			assert_not_contains( 'Hello', $composed['html'], 'A missing first name must not produce "Hello ,".' );
 		},
@@ -141,7 +142,7 @@ run_tests(
 		'the details table is labelled in the donor language' => static function (): void {
 			test_reset_options();
 
-			$composed = PSPGD_Subscriptions::compose(
+			$composed = PSPGD_Emails::compose(
 				'donation_receipt',
 				'hy',
 				array( 'first_name' => 'Անna' ),
@@ -160,7 +161,7 @@ run_tests(
 				)
 			);
 
-			$composed = PSPGD_Subscriptions::compose( 'donation_receipt', 'en', array() );
+			$composed = PSPGD_Emails::compose( 'donation_receipt', 'en', array() );
 
 			assert_contains( '<a href="https://example.test/receipt">', $composed['html'], 'A link in the body used to be escaped into visible markup.' );
 			assert_contains( '<br>', $composed['html'], 'A line break in the body must survive.' );
@@ -175,7 +176,7 @@ run_tests(
 				)
 			);
 
-			$composed = PSPGD_Subscriptions::compose( 'donation_receipt', 'en', array() );
+			$composed = PSPGD_Emails::compose( 'donation_receipt', 'en', array() );
 
 			assert_not_contains( '<script', $composed['html'], 'The body allowlist must not admit scripts.' );
 			assert_not_contains( '<td>x</td>', $composed['html'], 'A table in the body would break the surrounding layout.' );
@@ -184,7 +185,7 @@ run_tests(
 		'the subject is filled in from the same placeholders as the body' => static function (): void {
 			test_reset_options();
 
-			$composed = PSPGD_Subscriptions::compose(
+			$composed = PSPGD_Emails::compose(
 				'recurring_receipt',
 				'en',
 				array( 'interval' => 'Monthly donation', 'amount_formatted' => '10,000 AMD' )

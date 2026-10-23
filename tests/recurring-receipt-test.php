@@ -22,6 +22,7 @@ require_once dirname( __DIR__ ) . '/includes/class-pspgd-stats.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-exchange-rates.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-campaigns.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-pspg.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-recurring.php';
 
@@ -141,7 +142,7 @@ run_tests(
 			receipt_reset();
 			$wpdb->rows = array( receipt_donor(), receipt_subscription( array( 'status' => 'processing' ) ) );
 
-			PSPGD_Subscriptions::send_receipt(
+			PSPGD_Emails::send_receipt(
 				receipt_donation( array( 'status' => 'paid', 'transaction_reference' => '900123456789' ) )
 			);
 
@@ -155,7 +156,7 @@ run_tests(
 			receipt_reset();
 			$wpdb->rows = array( receipt_donor(), receipt_subscription( array( 'status' => 'processing' ) ) );
 
-			PSPGD_Subscriptions::send_receipt( receipt_donation( array( 'status' => 'paid' ) ) );
+			PSPGD_Emails::send_receipt( receipt_donation( array( 'status' => 'paid' ) ) );
 
 			assert_not_contains( 'Next payment', receipt_mail(), 'next_payment_at is still the charge being confirmed; offering it as the next one reads as a second payment due.' );
 		},
@@ -165,7 +166,7 @@ run_tests(
 			receipt_reset();
 			$wpdb->rows = array( receipt_donor(), receipt_subscription( array( 'status' => 'cancelled', 'next_payment_at' => '' ) ) );
 
-			PSPGD_Subscriptions::send_receipt( receipt_donation( array( 'status' => 'paid' ) ) );
+			PSPGD_Emails::send_receipt( receipt_donation( array( 'status' => 'paid' ) ) );
 
 			assert_same( 1, count( test_sent_mail() ), 'A final payment is still receipted.' );
 			assert_not_contains( 'pspgd_cancel=', receipt_mail(), 'There is nothing left to cancel, so offering it would only confuse.' );

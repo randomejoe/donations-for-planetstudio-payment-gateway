@@ -16,6 +16,7 @@ require_once dirname( __DIR__ ) . '/includes/class-pspgd-pspg.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-exchange-rates.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-i18n.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-campaigns.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-recurring.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-reconciliation.php';
@@ -105,7 +106,7 @@ run_tests(
 			tz_reset( 'Asia/Yerevan' );
 			test_set_now( '2026-08-23 19:45:00' ); // 23:45 in Yerevan.
 
-			assert_same( '2026-08-23', tz_call( 'PSPGD_Subscriptions', 'format_date', '2026-08-23 23:30:00' ), 'late-evening donation keeps its own date' );
+			assert_same( '2026-08-23', tz_call( 'PSPGD_Emails', 'format_date', '2026-08-23 23:30:00' ), 'late-evening donation keeps its own date' );
 		},
 
 		'this month starts on the first, local time' => static function (): void {
@@ -119,8 +120,8 @@ run_tests(
 			tz_reset( 'Asia/Yerevan' );
 			test_set_now( '2026-08-23 09:00:00' ); // 13:00 in Yerevan.
 
-			assert_true( tz_call( 'PSPGD_Subscriptions', 'is_future', '2026-08-23 15:00:00' ), '15:00 local is still ahead of 13:00 local' );
-			assert_false( tz_call( 'PSPGD_Subscriptions', 'is_future', '2026-08-23 12:00:00' ), '12:00 local has passed' );
+			assert_true( tz_call( 'PSPGD_Emails', 'is_future', '2026-08-23 15:00:00' ), '15:00 local is still ahead of 13:00 local' );
+			assert_false( tz_call( 'PSPGD_Emails', 'is_future', '2026-08-23 12:00:00' ), '12:00 local has passed' );
 		},
 	)
 );

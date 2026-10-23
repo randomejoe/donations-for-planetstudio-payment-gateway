@@ -500,7 +500,7 @@ final class PSPGD_Campaigns {
 				sprintf( 'Campaign closed (%s), so the schedule was ended and the card binding revoked.', $reason ),
 				is_array( $result ) ? $result : array()
 			);
-			PSPGD_Subscriptions::notify_recurring_cancelled_campaign_closed( $subscription, $reason );
+			PSPGD_Emails::notify_recurring_cancelled_campaign_closed( $subscription, $reason );
 			$cancelled[] = $subscription;
 		}
 

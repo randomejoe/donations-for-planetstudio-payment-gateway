@@ -31,6 +31,7 @@ $GLOBALS['test_site_locale'] = 'en_US';
 
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-i18n.php';
 require_once dirname( __DIR__ ) . '/includes/class-pspgd-subscriptions.php';
+require_once dirname( __DIR__ ) . '/includes/class-pspgd-emails.php';
 
 run_tests(
 	array(
@@ -75,7 +76,7 @@ run_tests(
 			// No Polylang, no page: this is a cron run.
 			assert_same(
 				'Ձեր կրկնվող նվիրատվությունը ակտիվ է',
-				PSPGD_Subscriptions::template_value( 'recurring_activation_subject', array(), 'hy' ),
+				PSPGD_Emails::template_value( 'recurring_activation_subject', array(), 'hy' ),
 				'This is the bug: follow-up emails used to fall back to English here.'
 			);
 		},
@@ -85,7 +86,7 @@ run_tests(
 
 			assert_same(
 				'Your recurring donation is active',
-				PSPGD_Subscriptions::template_value( 'recurring_activation_subject', array(), 'en' ),
+				PSPGD_Emails::template_value( 'recurring_activation_subject', array(), 'en' ),
 				'Passing a locale must not change what an English donor receives.'
 			);
 		},
@@ -95,7 +96,7 @@ run_tests(
 
 			assert_contains(
 				'5,000 AMD',
-				PSPGD_Subscriptions::template_value(
+				PSPGD_Emails::template_value(
 					'recurring_activation_body',
 					array( 'amount_formatted' => '5,000 AMD' ),
 					'hy'
@@ -115,7 +116,7 @@ run_tests(
 
 			assert_contains(
 				'5000.00 AMD',
-				PSPGD_Subscriptions::template_value(
+				PSPGD_Emails::template_value(
 					'recurring_activation_body',
 					array( 'amount' => '5000.00', 'currency' => 'AMD' ),
 					'hy'
@@ -133,8 +134,8 @@ run_tests(
 				)
 			);
 
-			assert_same( 'Չեղարկված', PSPGD_Subscriptions::template_value( 'recurring_cancel_subject', array(), 'hy' ), 'Saved Armenian wording must be used.' );
-			assert_same( 'Recurring donation cancelled', PSPGD_Subscriptions::template_value( 'recurring_cancel_subject', array(), 'en' ), 'An Armenian override must not leak into English mail.' );
+			assert_same( 'Չեղարկված', PSPGD_Emails::template_value( 'recurring_cancel_subject', array(), 'hy' ), 'Saved Armenian wording must be used.' );
+			assert_same( 'Recurring donation cancelled', PSPGD_Emails::template_value( 'recurring_cancel_subject', array(), 'en' ), 'An Armenian override must not leak into English mail.' );
 		},
 
 		'a blank override falls through to the built-in wording' => static function (): void {
@@ -148,7 +149,7 @@ run_tests(
 
 			assert_same(
 				'Կրկնվող նվիրատվությունը չեղարկված է',
-				PSPGD_Subscriptions::template_value( 'recurring_cancel_subject', array(), 'hy' ),
+				PSPGD_Emails::template_value( 'recurring_cancel_subject', array(), 'hy' ),
 				'Clearing a field in the admin means "use the default", not "send an empty subject".'
 			);
 		},
@@ -158,7 +159,7 @@ run_tests(
 
 			assert_same(
 				'Your recurring donation is active',
-				PSPGD_Subscriptions::template_value( 'recurring_activation_subject', array(), 'ru' ),
+				PSPGD_Emails::template_value( 'recurring_activation_subject', array(), 'ru' ),
 				'A language nobody translated must degrade to the default, not to nothing.'
 			);
 		},

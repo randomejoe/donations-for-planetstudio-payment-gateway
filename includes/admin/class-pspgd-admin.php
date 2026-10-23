@@ -1050,7 +1050,7 @@ final class PSPGD_Admin {
 		}
 
 		$templates = (array) get_option( 'pspgd_email_templates', array() );
-		$defaults  = PSPGD_Subscriptions::default_templates();
+		$defaults  = PSPGD_Emails::default_templates();
 		$locales   = PSPGD_I18n::supported_locales();
 		$sent_to   = wp_get_current_user()->user_email;
 		?>
@@ -1064,7 +1064,7 @@ final class PSPGD_Admin {
 			<h2><?php esc_html_e( 'Placeholders', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
 			<p><?php esc_html_e( 'Use these anywhere in a subject, heading or body. A placeholder with nothing behind it -- a campaign name on a donation that had no campaign -- is replaced with nothing.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
 			<p>
-				<?php foreach ( PSPGD_Subscriptions::placeholders() as $placeholder ) : ?>
+				<?php foreach ( PSPGD_Emails::placeholders() as $placeholder ) : ?>
 					<code style="margin-right:8px;">{<?php echo esc_html( $placeholder ); ?>}</code>
 				<?php endforeach; ?>
 			</p>
@@ -1078,12 +1078,12 @@ final class PSPGD_Admin {
 				<table class="form-table" role="presentation">
 					<tr>
 						<th scope="row"><label for="pspgd-from-name"><?php esc_html_e( 'From name', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
-						<td><input class="regular-text" id="pspgd-from-name" name="from_name" value="<?php echo esc_attr( (string) get_option( 'pspgd_email_from_name', '' ) ); ?>" placeholder="<?php echo esc_attr( PSPGD_Subscriptions::from_name() ); ?>"></td>
+						<td><input class="regular-text" id="pspgd-from-name" name="from_name" value="<?php echo esc_attr( (string) get_option( 'pspgd_email_from_name', '' ) ); ?>" placeholder="<?php echo esc_attr( PSPGD_Emails::from_name() ); ?>"></td>
 					</tr>
 					<tr>
 						<th scope="row"><label for="pspgd-from-address"><?php esc_html_e( 'From address', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
 						<td>
-							<input class="regular-text" type="email" id="pspgd-from-address" name="from_address" value="<?php echo esc_attr( (string) get_option( 'pspgd_email_from_address', '' ) ); ?>" placeholder="<?php echo esc_attr( PSPGD_Subscriptions::from_address() ); ?>">
+							<input class="regular-text" type="email" id="pspgd-from-address" name="from_address" value="<?php echo esc_attr( (string) get_option( 'pspgd_email_from_address', '' ) ); ?>" placeholder="<?php echo esc_attr( PSPGD_Emails::from_address() ); ?>">
 							<p class="description"><?php esc_html_e( 'Must be an address at this site\'s own domain, or the mail is likely to be rejected or marked as spam.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
 						</td>
 					</tr>
@@ -1105,7 +1105,7 @@ final class PSPGD_Admin {
 
 				<h2><?php esc_html_e( 'Logo', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
 				<p><?php esc_html_e( 'The image at the top of every email. Upload both to the media library and paste the URLs here. A reader whose mail app is in dark mode is shown the dark-mode version; everyone else sees the normal one. Left blank, the theme\'s logo is used, and with no theme logo the site name is shown instead. Colours and font come from Form Settings > Appearance.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
-				<?php $logos = PSPGD_Subscriptions::logo_urls(); ?>
+				<?php $logos = PSPGD_Emails::logo_urls(); ?>
 				<table class="form-table" role="presentation">
 					<tr>
 						<th scope="row"><label for="pspgd-logo-light"><?php esc_html_e( 'Logo', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
@@ -1127,7 +1127,7 @@ final class PSPGD_Admin {
 				<p><?php esc_html_e( 'Shown as a row of links in the footer of every email. Leave a field blank and that network is left out entirely.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
 				<?php $socials = (array) get_option( 'pspgd_social_links', array() ); ?>
 				<table class="form-table" role="presentation">
-					<?php foreach ( PSPGD_Subscriptions::social_networks() as $network => $label ) : ?>
+					<?php foreach ( PSPGD_Emails::social_networks() as $network => $label ) : ?>
 						<tr>
 							<th scope="row"><label for="pspgd-social-<?php echo esc_attr( $network ); ?>"><?php echo esc_html( $label ); ?></label></th>
 							<td><input class="large-text code" type="url" id="pspgd-social-<?php echo esc_attr( $network ); ?>" name="social[<?php echo esc_attr( $network ); ?>]" value="<?php echo esc_attr( (string) ( $socials[ $network ] ?? '' ) ); ?>" placeholder="https://"></td>
@@ -1150,7 +1150,7 @@ final class PSPGD_Admin {
 							<tr>
 								<td><strong><?php echo esc_html( self::template_label( $key ) ); ?></strong><br><code><?php echo esc_html( $key ); ?></code></td>
 								<?php foreach ( $locales as $locale ) : ?>
-									<td><textarea class="large-text" rows="3" name="templates[<?php echo esc_attr( $locale ); ?>][<?php echo esc_attr( $key ); ?>]"><?php echo esc_textarea( $templates[ $locale ][ $key ] ?? '' ); ?></textarea><p class="description"><?php echo esc_html( sprintf( /* translators: %s: the built-in wording. */ __( 'Default: %s', 'donations-for-planetstudio-payment-gateway' ), PSPGD_Subscriptions::default_template( $key, $locale ) ) ); ?></p></td>
+									<td><textarea class="large-text" rows="3" name="templates[<?php echo esc_attr( $locale ); ?>][<?php echo esc_attr( $key ); ?>]"><?php echo esc_textarea( $templates[ $locale ][ $key ] ?? '' ); ?></textarea><p class="description"><?php echo esc_html( sprintf( /* translators: %s: the built-in wording. */ __( 'Default: %s', 'donations-for-planetstudio-payment-gateway' ), PSPGD_Emails::default_template( $key, $locale ) ) ); ?></p></td>
 								<?php endforeach; ?>
 							</tr>
 						<?php endforeach; ?>
@@ -1217,7 +1217,7 @@ final class PSPGD_Admin {
 			exit;
 		}
 
-		$sent = PSPGD_Subscriptions::send_preview( $template_key, $locale, (string) wp_get_current_user()->user_email );
+		$sent = PSPGD_Emails::send_preview( $template_key, $locale, (string) wp_get_current_user()->user_email );
 
 		wp_safe_redirect(
 			add_query_arg(
@@ -1388,7 +1388,7 @@ final class PSPGD_Admin {
 			return isset( $post[ $key ] ) && is_scalar( $post[ $key ] ) ? (string) $post[ $key ] : '';
 		};
 
-		$known_templates = array_keys( PSPGD_Subscriptions::default_templates() );
+		$known_templates = array_keys( PSPGD_Emails::default_templates() );
 		$posted          = isset( $post['templates'] ) && is_array( $post['templates'] ) ? $post['templates'] : array();
 		$templates       = (array) get_option( 'pspgd_email_templates', array() );
 		foreach ( PSPGD_I18n::supported_locales() as $locale ) {
@@ -1402,7 +1402,7 @@ final class PSPGD_Admin {
 				// link. Subjects go into a mail header and headings are escaped
 				// into the layout, so both stay single-line plain text.
 				$templates[ $locale ][ $key ] = '_body' === substr( $key, -5 )
-					? wp_kses( $raw_value, PSPGD_Subscriptions::allowed_body_html() )
+					? wp_kses( $raw_value, PSPGD_Emails::allowed_body_html() )
 					: sanitize_text_field( $raw_value );
 			}
 		}
@@ -1412,7 +1412,7 @@ final class PSPGD_Admin {
 		// value here would be an injection point in every email that goes out.
 		$posted_social = isset( $post['social'] ) && is_array( $post['social'] ) ? $post['social'] : array();
 		$social        = array();
-		foreach ( array_keys( PSPGD_Subscriptions::social_networks() ) as $network ) {
+		foreach ( array_keys( PSPGD_Emails::social_networks() ) as $network ) {
 			$value = $posted_social[ $network ] ?? '';
 			$url   = esc_url_raw( trim( is_scalar( $value ) ? (string) $value : '' ) );
 			if ( '' !== $url && in_array( wp_parse_url( $url, PHP_URL_SCHEME ), array( 'http', 'https' ), true ) ) {

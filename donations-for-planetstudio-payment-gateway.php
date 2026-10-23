@@ -33,6 +33,7 @@ require_once PSPGD_DIR . 'includes/class-pspgd-exchange-rates.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-i18n.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-campaigns.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-subscriptions.php';
+require_once PSPGD_DIR . 'includes/class-pspgd-emails.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-notifications.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-recurring.php';
 require_once PSPGD_DIR . 'includes/class-pspgd-reconciliation.php';

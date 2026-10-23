@@ -242,7 +242,7 @@ final class PSPGD_Recurring {
 		if ( 'paid' === $outcome ) {
 			$charged = PSPGD_Repository::find_donation( $donation_id );
 			if ( $charged && 'paid' === (string) $charged->status ) {
-				PSPGD_Subscriptions::send_receipt( $charged );
+				PSPGD_Emails::send_receipt( $charged );
 				$paid = true;
 			}
 		}
@@ -282,7 +282,7 @@ final class PSPGD_Recurring {
 			sprintf( 'Charge skipped and schedule ended: campaign %d is closed (%s).', $campaign_id, (string) $status['reason'] ),
 			is_array( $result ) ? $result : array()
 		);
-		PSPGD_Subscriptions::notify_recurring_cancelled_campaign_closed( $subscription, (string) $status['reason'] );
+		PSPGD_Emails::notify_recurring_cancelled_campaign_closed( $subscription, (string) $status['reason'] );
 
 		return false;
 	}
@@ -310,11 +310,11 @@ final class PSPGD_Recurring {
 				sprintf( 'Cancelled after %d consecutive failed charges.', $failed_count ),
 				$result
 			);
-			PSPGD_Subscriptions::notify_recurring_cancelled_after_failures( $subscription );
+			PSPGD_Emails::notify_recurring_cancelled_after_failures( $subscription );
 			return;
 		}
 
-		PSPGD_Subscriptions::notify_recurring_payment_failed( $subscription, $failed_count, self::max_consecutive_failures() );
+		PSPGD_Emails::notify_recurring_payment_failed( $subscription, $failed_count, self::max_consecutive_failures() );
 	}
 
 	private static function acquire_lock(): bool {

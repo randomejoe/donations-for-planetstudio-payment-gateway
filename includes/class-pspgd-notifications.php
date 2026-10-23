@@ -148,7 +148,7 @@ final class PSPGD_Notifications {
 
 		$sent = false;
 		foreach ( $recipients as $recipient ) {
-			$sent = PSPGD_Subscriptions::send_email( $recipient, $subject, $html ) || $sent;
+			$sent = PSPGD_Emails::send_email( $recipient, $subject, $html ) || $sent;
 		}
 
 		return $sent;

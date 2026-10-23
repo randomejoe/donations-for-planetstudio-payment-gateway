@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Donations for PlanetStudio Payment Gateway\n"
-"POT-Creation-Date: 2026-10-23 16:43+0000\n"
+"POT-Creation-Date: 2026-10-23 17:14+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,7 +31,7 @@ msgid_plural "%s unfinished payment attempts are hidden."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/public/class-pspgd-form.php:530
+#: includes/public/class-pspgd-form.php:584
 msgid "(Shown to staff only: the gateway said \"%s\".)"
 msgstr ""
 
@@ -142,7 +142,7 @@ msgstr ""
 msgid "Bank reference"
 msgstr ""
 
-#: includes/class-pspgd-campaigns.php:664
+#: includes/class-pspgd-campaigns.php:660
 msgid "Be the first to support this campaign."
 msgstr ""
 
@@ -167,7 +167,7 @@ msgstr ""
 msgid "Campaign"
 msgstr ""
 
-#: includes/class-pspgd-campaigns.php:633
+#: includes/class-pspgd-campaigns.php:629
 msgid "Campaign donation progress"
 msgstr ""
 
@@ -179,15 +179,15 @@ msgstr ""
 msgid "Campaign goal currency"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1456
+#: includes/admin/class-pspgd-admin.php:1502
 msgid "Campaign receipt body"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1455
+#: includes/admin/class-pspgd-admin.php:1501
 msgid "Campaign receipt heading"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1454
+#: includes/admin/class-pspgd-admin.php:1500
 msgid "Campaign receipt subject"
 msgstr ""
 
@@ -203,16 +203,16 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1469
+#: includes/admin/class-pspgd-admin.php:1515
 msgid "Cancel link label"
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:230
-#: includes/class-pspgd-subscriptions.php:231
+#: includes/class-pspgd-subscriptions.php:40
+#: includes/class-pspgd-subscriptions.php:41
 msgid "Cancel recurring donation"
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:230
+#: includes/class-pspgd-subscriptions.php:40
 msgid "Cancel recurring donation?"
 msgstr ""
 
@@ -328,15 +328,15 @@ msgstr ""
 msgid "Donation receipt"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1453
+#: includes/admin/class-pspgd-admin.php:1499
 msgid "Donation receipt body"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1452
+#: includes/admin/class-pspgd-admin.php:1498
 msgid "Donation receipt heading"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1451
+#: includes/admin/class-pspgd-admin.php:1497
 msgid "Donation receipt subject"
 msgstr ""
 
@@ -444,7 +444,7 @@ msgid_plural "Export %s donations to CSV"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-pspgd-subscriptions.php:433
+#: includes/class-pspgd-emails.php:341
 msgid "Facebook"
 msgstr ""
 
@@ -534,7 +534,7 @@ msgstr ""
 msgid "Including unfinished payment attempts: a donor opened the payment page and has not completed it. These are discarded automatically 24 hours after they are started."
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:434
+#: includes/class-pspgd-emails.php:342
 msgid "Instagram"
 msgstr ""
 
@@ -575,7 +575,7 @@ msgstr ""
 msgid "Leave this field empty"
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:435
+#: includes/class-pspgd-emails.php:343
 msgid "LinkedIn"
 msgstr ""
 
@@ -688,11 +688,11 @@ msgstr ""
 msgid "No exchange rate available, so currencies are listed separately."
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:268
+#: includes/class-pspgd-subscriptions.php:65
 msgid "No future payments will be made."
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:230
+#: includes/class-pspgd-subscriptions.php:40
 msgid "No future recurring payments will be made."
 msgstr ""
 
@@ -724,7 +724,7 @@ msgstr ""
 msgid "Ongoing"
 msgstr ""
 
-#: includes/class-pspgd-campaigns.php:623
+#: includes/class-pspgd-campaigns.php:619
 msgid "Ongoing campaign"
 msgstr ""
 
@@ -834,39 +834,39 @@ msgstr ""
 msgid "Recurring Donations"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1462
+#: includes/admin/class-pspgd-admin.php:1508
 msgid "Recurring activation body"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1461
+#: includes/admin/class-pspgd-admin.php:1507
 msgid "Recurring activation heading"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1460
+#: includes/admin/class-pspgd-admin.php:1506
 msgid "Recurring activation subject"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1468
+#: includes/admin/class-pspgd-admin.php:1514
 msgid "Recurring cancellation body"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1467
+#: includes/admin/class-pspgd-admin.php:1513
 msgid "Recurring cancellation heading"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1466
+#: includes/admin/class-pspgd-admin.php:1512
 msgid "Recurring cancellation subject"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1475
+#: includes/admin/class-pspgd-admin.php:1521
 msgid "Recurring cancelled after failures body"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1474
+#: includes/admin/class-pspgd-admin.php:1520
 msgid "Recurring cancelled after failures heading"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1473
+#: includes/admin/class-pspgd-admin.php:1519
 msgid "Recurring cancelled after failures subject"
 msgstr ""
 
@@ -874,15 +874,15 @@ msgstr ""
 msgid "Recurring charge receipt"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1459
+#: includes/admin/class-pspgd-admin.php:1505
 msgid "Recurring charge receipt body"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1458
+#: includes/admin/class-pspgd-admin.php:1504
 msgid "Recurring charge receipt heading"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1457
+#: includes/admin/class-pspgd-admin.php:1503
 msgid "Recurring charge receipt subject"
 msgstr ""
 
@@ -890,7 +890,7 @@ msgstr ""
 msgid "Recurring donation activated"
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:268
+#: includes/class-pspgd-subscriptions.php:65
 msgid "Recurring donation cancelled"
 msgstr ""
 
@@ -915,15 +915,15 @@ msgstr ""
 msgid "Recurring donations to this campaign have been cancelled, and the bank was asked to release their saved cards."
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1478
+#: includes/admin/class-pspgd-admin.php:1524
 msgid "Recurring ended with campaign body"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1477
+#: includes/admin/class-pspgd-admin.php:1523
 msgid "Recurring ended with campaign heading"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1476
+#: includes/admin/class-pspgd-admin.php:1522
 msgid "Recurring ended with campaign subject"
 msgstr ""
 
@@ -931,15 +931,15 @@ msgstr ""
 msgid "Recurring payment failed"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1472
+#: includes/admin/class-pspgd-admin.php:1518
 msgid "Recurring payment failed body"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1471
+#: includes/admin/class-pspgd-admin.php:1517
 msgid "Recurring payment failed heading"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1470
+#: includes/admin/class-pspgd-admin.php:1516
 msgid "Recurring payment failed subject"
 msgstr ""
 
@@ -951,15 +951,15 @@ msgstr ""
 msgid "Recurring setup failed"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1465
+#: includes/admin/class-pspgd-admin.php:1511
 msgid "Recurring setup failed body"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1464
+#: includes/admin/class-pspgd-admin.php:1510
 msgid "Recurring setup failed heading"
 msgstr ""
 
-#: includes/admin/class-pspgd-admin.php:1463
+#: includes/admin/class-pspgd-admin.php:1509
 msgid "Recurring setup failed subject"
 msgstr ""
 
@@ -983,7 +983,7 @@ msgstr ""
 msgid "Reverse proxy (last address in X-Forwarded-For)"
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:825
+#: includes/class-pspgd-emails.php:731
 msgid "Sample campaign"
 msgstr ""
 
@@ -1096,7 +1096,7 @@ msgstr ""
 msgid "Taken while test mode was on. No money moved, so it is left out of the figures above and of campaign totals."
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:437
+#: includes/class-pspgd-emails.php:345
 msgid "Telegram"
 msgstr ""
 
@@ -1170,11 +1170,11 @@ msgstr ""
 msgid "The test email could not be sent. Check the site mail configuration."
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:227
+#: includes/class-pspgd-subscriptions.php:37
 msgid "This cancellation link is invalid or has already been used."
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:240
+#: includes/class-pspgd-subscriptions.php:50
 msgid "This cancellation request is invalid."
 msgstr ""
 
@@ -1182,7 +1182,7 @@ msgstr ""
 msgid "This donor has a recurring donation that is still active. Cancel it first -- erasing the record would leave a saved card being charged with no way to contact them about it."
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:247
+#: includes/class-pspgd-subscriptions.php:57
 msgid "This recurring donation has already been cancelled."
 msgstr ""
 
@@ -1190,7 +1190,7 @@ msgstr ""
 msgid "This version of PlanetStudio Payment Gateway (%1$s) is missing parts this plugin relies on: %2$s. Payments may not be confirmed, checked or cancelled correctly. Update both plugins, and check the donation log before relying on it."
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:439
+#: includes/class-pspgd-emails.php:347
 msgid "TikTok"
 msgstr ""
 
@@ -1266,7 +1266,7 @@ msgstr ""
 msgid "Wording"
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:438
+#: includes/class-pspgd-emails.php:346
 msgid "X"
 msgstr ""
 
@@ -1280,12 +1280,12 @@ msgid "Yes, do not name them publicly"
 msgstr ""
 
 #: includes/admin/class-pspgd-admin.php:1236
-#: includes/admin/class-pspgd-admin.php:1341
+#: includes/admin/class-pspgd-admin.php:1251
 msgid "You do not have permission to change these settings."
 msgstr ""
 
 #: includes/admin/class-pspgd-admin.php:1208
-#: includes/admin/class-pspgd-admin.php:1396
+#: includes/admin/class-pspgd-admin.php:1442
 msgid "You do not have permission to do this."
 msgstr ""
 
@@ -1300,7 +1300,7 @@ msgstr ""
 msgid "You do not have permission to view this page."
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:436
+#: includes/class-pspgd-emails.php:344
 msgid "YouTube"
 msgstr ""
 
@@ -1320,7 +1320,7 @@ msgstr ""
 msgid "[Test] "
 msgstr ""
 
-#: includes/class-pspgd-subscriptions.php:854
+#: includes/class-pspgd-emails.php:760
 msgid "[Test] %s"
 msgstr ""
 
