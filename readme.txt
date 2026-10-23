@@ -5,7 +5,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: planetstudio-payment-gateway
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -172,6 +172,17 @@ It is recommended for recurring donations. WordPress only runs scheduled jobs wh
 Yes, activated on one site or for the whole network. Each site has its own donations, settings, bank and scheduled jobs, and its own choice in Form Settings about whether its donation data is deleted with the plugin. PlanetStudio Payment Gateway has to be active on the same sites.
 
 == Changelog ==
+
+= 1.0.1 =
+* Recurring donations are no longer charged at most ten an hour. A run keeps charging for 20 seconds and, if charges are still due, continues a minute later, so a busy sign-up day is not charged days late every month.
+* A donation whose confirmation was interrupted part-way (a crash or a lost database write) is now found within 15 minutes, checked with the bank again and confirmed and receipted if it was paid. It used to stay unconfirmed for good.
+* Test mode now takes the same path as a real payment, so a test donation refreshes the figures on the donation log and closes a campaign at its goal straight away, as a real one does.
+* A payment marked failed (the donor returning through the bank's fail page, a declined card) can no longer overwrite a confirmation that arrived at the same moment.
+* A newly fetched exchange rate that moves more than 25% from the last one is refused and logged, so one bad rate cannot close a campaign at its goal early. Adjust or turn off with the `pspgd_exchange_rate_max_change` filter.
+* The admin screens name any part of PlanetStudio Payment Gateway this plugin calls that the installed version lacks.
+* Deactivating or deleting the plugin now clears all of its scheduled jobs; two were left behind before.
+* Multisite: network activation, deactivation and deletion now reach every site, not only the main one.
+* For developers: the `PSPGD_Admin::CAPABILITY` constant is now `PSPGD_Capability::MANAGE_DONATIONS`. The capability itself, `pspgd_manage_donations`, is unchanged.
 
 = 1.0.0 =
 * First public version.
