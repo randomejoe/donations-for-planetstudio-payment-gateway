@@ -13,11 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * `pending` forever -- money actually taken by the bank that never appears in
  * a total and never produces a receipt.
  *
- * This runs every 15 minutes and does three things:
+ * This runs every 15 minutes and:
  *
- *  1. re-asks the bank about payments that have been pending for a while;
- *  2. marks payments abandoned once a day has passed with no confirmation;
- *  3. releases subscriptions whose charge attempt died mid-flight.
+ *  1. releases donations whose confirmation died mid-flight, and re-asks the
+ *     bank about them;
+ *  2. re-asks the bank about payments that have been pending for a while;
+ *  3. marks payments abandoned once a day has passed with no confirmation;
+ *  4. releases subscriptions whose charge attempt died mid-flight.
  */
 final class PSPGD_Reconciliation {
 
@@ -29,6 +31,12 @@ final class PSPGD_Reconciliation {
 
 	/** How long a payment may stay unconfirmed before it is abandoned. */
 	private const ABANDON_AFTER = DAY_IN_SECONDS;
+
+	/**
+	 * How long a donation may stay claimed for processing before it is
+	 * released. A live claim lasts one database write.
+	 */
+	private const STUCK_DONATION_AFTER = 15 * MINUTE_IN_SECONDS;
 
 	/** How long a claimed subscription may stay silent before it is released. */
 	private const STUCK_CLAIM_AFTER = HOUR_IN_SECONDS;
@@ -70,6 +78,7 @@ final class PSPGD_Reconciliation {
 	}
 
 	public static function run(): void {
+		self::release_stuck_donations();
 		self::recheck_pending_payments();
 		self::abandon_unconfirmed_payments();
 		self::purge_abandoned_subscriptions();
@@ -103,17 +112,57 @@ final class PSPGD_Reconciliation {
 		}
 
 		foreach ( PSPGD_Repository::stale_pending_donations( self::ago( self::RECHECK_AFTER ), self::BATCH ) as $donation ) {
-			$result = PSPGD_PSPG::reconcile_donation( $donation );
-			$status = PSPGD_PSPG::normalize_status( is_array( $result ) ? $result : array() );
+			self::recheck( $donation );
+		}
+	}
 
-			if ( 'paid' === $status ) {
-				PSPGD_Repository::log_event(
-					'donation',
-					(int) $donation->id,
-					'reconcile_recovered',
-					'A payment the bank never reported back was found to be paid and has been confirmed.'
-				);
+	/**
+	 * Put back donations whose confirmation never finished, and ask the bank
+	 * about each one straight away.
+	 *
+	 * The claim in mark_donation_processing() is what stops a payment being
+	 * confirmed twice, but a fatal or a lost write before its outcome is
+	 * recorded leaves the row claimed and invisible to every other sweep.
+	 * Nothing that follows a confirmation -- receipt, campaign, staff email
+	 * -- has run for it yet, so applying the bank's answer afresh is safe.
+	 *
+	 * A donation that never reached the bank goes back to pending and is
+	 * abandoned with the rest after a day.
+	 */
+	private static function release_stuck_donations(): void {
+		$cutoff = self::ago( self::STUCK_DONATION_AFTER );
+
+		foreach ( PSPGD_Repository::stuck_processing_donations( $cutoff, self::BATCH ) as $donation ) {
+			if ( ! PSPGD_Repository::release_stuck_donation( (int) $donation->id, $cutoff ) ) {
+				continue;
 			}
+
+			PSPGD_Stats::flush();
+			PSPGD_Repository::log_event(
+				'donation',
+				(int) $donation->id,
+				'payment_claim_recovered',
+				sprintf( 'Applying a payment report to this donation stopped at %s before its outcome was recorded, so it was returned to pending to be checked with the bank again.', (string) $donation->updated_at )
+			);
+
+			if ( ! empty( $donation->pspg_order_id ) && PSPGD_PSPG::is_ready() ) {
+				self::recheck( $donation );
+			}
+		}
+	}
+
+	/** Ask the bank about one donation and apply what it says. */
+	private static function recheck( object $donation ): void {
+		$result = PSPGD_PSPG::reconcile_donation( $donation );
+		$status = PSPGD_PSPG::normalize_status( is_array( $result ) ? $result : array() );
+
+		if ( 'paid' === $status ) {
+			PSPGD_Repository::log_event(
+				'donation',
+				(int) $donation->id,
+				'reconcile_recovered',
+				'A payment the bank never reported back was found to be paid and has been confirmed.'
+			);
 		}
 	}
 

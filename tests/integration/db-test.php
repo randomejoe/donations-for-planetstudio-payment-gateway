@@ -444,6 +444,19 @@ it_run(
 			unset( $working );
 		},
 
+		'a donation stuck in processing is found once old enough, and released once' => static function (): void {
+			$cutoff  = it_ago( 15 * MINUTE_IN_SECONDS );
+			$stuck   = it_donation( array( 'status' => 'processing', 'updated_at' => it_ago( HOUR_IN_SECONDS ) ) );
+			$working = it_donation( array( 'status' => 'processing', 'updated_at' => it_ago( 60 ) ) );
+			$pending = it_donation( array( 'updated_at' => it_ago( HOUR_IN_SECONDS ) ) );
+
+			it_same( array( $stuck ), it_ids( PSPGD_Repository::stuck_processing_donations( $cutoff ) ), 'A confirmation still running, and a pending row, are not stuck.' );
+			it_true( PSPGD_Repository::release_stuck_donation( $stuck, $cutoff ), 'A stuck donation is released.' );
+			it_false( PSPGD_Repository::release_stuck_donation( $stuck, $cutoff ), 'Releasing it again does nothing.' );
+			it_false( PSPGD_Repository::release_stuck_donation( $working, $cutoff ), 'A fresh claim is never released.' );
+			it_same( array( 'pending', 'processing', 'pending' ), array( it_row( 'donations', $stuck )->status, it_row( 'donations', $working )->status, it_row( 'donations', $pending )->status ), 'Only the stuck row moved.' );
+		},
+
 		'the abandonment purge never touches a signup that took money or is mid-payment' => static function (): void {
 			$old = it_ago( 2 * DAY_IN_SECONDS );
 
@@ -481,6 +494,7 @@ it_run(
 		'the reconciliation job settles old rows and leaves live ones alone' => static function (): void {
 			$old          = it_ago( 2 * DAY_IN_SECONDS );
 			$unconfirmed  = it_donation( array( 'created_at' => $old ) );
+			$claimed      = it_donation( array( 'status' => 'processing', 'created_at' => $old, 'updated_at' => $old ) );
 			$paid         = it_donation( array( 'status' => 'paid', 'created_at' => $old ) );
 			$abandoned    = it_subscription( array( 'created_at' => $old ) );
 			$signup       = it_donation( array( 'subscription_id' => $abandoned, 'created_at' => $old ) );
@@ -494,6 +508,8 @@ it_run(
 
 			it_same( 'abandoned', it_row( 'donations', $unconfirmed )->status, 'A day-old pending donation is abandoned.' );
 			it_same( 'paid', it_row( 'donations', $paid )->status, 'A paid one is not.' );
+			it_same( 'abandoned', it_row( 'donations', $claimed )->status, 'A day-old donation stuck in processing is released, and then abandoned like any other.' );
+			it_true( in_array( 'payment_claim_recovered', it_event_types( 'donation', $claimed ), true ), 'The release is logged.' );
 			it_same( null, it_row( 'subscriptions', $abandoned ), 'An abandoned signup is purged...' );
 			it_same( array( 'abandoned', '0' ), array( it_row( 'donations', $signup )->status, (string) it_row( 'donations', $signup )->subscription_id ), '...its donation, which was abandoned first in the same run, is kept and detached...' );
 			it_true( in_array( 'subscription_abandoned', it_event_types( 'subscription', $abandoned ), true ), '...and one event says so.' );

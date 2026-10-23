@@ -564,6 +564,58 @@ final class PSPGD_Repository {
 	}
 
 	/**
+	 * Donations claimed to apply a bank report that never got their outcome
+	 * written -- a fatal or a lost database write between
+	 * mark_donation_processing() and the status that follows it, which is
+	 * one statement later. Left alone they are never re-checked, never
+	 * abandoned and never counted, because every sweep looks at pending rows.
+	 *
+	 * @return object[]
+	 */
+	public static function stuck_processing_donations( string $not_updated_since, int $limit = 20 ): array {
+		global $wpdb;
+
+		$table = $wpdb->prefix . 'pspgd_donations';
+
+		return (array) $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT * FROM %i
+				WHERE status = %s AND updated_at <= %s
+				ORDER BY updated_at ASC
+				LIMIT %d',
+				$table,
+				'processing',
+				$not_updated_since,
+				$limit
+			)
+		);
+	}
+
+	/**
+	 * Return a stuck donation to pending, so it is re-checked and settled
+	 * like any other. Conditional on the row still being in processing and
+	 * not touched since the cut-off, so a path that claimed it a moment ago
+	 * always wins.
+	 */
+	public static function release_stuck_donation( int $donation_id, string $not_updated_since ): bool {
+		global $wpdb;
+
+		$updated = $wpdb->query(
+			$wpdb->prepare(
+				'UPDATE %i SET status = %s, updated_at = %s WHERE id = %d AND status = %s AND updated_at <= %s',
+				$wpdb->prefix . 'pspgd_donations',
+				'pending',
+				current_time( 'mysql' ),
+				$donation_id,
+				'processing',
+				$not_updated_since
+			)
+		);
+
+		return 1 === (int) $updated;
+	}
+
+	/**
 	 * Subscriptions claimed for charging that never reported back -- a fatal,
 	 * a timeout or a gateway hang between claim_due_subscription() and
 	 * reschedule_subscription(). Left alone they are never charged again,

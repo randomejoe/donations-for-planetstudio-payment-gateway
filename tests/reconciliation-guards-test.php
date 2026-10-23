@@ -92,6 +92,30 @@ run_tests(
 			assert_same( 'processing', $wpdb->updates[0]['where']['status'], 'A worker that recovered on its own must win over the reaper.' );
 		},
 
+		'only donations left in processing past the cut-off count as stuck' => static function (): void {
+			global $wpdb;
+			$wpdb->reset_log();
+
+			PSPGD_Repository::stuck_processing_donations( '2026-08-23 11:45:00', 20 );
+
+			assert_contains( "status = 'processing'", $wpdb->reads[0], 'Only a claimed row can be stuck.' );
+			assert_contains( "updated_at <= '2026-08-23 11:45:00'", $wpdb->reads[0], 'A claim taken a moment ago is a confirmation still running.' );
+			assert_not_contains( 'pspg_order_id', $wpdb->reads[0], 'A row that never reached the bank is released too, so it can be abandoned.' );
+		},
+
+		'releasing a stuck donation is guarded on its status and age' => static function (): void {
+			global $wpdb;
+			$wpdb->reset_log();
+
+			assert_true( PSPGD_Repository::release_stuck_donation( 55, '2026-08-23 11:45:00' ), 'A stuck donation is released.' );
+			assert_contains( "SET status = 'pending'", $wpdb->queries[0], 'Back to pending, where every sweep can see it.' );
+			assert_contains( "status = 'processing' AND updated_at <= '2026-08-23 11:45:00'", $wpdb->queries[0], 'In one statement, so a path that claimed it since the read always wins.' );
+
+			$wpdb->query_result = 0;
+			assert_false( PSPGD_Repository::release_stuck_donation( 55, '2026-08-23 11:45:00' ), 'A row that moved on is reported as not released.' );
+			$wpdb->query_result = 1;
+		},
+
 		'only donations with a bank order are re-asked about' => static function (): void {
 			global $wpdb;
 			$wpdb->reset_log();
