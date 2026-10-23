@@ -429,11 +429,11 @@ final class PSPGD_Repository {
 	 *
 	 * @return object[]
 	 */
-	public static function due_subscriptions(): array {
+	public static function due_subscriptions( int $limit = 10 ): array {
 		global $wpdb;
 		$table = $wpdb->prefix . 'pspgd_subscriptions';
 		$now   = current_time( 'mysql' );
-		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE status = %s AND is_test = 0 AND next_payment_at <= %s ORDER BY next_payment_at ASC LIMIT 10', $table, 'active', $now ) );
+		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE status = %s AND is_test = 0 AND next_payment_at <= %s ORDER BY next_payment_at ASC LIMIT %d', $table, 'active', $now, $limit ) );
 	}
 
 	public static function reschedule_subscription( int $subscription_id, string $next_payment_at, bool $success ): void {

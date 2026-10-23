@@ -16,6 +16,7 @@ final class PSPGD_Installer {
 		return array(
 			PSPGD_Exchange_Rates::CRON_HOOK,
 			PSPGD_Recurring::HOOK,
+			PSPGD_Recurring::CONTINUE_HOOK,
 			PSPGD_Reconciliation::HOOK,
 			PSPGD_Campaigns::CRON_HOOK,
 		);

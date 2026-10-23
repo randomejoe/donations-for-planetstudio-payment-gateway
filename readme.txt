@@ -38,6 +38,7 @@ This is an independent add-on. It is not made or supported by PlanetStudio.
 
 * Offered through ArCa-network banks in PSPG, the saved-card path that has been proven in production. Other banks take one-time donations.
 * Charged hourly on the donor's sign-up anniversary, with retries after 3, 7 and 14 days before cancelling. A declined charge is retried and the donor told; a charge the bank never confirms is checked again rather than counted.
+* A run charges for 20 seconds at a time; if charges are still due, it continues a minute later, so a busy sign-up day is not charged late every month.
 * Every email carries a cancel link that stays valid for the life of the donation.
 * Payments the bank never reported back are re-checked every 15 minutes, so a donor who closes the tab still gets a receipt.
 
@@ -161,6 +162,10 @@ In PlanetStudio Payment Gateway > Orders. After a full refund or a void the dona
 = Where do the colours come from? =
 
 Donations > Form Settings > Appearance. The defaults are a neutral blue.
+
+= Do I need a server cron job? =
+
+It is recommended for recurring donations. WordPress only runs scheduled jobs when someone visits the site, so on a quiet site charges, follow-up runs and the 15-minute payment re-checks can start late. Set `define( 'DISABLE_WP_CRON', true );` in wp-config.php and have the server request `https://your-site/wp-cron.php` every few minutes, or ask your host to do it.
 
 = Does it work on multisite? =
 

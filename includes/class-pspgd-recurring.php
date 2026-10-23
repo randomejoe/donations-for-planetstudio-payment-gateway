@@ -6,6 +6,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class PSPGD_Recurring {
 	public const HOOK = 'pspgd_process_recurring';
 
+	/**
+	 * A one-off run, scheduled when a run's time is up with charges still
+	 * due. It has its own hook because ensure_schedule() takes the next
+	 * HOOK event to be the hourly one, and would replace a one-off run of
+	 * the same hook with a second hourly schedule.
+	 */
+	public const CONTINUE_HOOK = 'pspgd_process_recurring_continue';
+
+	/** Subscriptions read per query. */
+	private const BATCH = 10;
+
+	/**
+	 * Seconds a run keeps starting new charges. Each charge waits on the
+	 * bank, and a WP-Cron request is commonly allowed 30 seconds of PHP, so
+	 * a run stops starting charges well before that.
+	 */
+	private const TIME_BUDGET = 20;
+
+	/** Seconds before a run cut short picks up where it stopped. */
+	private const CONTINUE_AFTER = MINUTE_IN_SECONDS;
+
 	private const LOCK_KEY = 'pspgd_recurring_lock';
 	private const LOCK_TTL = 15 * MINUTE_IN_SECONDS;
 
@@ -29,6 +50,7 @@ final class PSPGD_Recurring {
 	public static function init(): void {
 		add_action( 'init', array( __CLASS__, 'ensure_schedule' ) );
 		add_action( self::HOOK, array( __CLASS__, 'process_due_subscriptions' ) );
+		add_action( self::CONTINUE_HOOK, array( __CLASS__, 'process_due_subscriptions' ) );
 	}
 
 	public static function ensure_schedule(): void {
@@ -116,21 +138,66 @@ final class PSPGD_Recurring {
 		return max( 1, (int) apply_filters( 'pspgd_max_consecutive_failures', self::MAX_CONSECUTIVE_FAILURES ) );
 	}
 
+	/**
+	 * Charge every subscription that is due, a batch at a time, for as long
+	 * as the run's time budget lasts.
+	 *
+	 * A run used to stop after one batch of ten, so at most 240 charges a
+	 * day went through and a busy sign-up day was charged days late every
+	 * month after. If time runs out with charges still due, a follow-up run
+	 * is scheduled a minute later instead of waiting for the next hour.
+	 */
 	public static function process_due_subscriptions(): void {
 		if ( ! self::acquire_lock() ) {
 			return;
 		}
 
-		try {
-			foreach ( PSPGD_Repository::due_subscriptions() as $subscription ) {
-				if ( ! PSPGD_Repository::claim_due_subscription( $subscription ) ) {
-					continue;
-				}
+		$started     = PSPGD_Clock::now();
+		$seen        = array();
+		$out_of_time = false;
 
-				self::charge_once( $subscription, 'recurring_cron' );
-			}
+		try {
+			do {
+				$batch  = PSPGD_Repository::due_subscriptions( self::BATCH );
+				$unseen = 0;
+
+				foreach ( $batch as $subscription ) {
+					$id = (int) $subscription->id;
+					// A row that could not be claimed is still due, and would
+					// otherwise be read and skipped until the budget ran out.
+					if ( isset( $seen[ $id ] ) ) {
+						continue;
+					}
+
+					// At least one charge per run, however slow the last one was.
+					if ( $seen && PSPGD_Clock::now() - $started >= self::TIME_BUDGET ) {
+						$out_of_time = true;
+						break 2;
+					}
+
+					$seen[ $id ] = true;
+					++$unseen;
+
+					if ( ! PSPGD_Repository::claim_due_subscription( $subscription ) ) {
+						continue;
+					}
+
+					self::charge_once( $subscription, 'recurring_cron' );
+				}
+			} while ( $unseen > 0 && count( $batch ) >= self::BATCH );
 		} finally {
 			self::release_lock();
+		}
+
+		if ( $out_of_time ) {
+			self::schedule_continuation();
+		}
+	}
+
+	/** Run again shortly, unless a follow-up run is already waiting. */
+	public static function schedule_continuation(): void {
+		if ( ! wp_next_scheduled( self::CONTINUE_HOOK ) ) {
+			wp_schedule_single_event( time() + self::CONTINUE_AFTER, self::CONTINUE_HOOK );
 		}
 	}
 

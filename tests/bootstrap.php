@@ -517,6 +517,14 @@ if ( ! function_exists( 'wp_schedule_event' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_schedule_single_event' ) ) {
+	function wp_schedule_single_event( int $timestamp, string $hook ): bool {
+		$GLOBALS['test_cron'][ $hook ] = $timestamp;
+		unset( $GLOBALS['test_cron_recurrence'][ $hook ] );
+		return true;
+	}
+}
+
 if ( ! function_exists( 'wp_clear_scheduled_hook' ) ) {
 	function wp_clear_scheduled_hook( string $hook ): void {
 		unset( $GLOBALS['test_cron'][ $hook ], $GLOBALS['test_cron_recurrence'][ $hook ] );

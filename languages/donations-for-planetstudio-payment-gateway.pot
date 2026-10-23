@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Donations for PlanetStudio Payment Gateway\n"
-"POT-Creation-Date: 2026-10-23 17:16+0000\n"
+"POT-Creation-Date: 2026-10-23 17:45+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -430,7 +430,7 @@ msgstr ""
 msgid "Event log retention"
 msgstr ""
 
-#: includes/class-pspgd-reconciliation.php:54
+#: includes/class-pspgd-reconciliation.php:62
 msgid "Every 15 minutes (Donations for PlanetStudio Payment Gateway)"
 msgstr ""
 
@@ -660,7 +660,7 @@ msgstr ""
 msgid "No Turnstile keys are saved yet, so the check is not shown even when ticked. Enter them under %s; this form uses the same keys."
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:566
+#: includes/class-pspgd-pspg.php:572
 msgid "No bank order reference is stored for this donation."
 msgstr ""
 
@@ -668,7 +668,7 @@ msgstr ""
 msgid "No campaign logs yet."
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:1070
+#: includes/class-pspgd-pspg.php:918
 msgid "No donation has been confirmed. Please try again or contact us if you need help."
 msgstr ""
 
@@ -728,7 +728,7 @@ msgstr ""
 msgid "Ongoing campaign"
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:248
+#: includes/class-pspgd-pspg.php:254
 msgid "Online donations are not set up yet. Please try again later."
 msgstr ""
 
@@ -760,7 +760,7 @@ msgstr ""
 msgid "PSPG order"
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:554
+#: includes/class-pspgd-pspg.php:560
 msgid "PSPG status sync is not available."
 msgstr ""
 
@@ -796,7 +796,7 @@ msgstr ""
 msgid "PlanetStudio Payment Gateway is not active, so its banks cannot be listed. Enter the bank id by hand, or activate the gateway."
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:249
+#: includes/class-pspgd-pspg.php:255
 msgid "PlanetStudio Payment Gateway is not available."
 msgstr ""
 
@@ -943,7 +943,7 @@ msgstr ""
 msgid "Recurring payment failed subject"
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:348
+#: includes/class-pspgd-pspg.php:354
 msgid "Recurring payments are not available."
 msgstr ""
 
@@ -971,7 +971,7 @@ msgstr ""
 msgid "Reply-to address"
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:1097
+#: includes/class-pspgd-pspg.php:945
 msgid "Return to %s"
 msgstr ""
 
@@ -1126,7 +1126,7 @@ msgstr ""
 msgid "Text colour"
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:1065
+#: includes/class-pspgd-pspg.php:913
 msgid "Thank you for your donation."
 msgstr ""
 
@@ -1162,7 +1162,7 @@ msgstr ""
 msgid "The image at the top of every email. Upload both to the media library and paste the URLs here. A reader whose mail app is in dark mode is shown the dark-mode version; everyone else sees the normal one. Left blank, the theme's logo is used, and with no theme logo the site name is shown instead. Colours and font come from Form Settings > Appearance."
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:406
+#: includes/class-pspgd-pspg.php:412
 msgid "The saved card could not be revoked at the gateway."
 msgstr ""
 
@@ -1246,7 +1246,7 @@ msgstr ""
 msgid "Visitor address"
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:1074
+#: includes/class-pspgd-pspg.php:922
 msgid "We will email your receipt once the bank confirms the donation."
 msgstr ""
 
@@ -1304,15 +1304,15 @@ msgstr ""
 msgid "YouTube"
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:1066
+#: includes/class-pspgd-pspg.php:914
 msgid "Your payment has been confirmed. A receipt has been sent to your email address."
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:1073
+#: includes/class-pspgd-pspg.php:921
 msgid "Your payment is being confirmed."
 msgstr ""
 
-#: includes/class-pspgd-pspg.php:1069
+#: includes/class-pspgd-pspg.php:917
 msgid "Your payment was not completed."
 msgstr ""
 

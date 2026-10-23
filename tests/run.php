@@ -4,6 +4,7 @@ $tests = array(
 	'plugin-load-test.php',
 	'recurring-failure-count-test.php',
 	'recurring-schedule-test.php',
+	'recurring-batch-test.php',
 	'reconciliation-guards-test.php',
 	'stuck-donation-test.php',
 	'subscription-purge-test.php',

@@ -79,6 +79,7 @@ function lifecycle_schedule_everything(): void {
 	test_reset_cron();
 	PSPGD_Exchange_Rates::ensure_schedule();
 	PSPGD_Recurring::ensure_schedule();
+	PSPGD_Recurring::schedule_continuation();
 	PSPGD_Reconciliation::ensure_schedule();
 	PSPGD_Campaigns::ensure_schedule();
 }
@@ -98,7 +99,8 @@ run_tests(
 			// so the source is checked too.
 			$scheduling = array();
 			foreach ( glob( dirname( __DIR__ ) . '/includes/{,*/}*.php', GLOB_BRACE ) as $file ) {
-				if ( false !== strpos( (string) file_get_contents( $file ), 'wp_schedule_event(' ) ) {
+				$source = (string) file_get_contents( $file );
+				if ( false !== strpos( $source, 'wp_schedule_event(' ) || false !== strpos( $source, 'wp_schedule_single_event(' ) ) {
 					$scheduling[] = basename( $file );
 				}
 			}
@@ -123,7 +125,7 @@ run_tests(
 
 			PSPGD_Installer::deactivate( false );
 
-			assert_same( array( 1 => 0, 2 => 4 ), lifecycle_jobs_per_site(), 'Only the site it was deactivated on stops.' );
+			assert_same( array( 1 => 0, 2 => count( PSPGD_Installer::cron_hooks() ) ), lifecycle_jobs_per_site(), 'Only the site it was deactivated on stops.' );
 		},
 
 		'deactivating for a whole network clears every site' => static function (): void {
