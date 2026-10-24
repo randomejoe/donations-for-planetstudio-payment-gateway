@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Donations for PlanetStudio Payment Gateway
  * Description:       Donation form, campaigns with goals and deadlines, and recurring donations on saved cards, paid through PlanetStudio Payment Gateway.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            Joe Davtian
  * License:           GPLv3
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PSPGD_VERSION', '1.0.1' );
+define( 'PSPGD_VERSION', '1.0.2' );
 define( 'PSPGD_DB_VERSION', '2' );
 define( 'PSPGD_FILE', __FILE__ );
 define( 'PSPGD_DIR', plugin_dir_path( __FILE__ ) );

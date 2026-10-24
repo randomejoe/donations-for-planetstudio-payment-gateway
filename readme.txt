@@ -5,7 +5,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: planetstudio-payment-gateway
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -182,6 +182,9 @@ Yes, activated on one site or for the whole network. Each site has its own donat
 7. Form settings: bank, currencies, test mode and recurring giving.
 
 == Changelog ==
+
+= 1.0.2 =
+* Prepared for WordPress.org: screenshots in the readme, and every Plugin Check warning reviewed and explained in the code. No change in how the plugin behaves.
 
 = 1.0.1 =
 * Recurring donations are no longer charged at most ten an hour. A run keeps charging for 20 seconds and, if charges are still due, continues a minute later, so a busy sign-up day is not charged days late every month.
