@@ -101,10 +101,10 @@ jobs:
           mkdir -p build
           git archive --format=tar --prefix=donations-for-planetstudio-payment-gateway/ HEAD | tar -x -C build
 
-      # Errors fail the job; warnings are shown as annotations. 1.0.0 has
-      # 56 warnings, mostly nonce checks on read-only GET parameters and the
-      # plugin's own direct queries on its tables.
+      # Errors and warnings both fail the job. Every warning the code raised
+      # was checked and is ignored where it is raised, with the reason, so a
+      # new one is something to look at before WordPress.org's reviewers do.
       - uses: wordpress/plugin-check-action@v1
         with:
           build-dir: build/donations-for-planetstudio-payment-gateway
-          ignore-warnings: true
+          ignore-warnings: false
