@@ -58,3 +58,29 @@ gh release create vX.Y.Z dist/donations-for-planetstudio-payment-gateway-X.Y.Z.z
 The release notes follow the 1.0.0 release: what changed, then the install
 note (use the attached zip, not the "Source code" archives) and the
 requirements.
+
+## 5. WordPress.org
+
+Once the plugin is approved, each release also goes to the plugin's
+Subversion repository, `https://plugins.svn.wordpress.org/donations-for-planetstudio-payment-gateway`.
+`svn` is not on macOS by default: `brew install subversion`.
+
+```sh
+svn checkout https://plugins.svn.wordpress.org/donations-for-planetstudio-payment-gateway wporg-svn
+cd wporg-svn
+rm -rf trunk/* && unzip -q ../dist/donations-for-planetstudio-payment-gateway-X.Y.Z.zip -d /tmp/pspgd && cp -R /tmp/pspgd/donations-for-planetstudio-payment-gateway/. trunk/
+cp ../.wordpress-org/* assets/
+svn add --force trunk assets && svn status | awk '/^!/ {print $2}' | xargs -r svn rm
+svn cp trunk tags/X.Y.Z
+svn ci -m "Release X.Y.Z" --username joedavtian
+```
+
+`trunk/` is exactly the release zip's contents. WordPress.org serves the
+version named by `Stable tag:` in `trunk/readme.txt` from `tags/X.Y.Z/`, so
+the tag must exist before that readme says so.
+
+`assets/` holds the listing's icon, banner and screenshots from
+`.wordpress-org/` (left out of the zip). `screenshot-N.png` matches caption
+N under `== Screenshots ==` in `readme.txt`. `sh tools/wporg-assets/make.sh`
+redraws the icon and banner; how the screenshots were taken is in
+`tools/wporg-assets/README.md`.

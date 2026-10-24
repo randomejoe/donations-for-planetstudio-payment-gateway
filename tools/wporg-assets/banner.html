@@ -1,0 +1,61 @@
+<!doctype html>
+<!-- The WordPress.org plugin banner. Rendered at 1544x500 by make.sh, which also scales it to 772x250. -->
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=block" rel="stylesheet">
+<style>
+	html, body { margin: 0; padding: 0; }
+	body {
+		width: 1544px; height: 500px; overflow: hidden;
+		font-family: Manrope, sans-serif;
+	}
+	.banner {
+		position: relative; width: 1544px; height: 500px; box-sizing: border-box;
+		background: linear-gradient(120deg, #2563eb 0%, #1d4ed8 45%, #1e3a8a 100%);
+		color: #fff; padding: 0 96px; display: flex; align-items: center; gap: 72px;
+	}
+	.banner::before {
+		content: ""; position: absolute; right: -120px; top: -160px; width: 620px; height: 620px;
+		border-radius: 50%; border: 36px solid rgba(147, 197, 253, 0.16);
+	}
+	.words { flex: 1; position: relative; }
+	.words h1 { margin: 0 0 22px; font-size: 64px; line-height: 1.08; font-weight: 800; letter-spacing: -1px; }
+	.words p { margin: 0; font-size: 28px; font-weight: 500; color: #dbeafe; }
+	.words p span { color: #93c5fd; padding: 0 10px; }
+
+	.card {
+		position: relative; width: 420px; flex: none; background: #fff; color: #1f2937;
+		border-radius: 14px; border-top: 6px solid #93c5fd; padding: 28px 30px 30px;
+		box-shadow: 0 30px 60px rgba(15, 23, 42, 0.35);
+	}
+	.steps { display: flex; gap: 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #64748b; margin-bottom: 18px; }
+	.steps b { color: #1d4ed8; border-bottom: 2px solid #1d4ed8; padding-bottom: 6px; }
+	.card h2 { margin: 0 0 16px; font-size: 26px; font-weight: 800; }
+	.freq, .amounts { display: grid; gap: 10px; margin-bottom: 12px; }
+	.freq { grid-template-columns: repeat(3, 1fr); }
+	.amounts { grid-template-columns: repeat(2, 1fr); }
+	.btn { border: 1px solid #cbd5e1; border-radius: 6px; padding: 11px 0; text-align: center; font-size: 15px; font-weight: 700; }
+	.on { background: #1d4ed8; border-color: #1d4ed8; color: #fff; }
+	.bar { margin-top: 18px; font-size: 14px; font-weight: 700; display: flex; justify-content: space-between; }
+	.track { height: 10px; border-radius: 5px; background: #dbeafe; margin-top: 8px; overflow: hidden; }
+	.track i { display: block; width: 68%; height: 100%; background: #1d4ed8; }
+</style>
+</head>
+<body>
+<div class="banner">
+	<div class="words">
+		<h1>Donations for PlanetStudio Payment Gateway</h1>
+		<p>Donation form<span>·</span>Campaigns<span>·</span>Recurring giving</p>
+	</div>
+	<div class="card" aria-hidden="true">
+		<div class="steps"><b>1. AMOUNT</b><span>2. YOUR DETAILS</span><span>3. REVIEW</span></div>
+		<h2>Choose your donation</h2>
+		<div class="freq"><div class="btn">One-time</div><div class="btn on">Monthly</div><div class="btn">Weekly</div></div>
+		<div class="amounts"><div class="btn">5,000 AMD</div><div class="btn on">10,000 AMD</div><div class="btn">20,000 AMD</div><div class="btn">50,000 AMD</div></div>
+		<div class="bar"><span>1,360,000 AMD raised</span><span>68%</span></div>
+		<div class="track"><i></i></div>
+	</div>
+</div>
+</body>
+</html>

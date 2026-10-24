@@ -171,6 +171,16 @@ It is recommended for recurring donations. WordPress only runs scheduled jobs wh
 
 Yes, activated on one site or for the whole network. Each site has its own donations, settings, bank and scheduled jobs, and its own choice in Form Settings about whether its donation data is deleted with the plugin. PlanetStudio Payment Gateway has to be active on the same sites.
 
+== Screenshots ==
+
+1. A campaign page: progress towards the goal across currencies, the campaign's story, the three-step donation form and the supporters list.
+2. The payment result screen a donor sees after paying, in your colours.
+3. A receipt email, in the donor's language, with your logo and colours.
+4. The donation log: the figures at a glance, filters, search and CSV export.
+5. Recurring donations, with each saved card's status and the next payment date.
+6. A campaign's goal and end date, set beside the editor.
+7. Form settings: bank, currencies, test mode and recurring giving.
+
 == Changelog ==
 
 = 1.0.1 =
