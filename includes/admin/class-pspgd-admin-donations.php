@@ -17,11 +17,13 @@ final class PSPGD_Admin_Donations {
 		$filters        = self::donation_filters();
 		$donation_total = PSPGD_Repository::count_donations( $filters );
 		$donation_pages = max( 1, (int) ceil( $donation_total / PSPGD_Admin::PER_PAGE ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- A page number in a link; it only picks which rows are shown.
 		$donation_page  = min( $donation_pages, max( 1, absint( $_GET['d_page'] ?? 1 ) ) );
 		$donations      = PSPGD_Repository::list_donations( PSPGD_Admin::PER_PAGE, ( $donation_page - 1 ) * PSPGD_Admin::PER_PAGE, $filters );
 
 		$event_total = PSPGD_Repository::count_events();
 		$event_pages = max( 1, (int) ceil( $event_total / PSPGD_Admin::PER_PAGE ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- A page number in a link; it only picks which rows are shown.
 		$event_page  = min( $event_pages, max( 1, absint( $_GET['e_page'] ?? 1 ) ) );
 		$events      = PSPGD_Repository::list_recent_events( PSPGD_Admin::PER_PAGE, ( $event_page - 1 ) * PSPGD_Admin::PER_PAGE );
 		?>
@@ -133,6 +135,7 @@ final class PSPGD_Admin_Donations {
 	 * @return array<string, string>
 	 */
 	private static function donation_filters(): array {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- The log's own GET filter form; filters only narrow what is shown.
 		return array(
 			'status'      => isset( $_GET['f_status'] ) ? sanitize_key( wp_unslash( $_GET['f_status'] ) ) : '',
 			'type'        => isset( $_GET['f_type'] ) ? sanitize_key( wp_unslash( $_GET['f_type'] ) ) : '',
@@ -143,6 +146,7 @@ final class PSPGD_Admin_Donations {
 			'date_to'     => self::sanitize_date( sanitize_text_field( wp_unslash( $_GET['f_to'] ?? '' ) ) ),
 			'search'      => isset( $_GET['f_search'] ) ? sanitize_text_field( wp_unslash( $_GET['f_search'] ) ) : '',
 		);
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	/** @param mixed $value */

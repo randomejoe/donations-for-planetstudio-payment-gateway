@@ -853,10 +853,12 @@ final class PSPGD_Repository {
 			array( $limit, $offset )
 		);
 
+		// The WHERE clause is assembled by donation_filter_sql() from fixed column
+		// names and placeholders only; its values are in $args, which the sniffs
+		// cannot count.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		return (array) $wpdb->get_results(
 			$wpdb->prepare(
-				// The WHERE clause is assembled by donation_filter_sql() from fixed column names and placeholders only; its values are in $args.
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT d.*, donor.email, donor.first_name, donor.last_name, campaign.post_title AS campaign_title
 				FROM %i d
 				LEFT JOIN %i donor ON donor.id = d.donor_id
@@ -867,6 +869,7 @@ final class PSPGD_Repository {
 				$args
 			)
 		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, PluginCheck.Security.DirectDB.UnescapedDBParameter
 	}
 
 	/** @param array<string, string> $filters */
@@ -875,14 +878,15 @@ final class PSPGD_Repository {
 
 		$where = self::donation_filter_sql( $filters );
 
+		// Same WHERE clause as list_donations(): fixed columns and placeholders only.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
-				// Same WHERE clause as list_donations(): fixed columns and placeholders only.
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT COUNT(*) FROM %i d LEFT JOIN %i donor ON donor.id = d.donor_id {$where['sql']}",
 				array_merge( array( $wpdb->prefix . 'pspgd_donations', $wpdb->prefix . 'pspgd_donors' ), $where['args'] )
 			)
 		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, PluginCheck.Security.DirectDB.UnescapedDBParameter
 	}
 
 	/**

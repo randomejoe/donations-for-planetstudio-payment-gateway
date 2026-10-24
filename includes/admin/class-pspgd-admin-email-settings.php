@@ -21,9 +21,11 @@ final class PSPGD_Admin_Email_Settings {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Email Templates', 'donations-for-planetstudio-payment-gateway' ); ?></h1>
+			<?php // phpcs:disable WordPress.Security.NonceVerification.Recommended -- Flags this plugin's own redirects add; they only choose which notice to show. ?>
 			<?php if ( isset( $_GET['updated'] ) ) : ?><div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Email templates saved.', 'donations-for-planetstudio-payment-gateway' ); ?></p></div><?php endif; ?>
 			<?php if ( isset( $_GET['test_sent'] ) ) : ?><div class="notice notice-success is-dismissible"><p><?php printf( /* translators: %s: email address. */ esc_html__( 'Test email sent to %s.', 'donations-for-planetstudio-payment-gateway' ), esc_html( $sent_to ) ); ?></p></div><?php endif; ?>
 			<?php if ( isset( $_GET['test_failed'] ) ) : ?><div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'The test email could not be sent. Check the site mail configuration.', 'donations-for-planetstudio-payment-gateway' ); ?></p></div><?php endif; ?>
+			<?php // phpcs:enable WordPress.Security.NonceVerification.Recommended ?>
 			<p><?php esc_html_e( 'Edit the outgoing donation and recurring payment emails here. Leave any field blank to fall back to the built-in wording. Each email is built from the subject, heading and body below, plus a details table of the donation itself, which is added automatically.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
 
 			<h2><?php esc_html_e( 'Placeholders', 'donations-for-planetstudio-payment-gateway' ); ?></h2>

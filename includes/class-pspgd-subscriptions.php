@@ -28,11 +28,13 @@ final class PSPGD_Subscriptions {
 	}
 
 	public static function render_cancel_confirmation(): void {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- A link from the donor's email, authenticated by the cancel token checked below. It only shows a confirmation; cancelling is a POST with a nonce.
 		if ( ! isset( $_GET['pspgd_cancel'], $_GET['token'] ) ) {
 			return;
 		}
 		$subscription = PSPGD_Repository::find_subscription( absint( $_GET['pspgd_cancel'] ) );
 		$token        = sanitize_text_field( wp_unslash( $_GET['token'] ) );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 		if ( ! PSPGD_Cancel_Links::is_valid( $subscription, $token ) || 'active' !== $subscription->status ) {
 			wp_die( esc_html__( 'This cancellation link is invalid or has already been used.', 'donations-for-planetstudio-payment-gateway' ), 404 );
 		}

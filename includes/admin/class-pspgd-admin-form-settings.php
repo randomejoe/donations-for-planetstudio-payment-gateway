@@ -30,7 +30,7 @@ final class PSPGD_Admin_Form_Settings {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Donation Form Settings', 'donations-for-planetstudio-payment-gateway' ); ?></h1>
-			<?php if ( isset( $_GET['updated'] ) ) : ?><div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Form settings saved.', 'donations-for-planetstudio-payment-gateway' ); ?></p></div><?php endif; ?>
+			<?php if ( isset( $_GET['updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Set by this plugin's own redirect after saving; it only shows a notice. ?><div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Form settings saved.', 'donations-for-planetstudio-payment-gateway' ); ?></p></div><?php endif; ?>
 			<p><?php printf( /* translators: %s: the shortcode. */ esc_html__( 'Add the form to any page with the %s shortcode. Campaign pages show it automatically.', 'donations-for-planetstudio-payment-gateway' ), '<code>[pspgd_donation_form]</code>' ); ?></p>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="pspgd_save_form_settings">

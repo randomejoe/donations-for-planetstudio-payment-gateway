@@ -688,6 +688,7 @@ final class PSPGD_Campaigns {
 		$group_id = (int) get_post_meta( $campaign_id, '_pspgd_campaign_group_id', true );
 		if ( $group_id > 0 ) {
 			global $wpdb;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Finds a campaign's other-language copies by the group id they share. meta_key is indexed; a meta_query through get_posts() would run this and more.
 			$group_ids = $wpdb->get_col(
 				$wpdb->prepare(
 					"SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s",
@@ -733,7 +734,9 @@ final class PSPGD_Campaigns {
 		// One %d per campaign id; the ids themselves go through prepare().
 		$placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
 
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $placeholders is only %d markers.
+		// The plugin's own tables, for the campaign status box. $placeholders is only %d
+		// markers, one per id passed with them, which the sniff cannot count.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$donation_rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT CONCAT('donation #', d.id, ' ', d.status) AS event_type, d.created_at, COALESCE(CONCAT('Donation amount: ', d.amount, ' ', d.currency), '') AS message
@@ -755,7 +758,7 @@ final class PSPGD_Campaigns {
 				array_merge( array( $wpdb->prefix . 'pspgd_events', 'campaign' ), $ids )
 			)
 		);
-		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		$rows = array_merge( (array) $donation_rows, (array) $event_rows );
 		usort(

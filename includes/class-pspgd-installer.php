@@ -101,7 +101,7 @@ final class PSPGD_Installer {
 		);
 
 		foreach ( $tables as $table ) {
-			$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $table ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- Removing the plugin's own tables is what the box asked for.
+			$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $table ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Removing the plugin's own tables is what the box asked for.
 		}
 
 		// ---------------------------------------------------------------------
@@ -153,6 +153,7 @@ final class PSPGD_Installer {
 
 		// Every other transient expires by itself, but there is no reason to wait:
 		// the form throttle counters, saved form errors and the cached figures.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall: no API deletes options by prefix.
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
@@ -170,6 +171,7 @@ final class PSPGD_Installer {
 		// Per-currency exchange-rate cache options, e.g.
 		// pspgd_exchange_rate_usd_amd_last_known. Removed by prefix, because the set
 		// depends on which currencies the site offered over its lifetime.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall: no API deletes options by prefix.
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",

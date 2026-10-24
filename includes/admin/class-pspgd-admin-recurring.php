@@ -23,10 +23,11 @@ final class PSPGD_Admin_Recurring {
 		// A subscription row exists before the donor reaches the bank, so a
 		// pending one is an unfinished payment attempt rather than a
 		// recurring donation. Hidden unless explicitly asked for.
-		$show_incomplete = ! empty( $_GET['show_incomplete'] );
+		$show_incomplete = ! empty( $_GET['show_incomplete'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- A display toggle in a link.
 
 		$sub_total = PSPGD_Repository::count_subscriptions( $show_incomplete );
 		$sub_pages = max( 1, (int) ceil( $sub_total / PSPGD_Admin::PER_PAGE ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- A page number in a link; it only picks which rows are shown.
 		$sub_page  = min( $sub_pages, max( 1, absint( $_GET['s_page'] ?? 1 ) ) );
 		$subscriptions   = PSPGD_Repository::list_subscriptions( PSPGD_Admin::PER_PAGE, ( $sub_page - 1 ) * PSPGD_Admin::PER_PAGE, $show_incomplete );
 
@@ -56,14 +57,14 @@ final class PSPGD_Admin_Recurring {
 				</p>
 			<?php endif; ?>
 
-			<?php if ( isset( $_GET['pspgd_notice'] ) ) : ?>
+			<?php if ( isset( $_GET['pspgd_notice'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Set by this plugin's own redirect; it only picks a notice from a fixed list. ?>
 				<?php
 				$notice_map = array(
 					'cancelled'      => array( 'success', __( 'Subscription cancelled.', 'donations-for-planetstudio-payment-gateway' ) ),
 					'cancel_failed'  => array( 'error', __( 'Could not cancel the subscription at the gateway. See the event log for details.', 'donations-for-planetstudio-payment-gateway' ) ),
 					'not_found'      => array( 'error', __( 'Subscription not found.', 'donations-for-planetstudio-payment-gateway' ) ),
 				);
-				$notice_key = sanitize_key( (string) $_GET['pspgd_notice'] );
+				$notice_key = sanitize_key( wp_unslash( (string) $_GET['pspgd_notice'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- As above.
 				if ( isset( $notice_map[ $notice_key ] ) ) :
 					list( $notice_type, $notice_text ) = $notice_map[ $notice_key ];
 					?>

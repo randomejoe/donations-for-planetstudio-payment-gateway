@@ -3,6 +3,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// The figures come from the plugin's own donations and subscriptions tables,
+// queried directly through $wpdb->prepare(). snapshot() keeps the result in a
+// transient for five minutes, and flush() drops it when a donation changes.
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
 /**
  * The handful of numbers worth seeing at a glance above the donation log.
  *

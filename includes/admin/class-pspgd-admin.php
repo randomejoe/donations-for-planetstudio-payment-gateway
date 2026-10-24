@@ -29,6 +29,7 @@ final class PSPGD_Admin {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- The admin page being viewed; it only decides whether to show the notice.
 		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 		if ( 0 !== strpos( $page, 'pspgd' ) ) {
 			return;
