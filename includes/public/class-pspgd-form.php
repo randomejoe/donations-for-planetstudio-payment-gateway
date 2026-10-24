@@ -136,7 +136,10 @@ final class PSPGD_Form {
 			esc_attr( $colors['primary'] ),
 			esc_attr( $colors['accent'] ),
 			esc_attr( $colors['text'] ),
-			esc_attr( PSPGD_Settings::font_family() ),
+			// Not esc_attr(): this is a stylesheet, where &quot; is invalid.
+			// font_family() keeps only letters, digits, spaces, commas,
+			// quotes and hyphens, so the value cannot leave its declaration.
+			PSPGD_Settings::font_family(),
 			PSPGD_Settings::radius()
 		);
 	}

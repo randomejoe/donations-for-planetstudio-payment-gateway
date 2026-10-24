@@ -214,6 +214,15 @@ run_tests(
 			assert_contains( '--pspgd-radius:32px', $css, 'The radius is clamped.' );
 		},
 
+		'a quoted font name reaches the stylesheet as CSS, not as HTML' => static function (): void {
+			customisation_fresh_install( array( 'pspgd_font_family' => '"Open Sans", Arial, sans-serif' ) );
+
+			$css = PSPGD_Form::brand_css();
+
+			assert_contains( '--pspgd-font:"Open Sans", Arial, sans-serif;', $css, 'Quotes are how CSS names a font with a space in it.' );
+			assert_not_contains( '&quot;', $css, 'An HTML entity in a stylesheet is invalid CSS: the inputs and buttons lost their font.' );
+		},
+
 		'an email with no logo set uses the theme logo, and with none shows the site name' => static function (): void {
 			customisation_fresh_install( array( 'pspgd_colors' => array( 'primary' => '#0a7d4f' ) ) );
 
