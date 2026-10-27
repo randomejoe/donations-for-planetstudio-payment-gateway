@@ -46,15 +46,15 @@ final class PSPGD_Notifications {
 
 		$subject = sprintf(
 			/* translators: 1: amount with currency, 2: donor name. */
-			__( 'New donation: %1$s from %2$s', 'donations-for-planetstudio-payment-gateway' ),
+			__( 'New donation: %1$s from %2$s', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			$amount,
-			'' !== $name ? $name : __( 'a donor', 'donations-for-planetstudio-payment-gateway' )
+			'' !== $name ? $name : __( 'a donor', 'joedavtian-donations-for-planetstudio-payment-gateway' )
 		);
 
 		$sent = self::send(
 			$recipients,
 			self::subject_prefix( $donation ) . $subject,
-			__( 'A donation has been received.', 'donations-for-planetstudio-payment-gateway' ),
+			__( 'A donation has been received.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			self::details( $donation, $donor )
 		);
 
@@ -78,7 +78,7 @@ final class PSPGD_Notifications {
 		$details = self::details( $donation, $donor );
 
 		if ( $settled ) {
-			$details[ __( 'Amount the bank reported', 'donations-for-planetstudio-payment-gateway' ) ] = PSPGD_I18n::format_amount(
+			$details[ __( 'Amount the bank reported', 'joedavtian-donations-for-planetstudio-payment-gateway' ) ] = PSPGD_I18n::format_amount(
 				(float) $settled['amount'],
 				'' !== $settled['currency'] ? $settled['currency'] : (string) $donation->currency
 			);
@@ -88,10 +88,10 @@ final class PSPGD_Notifications {
 			$recipients,
 			self::subject_prefix( $donation ) . sprintf(
 				/* translators: %d: donation number. */
-				__( 'Donation #%d needs review: the bank reported a different amount', 'donations-for-planetstudio-payment-gateway' ),
+				__( 'Donation #%d needs review: the bank reported a different amount', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				(int) $donation->id
 			),
-			__( 'The bank reported this payment as paid, but for a different amount or currency than the donor chose. It has been left out of every total and no receipt was sent. Compare the order in PlanetStudio Payment Gateway with your bank before doing anything else.', 'donations-for-planetstudio-payment-gateway' ),
+			__( 'The bank reported this payment as paid, but for a different amount or currency than the donor chose. It has been left out of every total and no receipt was sent. Compare the order in PlanetStudio Payment Gateway with your bank before doing anything else.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			$details
 		);
 
@@ -99,7 +99,7 @@ final class PSPGD_Notifications {
 	}
 
 	private static function subject_prefix( object $donation ): string {
-		return empty( $donation->is_test ) ? '' : __( '[Test] ', 'donations-for-planetstudio-payment-gateway' );
+		return empty( $donation->is_test ) ? '' : __( '[Test] ', 'joedavtian-donations-for-planetstudio-payment-gateway' );
 	}
 
 	/**
@@ -107,22 +107,22 @@ final class PSPGD_Notifications {
 	 */
 	private static function details( object $donation, ?object $donor ): array {
 		$types = array(
-			'one_time'          => __( 'One-time', 'donations-for-planetstudio-payment-gateway' ),
-			'recurring_initial' => __( 'First payment of a recurring donation', 'donations-for-planetstudio-payment-gateway' ),
-			'recurring'         => __( 'Scheduled recurring payment', 'donations-for-planetstudio-payment-gateway' ),
+			'one_time'          => __( 'One-time', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			'recurring_initial' => __( 'First payment of a recurring donation', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			'recurring'         => __( 'Scheduled recurring payment', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 		);
 
 		$campaign = (int) $donation->campaign_id > 0 ? get_post( (int) $donation->campaign_id ) : null;
 
 		return array(
-			__( 'Donation', 'donations-for-planetstudio-payment-gateway' )       => '#' . (int) $donation->id,
-			__( 'Amount', 'donations-for-planetstudio-payment-gateway' )         => PSPGD_I18n::format_amount( (float) $donation->amount, (string) $donation->currency ),
-			__( 'Donor', 'donations-for-planetstudio-payment-gateway' )          => $donor ? trim( (string) $donor->first_name . ' ' . (string) $donor->last_name ) : '',
-			__( 'Email', 'donations-for-planetstudio-payment-gateway' )          => $donor ? (string) $donor->email : '',
-			__( 'Type', 'donations-for-planetstudio-payment-gateway' )           => $types[ (string) $donation->type ] ?? (string) $donation->type,
-			__( 'Campaign', 'donations-for-planetstudio-payment-gateway' )       => $campaign ? (string) $campaign->post_title : '',
-			__( 'Anonymous', 'donations-for-planetstudio-payment-gateway' )      => empty( $donation->is_anonymous ) ? '' : __( 'Yes, do not name them publicly', 'donations-for-planetstudio-payment-gateway' ),
-			__( 'Bank reference', 'donations-for-planetstudio-payment-gateway' ) => (string) $donation->transaction_reference,
+			__( 'Donation', 'joedavtian-donations-for-planetstudio-payment-gateway' )       => '#' . (int) $donation->id,
+			__( 'Amount', 'joedavtian-donations-for-planetstudio-payment-gateway' )         => PSPGD_I18n::format_amount( (float) $donation->amount, (string) $donation->currency ),
+			__( 'Donor', 'joedavtian-donations-for-planetstudio-payment-gateway' )          => $donor ? trim( (string) $donor->first_name . ' ' . (string) $donor->last_name ) : '',
+			__( 'Email', 'joedavtian-donations-for-planetstudio-payment-gateway' )          => $donor ? (string) $donor->email : '',
+			__( 'Type', 'joedavtian-donations-for-planetstudio-payment-gateway' )           => $types[ (string) $donation->type ] ?? (string) $donation->type,
+			__( 'Campaign', 'joedavtian-donations-for-planetstudio-payment-gateway' )       => $campaign ? (string) $campaign->post_title : '',
+			__( 'Anonymous', 'joedavtian-donations-for-planetstudio-payment-gateway' )      => empty( $donation->is_anonymous ) ? '' : __( 'Yes, do not name them publicly', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			__( 'Bank reference', 'joedavtian-donations-for-planetstudio-payment-gateway' ) => (string) $donation->transaction_reference,
 		);
 	}
 
@@ -143,7 +143,7 @@ final class PSPGD_Notifications {
 		$html    = '<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0;padding:24px;font-family:-apple-system,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.5;color:#111827;background:#ffffff;">'
 			. '<p style="margin:0 0 16px;">' . esc_html( $intro ) . '</p>'
 			. '<table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 0 20px;border-collapse:collapse;">' . $rows . '</table>'
-			. ( '' !== $log_url ? '<p style="margin:0;"><a href="' . esc_url( $log_url ) . '">' . esc_html__( 'Open the donation log', 'donations-for-planetstudio-payment-gateway' ) . '</a></p>' : '' )
+			. ( '' !== $log_url ? '<p style="margin:0;"><a href="' . esc_url( $log_url ) . '">' . esc_html__( 'Open the donation log', 'joedavtian-donations-for-planetstudio-payment-gateway' ) . '</a></p>' : '' )
 			. '</body></html>';
 
 		$sent = false;

@@ -91,10 +91,10 @@ final class PSPGD_Campaigns {
 			'pspgd_campaign',
 			array(
 				'labels' => array(
-					'name'          => __( 'Campaigns', 'donations-for-planetstudio-payment-gateway' ),
-					'singular_name' => __( 'Campaign', 'donations-for-planetstudio-payment-gateway' ),
-					'add_new_item'  => __( 'Add New Campaign', 'donations-for-planetstudio-payment-gateway' ),
-					'edit_item'     => __( 'Edit Campaign', 'donations-for-planetstudio-payment-gateway' ),
+					'name'          => __( 'Campaigns', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+					'singular_name' => __( 'Campaign', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+					'add_new_item'  => __( 'Add New Campaign', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+					'edit_item'     => __( 'Edit Campaign', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				),
 				'public'       => true,
 				'show_in_menu' => 'pspgd',
@@ -107,8 +107,8 @@ final class PSPGD_Campaigns {
 	}
 
 	public static function add_meta_boxes(): void {
-		add_meta_box( 'pspgd-campaign-fundraising', __( 'Fundraising details', 'donations-for-planetstudio-payment-gateway' ), array( __CLASS__, 'render_meta_box' ), 'pspgd_campaign', 'side', 'high' );
-		add_meta_box( 'pspgd-campaign-status', __( 'Campaign status', 'donations-for-planetstudio-payment-gateway' ), array( __CLASS__, 'render_status_box' ), 'pspgd_campaign', 'side', 'high' );
+		add_meta_box( 'pspgd-campaign-fundraising', __( 'Fundraising details', 'joedavtian-donations-for-planetstudio-payment-gateway' ), array( __CLASS__, 'render_meta_box' ), 'pspgd_campaign', 'side', 'high' );
+		add_meta_box( 'pspgd-campaign-status', __( 'Campaign status', 'joedavtian-donations-for-planetstudio-payment-gateway' ), array( __CLASS__, 'render_status_box' ), 'pspgd_campaign', 'side', 'high' );
 	}
 
 	public static function render_meta_box( WP_Post $post ): void {
@@ -117,10 +117,10 @@ final class PSPGD_Campaigns {
 		$currency = self::goal_currency( $post->ID );
 		wp_nonce_field( 'pspgd_campaign_save', 'pspgd_campaign_nonce' );
 		?>
-		<p><label for="pspgd-campaign-goal"><strong><?php echo esc_html( sprintf( /* translators: %s: currency code, e.g. EUR. */ __( 'Goal amount (%s)', 'donations-for-planetstudio-payment-gateway' ), $currency ) ); ?></strong></label><input class="widefat" type="number" min="1" step="1" id="pspgd-campaign-goal" name="pspgd_campaign_goal" value="<?php echo esc_attr( $goal ); ?>"></p>
-		<p><label for="pspgd-campaign-deadline"><strong><?php esc_html_e( 'End date', 'donations-for-planetstudio-payment-gateway' ); ?></strong></label><input class="widefat" type="date" id="pspgd-campaign-deadline" name="pspgd_campaign_deadline" value="<?php echo esc_attr( $deadline ); ?>"></p>
-		<p><label><input type="checkbox" name="pspgd_campaign_close_at_goal" value="1" <?php checked( self::closes_at_goal( $post->ID ) ); ?>> <?php esc_html_e( 'Stop taking donations when the goal is reached', 'donations-for-planetstudio-payment-gateway' ); ?></label></p>
-		<p class="description"><?php echo esc_html( sprintf( /* translators: %s: currency code. */ __( 'The goal is in %s. Donations in other currencies are converted at the daily exchange rate and counted toward it. The campaign stops taking donations when the end date passes, or when the goal is reached if the box above is ticked. Its recurring donations are then cancelled. Pushing the end date out, raising the goal or unticking the box reopens it, but donors already cancelled are not restored. Leave the end date blank for an ongoing campaign.', 'donations-for-planetstudio-payment-gateway' ), $currency ) ); ?></p>
+		<p><label for="pspgd-campaign-goal"><strong><?php echo esc_html( sprintf( /* translators: %s: currency code, e.g. EUR. */ __( 'Goal amount (%s)', 'joedavtian-donations-for-planetstudio-payment-gateway' ), $currency ) ); ?></strong></label><input class="widefat" type="number" min="1" step="1" id="pspgd-campaign-goal" name="pspgd_campaign_goal" value="<?php echo esc_attr( $goal ); ?>"></p>
+		<p><label for="pspgd-campaign-deadline"><strong><?php esc_html_e( 'End date', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></strong></label><input class="widefat" type="date" id="pspgd-campaign-deadline" name="pspgd_campaign_deadline" value="<?php echo esc_attr( $deadline ); ?>"></p>
+		<p><label><input type="checkbox" name="pspgd_campaign_close_at_goal" value="1" <?php checked( self::closes_at_goal( $post->ID ) ); ?>> <?php esc_html_e( 'Stop taking donations when the goal is reached', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></p>
+		<p class="description"><?php echo esc_html( sprintf( /* translators: %s: currency code. */ __( 'The goal is in %s. Donations in other currencies are converted at the daily exchange rate and counted toward it. The campaign stops taking donations when the end date passes, or when the goal is reached if the box above is ticked. Its recurring donations are then cancelled. Pushing the end date out, raising the goal or unticking the box reopens it, but donors already cancelled are not restored. Leave the end date blank for an ongoing campaign.', 'joedavtian-donations-for-planetstudio-payment-gateway' ), $currency ) ); ?></p>
 		<?php
 	}
 
@@ -134,15 +134,15 @@ final class PSPGD_Campaigns {
 		$status       = self::status( $post->ID );
 		$events       = self::campaign_events( $campaign_ids );
 		?>
-		<p><strong><?php esc_html_e( 'Collected', 'donations-for-planetstudio-payment-gateway' ); ?></strong><br>
+		<p><strong><?php esc_html_e( 'Collected', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></strong><br>
 			<?php if ( $view['combined'] ) : ?>
 				<?php echo esc_html( PSPGD_I18n::format_amount( $view['total'], $view['base'] ) ); ?>
-				<?php if ( $view['converted'] ) : ?><span class="description"><?php esc_html_e( '(all currencies)', 'donations-for-planetstudio-payment-gateway' ); ?></span><?php endif; ?>
+				<?php if ( $view['converted'] ) : ?><span class="description"><?php esc_html_e( '(all currencies)', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span><?php endif; ?>
 			<?php else : ?>
-				<em><?php esc_html_e( 'No exchange rate available, so currencies are listed separately.', 'donations-for-planetstudio-payment-gateway' ); ?></em>
+				<em><?php esc_html_e( 'No exchange rate available, so currencies are listed separately.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></em>
 			<?php endif; ?>
 		</p>
-		<p><strong><?php esc_html_e( 'By currency', 'donations-for-planetstudio-payment-gateway' ); ?></strong><br>
+		<p><strong><?php esc_html_e( 'By currency', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></strong><br>
 			<?php if ( empty( $progress['by_currency'] ) ) : ?>
 				<?php echo esc_html( PSPGD_I18n::format_amount( 0.0, $currency ) ); ?>
 			<?php else : ?>
@@ -151,18 +151,18 @@ final class PSPGD_Campaigns {
 				<?php endforeach; ?>
 			<?php endif; ?>
 		</p>
-		<p><strong><?php esc_html_e( 'Goal', 'donations-for-planetstudio-payment-gateway' ); ?></strong><br><?php echo esc_html( $goal > 0 ? PSPGD_I18n::format_amount( $goal, $currency ) : '-' ); ?></p>
-		<p><strong><?php esc_html_e( 'End date', 'donations-for-planetstudio-payment-gateway' ); ?></strong><br><?php echo esc_html( $deadline ? mysql2date( (string) get_option( 'date_format' ), $deadline ) : __( 'Ongoing', 'donations-for-planetstudio-payment-gateway' ) ); ?></p>
-		<p><strong><?php esc_html_e( 'Accepting donations', 'donations-for-planetstudio-payment-gateway' ); ?></strong><br>
+		<p><strong><?php esc_html_e( 'Goal', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></strong><br><?php echo esc_html( $goal > 0 ? PSPGD_I18n::format_amount( $goal, $currency ) : '-' ); ?></p>
+		<p><strong><?php esc_html_e( 'End date', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></strong><br><?php echo esc_html( $deadline ? mysql2date( (string) get_option( 'date_format' ), $deadline ) : __( 'Ongoing', 'joedavtian-donations-for-planetstudio-payment-gateway' ) ); ?></p>
+		<p><strong><?php esc_html_e( 'Accepting donations', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></strong><br>
 			<?php if ( $status['open'] ) : ?>
-				<?php esc_html_e( 'Yes', 'donations-for-planetstudio-payment-gateway' ); ?>
+				<?php esc_html_e( 'Yes', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>
 			<?php else : ?>
-				<?php echo esc_html( 'goal_reached' === $status['reason'] ? __( 'No - goal reached', 'donations-for-planetstudio-payment-gateway' ) : __( 'No - end date passed', 'donations-for-planetstudio-payment-gateway' ) ); ?>
-				<br><span class="description"><?php esc_html_e( 'Recurring donations to this campaign have been cancelled, and the bank was asked to release their saved cards.', 'donations-for-planetstudio-payment-gateway' ); ?></span>
+				<?php echo esc_html( 'goal_reached' === $status['reason'] ? __( 'No - goal reached', 'joedavtian-donations-for-planetstudio-payment-gateway' ) : __( 'No - end date passed', 'joedavtian-donations-for-planetstudio-payment-gateway' ) ); ?>
+				<br><span class="description"><?php esc_html_e( 'Recurring donations to this campaign have been cancelled, and the bank was asked to release their saved cards.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span>
 			<?php endif; ?>
 		</p>
 		<hr>
-		<p><strong><?php esc_html_e( 'Recent campaign logs', 'donations-for-planetstudio-payment-gateway' ); ?></strong></p>
+		<p><strong><?php esc_html_e( 'Recent campaign logs', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></strong></p>
 		<?php if ( $events ) : ?>
 			<ul style="margin:0;padding-left:18px;max-height:280px;overflow:auto;">
 				<?php foreach ( $events as $event ) : ?>
@@ -173,7 +173,7 @@ final class PSPGD_Campaigns {
 				<?php endforeach; ?>
 			</ul>
 		<?php else : ?>
-			<p><?php esc_html_e( 'No campaign logs yet.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+			<p><?php esc_html_e( 'No campaign logs yet.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 		<?php endif; ?>
 		<?php
 	}
@@ -616,7 +616,7 @@ final class PSPGD_Campaigns {
 		}
 		$campaign_status = self::status( $campaign_id );
 		$donors       = PSPGD_Settings::show_supporters() ? PSPGD_Repository::campaign_donors( $campaign_ids ) : array();
-		$deadline_text = $deadline ? PSPGD_I18n::fill( PSPGD_I18n::t( 'campaign_end', 'Campaign ends %s' ), mysql2date( (string) get_option( 'date_format' ), $deadline ) ) : __( 'Ongoing campaign', 'donations-for-planetstudio-payment-gateway' );
+		$deadline_text = $deadline ? PSPGD_I18n::fill( PSPGD_I18n::t( 'campaign_end', 'Campaign ends %s' ), mysql2date( (string) get_option( 'date_format' ), $deadline ) ) : __( 'Ongoing campaign', 'joedavtian-donations-for-planetstudio-payment-gateway' );
 		if ( ! $campaign_status['open'] ) {
 			$deadline_text = 'goal_reached' === $campaign_status['reason']
 				? PSPGD_I18n::t( 'campaign_eyebrow_goal', 'Goal reached' )
@@ -626,7 +626,7 @@ final class PSPGD_Campaigns {
 
 		ob_start();
 		?>
-		<section class="pspgd-campaign" aria-label="<?php esc_attr_e( 'Campaign donation progress', 'donations-for-planetstudio-payment-gateway' ); ?>">
+		<section class="pspgd-campaign" aria-label="<?php esc_attr_e( 'Campaign donation progress', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>">
 			<div class="pspgd-campaign__progress" data-pspgd-campaign-currencies="<?php echo esc_attr( (string) wp_json_encode( $switch_data ) ); ?>">
 				<p class="pspgd-campaign__eyebrow"><?php echo esc_html( $deadline_text ); ?></p>
 				<?php if ( $switchable ) : ?>
@@ -657,7 +657,7 @@ final class PSPGD_Campaigns {
 			<?php if ( PSPGD_Settings::show_supporters() ) : ?>
 			<div class="pspgd-campaign__donors">
 				<h2><?php echo esc_html( PSPGD_I18n::t( 'campaign_supporters', 'Supporters' ) ); ?></h2>
-				<?php if ( $donors ) : ?><ul><?php foreach ( $donors as $donation ) : ?><li><span><?php echo esc_html( ! empty( $donation->is_anonymous ) ? PSPGD_I18n::t( 'anonymous_donor', 'Anonymous donor' ) : self::public_name( (string) $donation->first_name, (string) $donation->last_name ) ); ?></span><strong><?php echo esc_html( PSPGD_I18n::format_amount( (float) $donation->amount, (string) $donation->currency ) ); ?></strong></li><?php endforeach; ?></ul><?php else : ?><p><?php esc_html_e( 'Be the first to support this campaign.', 'donations-for-planetstudio-payment-gateway' ); ?></p><?php endif; ?></div>
+				<?php if ( $donors ) : ?><ul><?php foreach ( $donors as $donation ) : ?><li><span><?php echo esc_html( ! empty( $donation->is_anonymous ) ? PSPGD_I18n::t( 'anonymous_donor', 'Anonymous donor' ) : self::public_name( (string) $donation->first_name, (string) $donation->last_name ) ); ?></span><strong><?php echo esc_html( PSPGD_I18n::format_amount( (float) $donation->amount, (string) $donation->currency ) ); ?></strong></li><?php endforeach; ?></ul><?php else : ?><p><?php esc_html_e( 'Be the first to support this campaign.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p><?php endif; ?></div>
 			<?php endif; ?>
 		</section>
 		<?php

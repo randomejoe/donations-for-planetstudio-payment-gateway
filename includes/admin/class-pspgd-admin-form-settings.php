@@ -10,7 +10,7 @@ final class PSPGD_Admin_Form_Settings {
 
 	public static function render_form_settings_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to view this page.', 'donations-for-planetstudio-payment-gateway' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to view this page.', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 
 		$labels            = (array) get_option( 'pspgd_form_labels', array() );
@@ -29,43 +29,43 @@ final class PSPGD_Admin_Form_Settings {
 		$languages         = (array) get_option( 'pspgd_languages', array() );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Donation Form Settings', 'donations-for-planetstudio-payment-gateway' ); ?></h1>
-			<?php if ( isset( $_GET['updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Set by this plugin's own redirect after saving; it only shows a notice. ?><div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Form settings saved.', 'donations-for-planetstudio-payment-gateway' ); ?></p></div><?php endif; ?>
-			<p><?php printf( /* translators: %s: the shortcode. */ esc_html__( 'Add the form to any page with the %s shortcode. Campaign pages show it automatically.', 'donations-for-planetstudio-payment-gateway' ), '<code>[pspgd_donation_form]</code>' ); ?></p>
+			<h1><?php esc_html_e( 'Donation Form Settings', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h1>
+			<?php if ( isset( $_GET['updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Set by this plugin's own redirect after saving; it only shows a notice. ?><div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Form settings saved.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p></div><?php endif; ?>
+			<p><?php printf( /* translators: %s: the shortcode. */ esc_html__( 'Add the form to any page with the %s shortcode. Campaign pages show it automatically.', 'joedavtian-donations-for-planetstudio-payment-gateway' ), '<code>[pspgd_donation_form]</code>' ); ?></p>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="pspgd_save_form_settings">
 				<?php wp_nonce_field( 'pspgd_save_form_settings' ); ?>
 
-				<h2><?php esc_html_e( 'Payments', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
+				<h2><?php esc_html_e( 'Payments', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="pspgd-bank"><?php esc_html_e( 'Bank', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
+						<th scope="row"><label for="pspgd-bank"><?php esc_html_e( 'Bank', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
 						<td>
 							<?php if ( $banks ) : ?>
 								<select id="pspgd-bank" name="bank_id">
-									<option value=""><?php esc_html_e( '-- Choose a bank --', 'donations-for-planetstudio-payment-gateway' ); ?></option>
+									<option value=""><?php esc_html_e( '-- Choose a bank --', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></option>
 									<?php foreach ( $banks as $id => $title ) : ?>
 										<option value="<?php echo esc_attr( $id ); ?>" <?php selected( $bank_id, $id ); ?>><?php echo esc_html( $title . ' (' . $id . ')' ); ?></option>
 									<?php endforeach; ?>
 								</select>
 							<?php else : ?>
 								<input class="regular-text code" id="pspgd-bank" name="bank_id" value="<?php echo esc_attr( $bank_id ); ?>" placeholder="arca_acba">
-								<p class="description"><?php esc_html_e( 'PlanetStudio Payment Gateway is not active, so its banks cannot be listed. Enter the bank id by hand, or activate the gateway.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+								<p class="description"><?php esc_html_e( 'PlanetStudio Payment Gateway is not active, so its banks cannot be listed. Enter the bank id by hand, or activate the gateway.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 							<?php endif; ?>
-							<p class="description"><?php esc_html_e( 'Every donation, recurring charge and card release goes through this bank. Its credentials are set in PlanetStudio Payment Gateway. Recurring donations need a bank that supports saved cards.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Every donation, recurring charge and card release goes through this bank. Its credentials are set in PlanetStudio Payment Gateway. Recurring donations need a bank that supports saved cards.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Currencies offered', 'donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Currencies offered', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
 						<td>
 							<?php foreach ( PSPGD_Settings::known_currencies() as $currency ) : ?>
 								<label style="margin-right:14px;"><input type="checkbox" name="currencies[]" value="<?php echo esc_attr( $currency ); ?>" <?php checked( in_array( $currency, $currencies, true ) ); ?>> <?php echo esc_html( $currency ); ?></label>
 							<?php endforeach; ?>
-							<p class="description"><?php esc_html_e( 'Each donation is charged in the currency the donor picks, so the bank must be set up to accept every currency ticked here. With only one ticked, the currency selector is hidden.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Each donation is charged in the currency the donor picks, so the bank must be set up to accept every currency ticked here. With only one ticked, the currency selector is hidden.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="pspgd-default-currency"><?php esc_html_e( 'Selected by default', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
+						<th scope="row"><label for="pspgd-default-currency"><?php esc_html_e( 'Selected by default', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
 						<td>
 							<select id="pspgd-default-currency" name="default_currency">
 								<?php foreach ( PSPGD_Settings::known_currencies() as $currency ) : ?>
@@ -75,142 +75,142 @@ final class PSPGD_Admin_Form_Settings {
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="pspgd-goal-currency"><?php esc_html_e( 'Campaign goal currency', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
+						<th scope="row"><label for="pspgd-goal-currency"><?php esc_html_e( 'Campaign goal currency', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
 						<td>
 							<select id="pspgd-goal-currency" name="goal_currency">
 								<?php foreach ( PSPGD_Settings::known_currencies() as $currency ) : ?>
 									<option value="<?php echo esc_attr( $currency ); ?>" <?php selected( PSPGD_Settings::goal_currency(), $currency ); ?>><?php echo esc_html( $currency ); ?></option>
 								<?php endforeach; ?>
 							</select>
-							<p class="description"><?php esc_html_e( 'New campaign goals are entered in this currency. A campaign keeps the currency it was created with if this is changed later.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+							<p class="description"><?php esc_html_e( 'New campaign goals are entered in this currency. A campaign keeps the currency it was created with if this is changed later.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Exchange rates', 'donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Exchange rates', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
 						<td>
-							<label><input type="checkbox" name="exchange_rates" value="1" <?php checked( PSPGD_Settings::exchange_rates() ); ?>> <?php esc_html_e( 'Combine currencies with daily exchange rates', 'donations-for-planetstudio-payment-gateway' ); ?></label>
-							<p class="description"><?php esc_html_e( 'When ticked and you offer more than one currency, campaign progress bars convert every donation into the goal currency. Once a day your site downloads public exchange rates from the free currency-api project (cdn.jsdelivr.net, with currency-api.pages.dev as a fallback); no donor, donation or site data is sent. Left unticked, nothing is downloaded and campaigns show each currency separately.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+							<label><input type="checkbox" name="exchange_rates" value="1" <?php checked( PSPGD_Settings::exchange_rates() ); ?>> <?php esc_html_e( 'Combine currencies with daily exchange rates', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label>
+							<p class="description"><?php esc_html_e( 'When ticked and you offer more than one currency, campaign progress bars convert every donation into the goal currency. Once a day your site downloads public exchange rates from the free currency-api project (cdn.jsdelivr.net, with currency-api.pages.dev as a fallback); no donor, donation or site data is sent. Left unticked, nothing is downloaded and campaigns show each currency separately.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 						</td>
 					</tr>
 				</table>
 
-				<h2><?php esc_html_e( 'Payment testing', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
-				<label><input type="checkbox" name="test_mode" value="1" <?php checked( $test_mode ); ?>> <strong><?php esc_html_e( 'Enable test mode', 'donations-for-planetstudio-payment-gateway' ); ?></strong></label>
-				<p class="description"><?php esc_html_e( 'Test mode does not contact the bank. Donations are immediately recorded as paid, marked Test, and left out of every total; recurring schedules receive a simulated saved card that is never charged.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+				<h2><?php esc_html_e( 'Payment testing', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
+				<label><input type="checkbox" name="test_mode" value="1" <?php checked( $test_mode ); ?>> <strong><?php esc_html_e( 'Enable test mode', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></strong></label>
+				<p class="description"><?php esc_html_e( 'Test mode does not contact the bank. Donations are immediately recorded as paid, marked Test, and left out of every total; recurring schedules receive a simulated saved card that is never charged.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 
-				<h2><?php esc_html_e( 'Donation frequency', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
-				<label><input type="checkbox" name="recurring_enabled" value="1" <?php checked( $recurring_enabled ); ?>> <strong><?php esc_html_e( 'Offer recurring donations', 'donations-for-planetstudio-payment-gateway' ); ?></strong></label>
+				<h2><?php esc_html_e( 'Donation frequency', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
+				<label><input type="checkbox" name="recurring_enabled" value="1" <?php checked( $recurring_enabled ); ?>> <strong><?php esc_html_e( 'Offer recurring donations', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></strong></label>
 				<p>
-					<label style="margin-right:14px;"><input type="checkbox" name="intervals[]" value="monthly" <?php checked( in_array( 'monthly', $intervals, true ) ); ?>> <?php esc_html_e( 'Monthly', 'donations-for-planetstudio-payment-gateway' ); ?></label>
-					<label><input type="checkbox" name="intervals[]" value="weekly" <?php checked( in_array( 'weekly', $intervals, true ) ); ?>> <?php esc_html_e( 'Weekly', 'donations-for-planetstudio-payment-gateway' ); ?></label>
+					<label style="margin-right:14px;"><input type="checkbox" name="intervals[]" value="monthly" <?php checked( in_array( 'monthly', $intervals, true ) ); ?>> <?php esc_html_e( 'Monthly', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label>
+					<label><input type="checkbox" name="intervals[]" value="weekly" <?php checked( in_array( 'weekly', $intervals, true ) ); ?>> <?php esc_html_e( 'Weekly', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label>
 				</p>
-				<p class="description"><?php esc_html_e( 'Turn recurring off while saved-card payments are unavailable at the bank. Donors can still give once.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Turn recurring off while saved-card payments are unavailable at the bank. Donors can still give once.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 
-				<h2><?php esc_html_e( 'Form options', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
+				<h2><?php esc_html_e( 'Form options', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Newsletter opt-in', 'donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Newsletter opt-in', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
 						<td>
-							<label><input type="checkbox" name="newsletter_optin" value="1" <?php checked( PSPGD_Settings::newsletter_optin() ); ?>> <?php esc_html_e( 'Show a "subscribe to our newsletter" checkbox', 'donations-for-planetstudio-payment-gateway' ); ?></label>
-							<p class="description"><?php esc_html_e( 'The checkbox is named mc4wp-subscribe, which Mailchimp for WordPress picks up through its "other forms" integration. This plugin does not store the choice itself.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+							<label><input type="checkbox" name="newsletter_optin" value="1" <?php checked( PSPGD_Settings::newsletter_optin() ); ?>> <?php esc_html_e( 'Show a "subscribe to our newsletter" checkbox', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label>
+							<p class="description"><?php esc_html_e( 'The checkbox is named mc4wp-subscribe, which Mailchimp for WordPress picks up through its "other forms" integration. This plugin does not store the choice itself.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Supporters list', 'donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Supporters list', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
 						<td>
-							<label><input type="checkbox" name="show_supporters" value="1" <?php checked( PSPGD_Settings::show_supporters() ); ?>> <?php esc_html_e( 'List supporters on campaign pages (first name and last initial, or "Anonymous donor")', 'donations-for-planetstudio-payment-gateway' ); ?></label>
+							<label><input type="checkbox" name="show_supporters" value="1" <?php checked( PSPGD_Settings::show_supporters() ); ?>> <?php esc_html_e( 'List supporters on campaign pages (first name and last initial, or "Anonymous donor")', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="pspgd-payment-image"><?php esc_html_e( 'Payment methods image', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
+						<th scope="row"><label for="pspgd-payment-image"><?php esc_html_e( 'Payment methods image', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
 						<td>
 							<input class="large-text code" type="url" id="pspgd-payment-image" name="payment_image_url" value="<?php echo esc_attr( PSPGD_Settings::payment_image_url() ); ?>" placeholder="https://">
-							<p class="description"><?php esc_html_e( 'Optional. Shown above the Donate button, typically the logos of the cards you accept. Upload it to the media library and paste its URL.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Optional. Shown above the Donate button, typically the logos of the cards you accept. Upload it to the media library and paste its URL.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="pspgd-languages"><?php esc_html_e( 'Donor languages', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
+						<th scope="row"><label for="pspgd-languages"><?php esc_html_e( 'Donor languages', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
 						<td>
 							<input class="regular-text code" id="pspgd-languages" name="languages" value="<?php echo esc_attr( implode( ', ', $languages ) ); ?>" placeholder="<?php echo esc_attr( implode( ', ', $locales ) ); ?>">
-							<p class="description"><?php esc_html_e( 'Two-letter codes, comma-separated, e.g. "en, hy". Leave blank to follow Polylang, or the site language when Polylang is not installed. Each donor is written to in the language they gave in.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Two-letter codes, comma-separated, e.g. "en, hy". Leave blank to follow Polylang, or the site language when Polylang is not installed. Each donor is written to in the language they gave in.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 						</td>
 					</tr>
 				</table>
 
 				<?php self::render_protection_settings(); ?>
 
-				<h2><?php esc_html_e( 'Appearance', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
-				<p><?php esc_html_e( 'Used by the donation form, campaign pages, the payment result screen and every email.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+				<h2><?php esc_html_e( 'Appearance', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
+				<p><?php esc_html_e( 'Used by the donation form, campaign pages, the payment result screen and every email.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="pspgd-color-primary"><?php esc_html_e( 'Main colour', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
-						<td><input type="color" id="pspgd-color-primary" name="colors[primary]" value="<?php echo esc_attr( $colors['primary'] ); ?>"> <span class="description"><?php esc_html_e( 'Buttons, selected options, links and the progress bar. White text sits on it, so pick something dark enough.', 'donations-for-planetstudio-payment-gateway' ); ?></span></td>
+						<th scope="row"><label for="pspgd-color-primary"><?php esc_html_e( 'Main colour', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
+						<td><input type="color" id="pspgd-color-primary" name="colors[primary]" value="<?php echo esc_attr( $colors['primary'] ); ?>"> <span class="description"><?php esc_html_e( 'Buttons, selected options, links and the progress bar. White text sits on it, so pick something dark enough.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span></td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="pspgd-color-accent"><?php esc_html_e( 'Accent colour', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
-						<td><input type="color" id="pspgd-color-accent" name="colors[accent]" value="<?php echo esc_attr( $colors['accent'] ); ?>"> <span class="description"><?php esc_html_e( 'Top borders, focus rings and soft backgrounds.', 'donations-for-planetstudio-payment-gateway' ); ?></span></td>
+						<th scope="row"><label for="pspgd-color-accent"><?php esc_html_e( 'Accent colour', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
+						<td><input type="color" id="pspgd-color-accent" name="colors[accent]" value="<?php echo esc_attr( $colors['accent'] ); ?>"> <span class="description"><?php esc_html_e( 'Top borders, focus rings and soft backgrounds.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span></td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="pspgd-color-text"><?php esc_html_e( 'Text colour', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
+						<th scope="row"><label for="pspgd-color-text"><?php esc_html_e( 'Text colour', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
 						<td><input type="color" id="pspgd-color-text" name="colors[text]" value="<?php echo esc_attr( $colors['text'] ); ?>"></td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="pspgd-font"><?php esc_html_e( 'Font', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
+						<th scope="row"><label for="pspgd-font"><?php esc_html_e( 'Font', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
 						<td>
 							<input class="regular-text" id="pspgd-font" name="font_family" value="<?php echo esc_attr( 'inherit' === PSPGD_Settings::font_family() ? '' : PSPGD_Settings::font_family() ); ?>" placeholder="inherit">
-							<p class="description"><?php esc_html_e( 'A CSS font-family, e.g. "Inter, sans-serif". Leave blank to use the theme\'s font. The font itself must already be loaded by the theme.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+							<p class="description"><?php esc_html_e( 'A CSS font-family, e.g. "Inter, sans-serif". Leave blank to use the theme\'s font. The font itself must already be loaded by the theme.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="pspgd-radius"><?php esc_html_e( 'Corner radius', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
+						<th scope="row"><label for="pspgd-radius"><?php esc_html_e( 'Corner radius', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
 						<td><input type="number" class="small-text" id="pspgd-radius" name="radius" min="0" max="32" step="1" value="<?php echo esc_attr( (string) PSPGD_Settings::radius() ); ?>"> px</td>
 					</tr>
 				</table>
 
-				<h2><?php esc_html_e( 'Suggested amounts', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
-				<p><?php esc_html_e( 'Comma-separated amounts shown as buttons for each currency. The second one is pre-selected.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+				<h2><?php esc_html_e( 'Suggested amounts', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
+				<p><?php esc_html_e( 'Comma-separated amounts shown as buttons for each currency. The second one is pre-selected.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 				<table class="form-table" role="presentation">
 					<?php foreach ( $currencies as $currency ) : ?>
 						<tr><th scope="row"><label for="pspgd-preset-<?php echo esc_attr( strtolower( $currency ) ); ?>"><?php echo esc_html( $currency ); ?></label></th><td><input class="regular-text" id="pspgd-preset-<?php echo esc_attr( strtolower( $currency ) ); ?>" name="presets[<?php echo esc_attr( $currency ); ?>]" value="<?php echo esc_attr( implode( ', ', (array) $presets[ $currency ] ) ); ?>"></td></tr>
 					<?php endforeach; ?>
 				</table>
 
-				<h2><?php esc_html_e( 'Minimum donation amounts', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
-				<p><?php esc_html_e( 'Donations below these amounts are rejected before payment is sent to the gateway. A donation costs the same in card fees whatever its size, so a very small one costs money to accept -- and a very small one is also what somebody testing a stolen card number sends.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+				<h2><?php esc_html_e( 'Minimum donation amounts', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
+				<p><?php esc_html_e( 'Donations below these amounts are rejected before payment is sent to the gateway. A donation costs the same in card fees whatever its size, so a very small one costs money to accept -- and a very small one is also what somebody testing a stolen card number sends.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 				<table class="form-table" role="presentation">
 					<?php foreach ( $currencies as $currency ) : ?>
 						<tr><th scope="row"><label for="pspgd-min-<?php echo esc_attr( strtolower( $currency ) ); ?>"><?php echo esc_html( $currency ); ?></label></th><td><input type="number" class="regular-text" id="pspgd-min-<?php echo esc_attr( strtolower( $currency ) ); ?>" name="min_amounts[<?php echo esc_attr( $currency ); ?>]" min="0.01" step="0.01" value="<?php echo esc_attr( (string) (float) $min_amounts[ $currency ] ); ?>"></td></tr>
 					<?php endforeach; ?>
 				</table>
 
-				<h2><?php esc_html_e( 'Maximum donation amounts', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
-				<p><?php esc_html_e( 'Donations above these amounts are rejected before payment is sent to the gateway.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+				<h2><?php esc_html_e( 'Maximum donation amounts', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
+				<p><?php esc_html_e( 'Donations above these amounts are rejected before payment is sent to the gateway.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 				<table class="form-table" role="presentation">
 					<?php foreach ( $currencies as $currency ) : ?>
 						<tr><th scope="row"><label for="pspgd-max-<?php echo esc_attr( strtolower( $currency ) ); ?>"><?php echo esc_html( $currency ); ?></label></th><td><input type="number" class="regular-text" id="pspgd-max-<?php echo esc_attr( strtolower( $currency ) ); ?>" name="max_amounts[<?php echo esc_attr( $currency ); ?>]" min="1" step="0.01" value="<?php echo esc_attr( (string) (float) $max_amounts[ $currency ] ); ?>"></td></tr>
 					<?php endforeach; ?>
 				</table>
 
-				<h2><?php esc_html_e( 'Event log retention', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
-				<p><?php esc_html_e( 'The event log records every payment, email and scheduled decision. Older entries are deleted automatically. Set this to 0 to keep everything.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+				<h2><?php esc_html_e( 'Event log retention', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
+				<p><?php esc_html_e( 'The event log records every payment, email and scheduled decision. Older entries are deleted automatically. Set this to 0 to keep everything.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="pspgd-event-retention"><?php esc_html_e( 'Keep events for', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
+						<th scope="row"><label for="pspgd-event-retention"><?php esc_html_e( 'Keep events for', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
 						<td>
 							<input type="number" class="small-text" id="pspgd-event-retention" name="event_retention_days" min="0" step="1" value="<?php echo esc_attr( (string) (int) get_option( 'pspgd_event_retention_days', 180 ) ); ?>">
-							<?php esc_html_e( 'days', 'donations-for-planetstudio-payment-gateway' ); ?>
+							<?php esc_html_e( 'days', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>
 						</td>
 					</tr>
 				</table>
 
-				<h2><?php esc_html_e( 'Removing the plugin', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
-				<label><input type="checkbox" name="delete_data_on_uninstall" value="1" <?php checked( '1' === (string) get_option( 'pspgd_delete_data_on_uninstall', '0' ) ); ?>> <?php esc_html_e( 'Delete all donation data when the plugin is deleted', 'donations-for-planetstudio-payment-gateway' ); ?></label>
-				<p class="description"><?php esc_html_e( 'Off by default. When ticked, deleting the plugin from the Plugins screen permanently removes every donor, donation, recurring donation, log entry and setting. Campaign pages are kept either way.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+				<h2><?php esc_html_e( 'Removing the plugin', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
+				<label><input type="checkbox" name="delete_data_on_uninstall" value="1" <?php checked( '1' === (string) get_option( 'pspgd_delete_data_on_uninstall', '0' ) ); ?>> <?php esc_html_e( 'Delete all donation data when the plugin is deleted', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label>
+				<p class="description"><?php esc_html_e( 'Off by default. When ticked, deleting the plugin from the Plugins screen permanently removes every donor, donation, recurring donation, log entry and setting. Campaign pages are kept either way.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 
-				<h2><?php esc_html_e( 'Form wording', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
-				<p><?php esc_html_e( 'Leave a field empty to use the built-in wording, shown greyed out. There is one column per donor language.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+				<h2><?php esc_html_e( 'Form wording', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
+				<p><?php esc_html_e( 'Leave a field empty to use the built-in wording, shown greyed out. There is one column per donor language.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 				<table class="widefat striped" style="max-width:1100px">
-					<thead><tr><th><?php esc_html_e( 'Label', 'donations-for-planetstudio-payment-gateway' ); ?></th><?php foreach ( $locales as $locale ) : ?><th><?php echo esc_html( strtoupper( $locale ) ); ?></th><?php endforeach; ?></tr></thead>
+					<thead><tr><th><?php esc_html_e( 'Label', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th><?php foreach ( $locales as $locale ) : ?><th><?php echo esc_html( strtoupper( $locale ) ); ?></th><?php endforeach; ?></tr></thead>
 					<tbody>
 						<?php foreach ( $fields as $key => $default ) : ?>
 							<tr>
@@ -222,7 +222,7 @@ final class PSPGD_Admin_Form_Settings {
 						<?php endforeach; ?>
 					</tbody>
 				</table>
-				<?php submit_button( __( 'Save form settings', 'donations-for-planetstudio-payment-gateway' ) ); ?>
+				<?php submit_button( __( 'Save form settings', 'joedavtian-donations-for-planetstudio-payment-gateway' ) ); ?>
 			</form>
 		</div>
 		<?php
@@ -234,42 +234,42 @@ final class PSPGD_Admin_Form_Settings {
 	 */
 	private static function render_protection_settings(): void {
 		$sources = array(
-			'remote_addr'     => __( 'Direct connection (REMOTE_ADDR)', 'donations-for-planetstudio-payment-gateway' ),
-			'cloudflare'      => __( 'Cloudflare (CF-Connecting-IP header)', 'donations-for-planetstudio-payment-gateway' ),
-			'x_real_ip'       => __( 'Reverse proxy (X-Real-IP header)', 'donations-for-planetstudio-payment-gateway' ),
-			'x_forwarded_for' => __( 'Reverse proxy (last address in X-Forwarded-For)', 'donations-for-planetstudio-payment-gateway' ),
+			'remote_addr'     => __( 'Direct connection (REMOTE_ADDR)', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			'cloudflare'      => __( 'Cloudflare (CF-Connecting-IP header)', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			'x_real_ip'       => __( 'Reverse proxy (X-Real-IP header)', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			'x_forwarded_for' => __( 'Reverse proxy (last address in X-Forwarded-For)', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 		);
 		$current   = PSPGD_Security::ip_source();
 		$seen      = PSPGD_Security::addresses_seen();
 		$available = PSPGD_Security::turnstile_available();
 		?>
-		<h2><?php esc_html_e( 'Spam protection', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
+		<h2><?php esc_html_e( 'Spam protection', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
 		<table class="form-table" role="presentation">
 			<tr>
-				<th scope="row"><label for="pspgd-ip-source"><?php esc_html_e( 'Visitor address', 'donations-for-planetstudio-payment-gateway' ); ?></label></th>
+				<th scope="row"><label for="pspgd-ip-source"><?php esc_html_e( 'Visitor address', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label></th>
 				<td>
 					<select id="pspgd-ip-source" name="client_ip_source">
 						<?php foreach ( $sources as $source => $label ) : ?>
 							<option value="<?php echo esc_attr( $source ); ?>" <?php selected( $current, $source ); ?>><?php echo esc_html( $label ); ?></option>
 						<?php endforeach; ?>
 					</select>
-					<p class="description"><?php echo esc_html( sprintf( /* translators: 1: number of attempts, 2: minutes. */ __( 'The form refuses more than %1$d donation attempts from one address in %2$d minutes. Behind a CDN or reverse proxy every visitor arrives from the proxy\'s address, so choose the header your proxy writes the real address into. Choose a header only if your proxy sets it: otherwise a visitor can write it themselves.', 'donations-for-planetstudio-payment-gateway' ), PSPGD_Security::rate_limit(), (int) ( PSPGD_Security::rate_window() / MINUTE_IN_SECONDS ) ) ); ?></p>
-					<p><?php esc_html_e( 'What each source holds for your own visit right now -- pick the one that shows your own address:', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+					<p class="description"><?php echo esc_html( sprintf( /* translators: 1: number of attempts, 2: minutes. */ __( 'The form refuses more than %1$d donation attempts from one address in %2$d minutes. Behind a CDN or reverse proxy every visitor arrives from the proxy\'s address, so choose the header your proxy writes the real address into. Choose a header only if your proxy sets it: otherwise a visitor can write it themselves.', 'joedavtian-donations-for-planetstudio-payment-gateway' ), PSPGD_Security::rate_limit(), (int) ( PSPGD_Security::rate_window() / MINUTE_IN_SECONDS ) ) ); ?></p>
+					<p><?php esc_html_e( 'What each source holds for your own visit right now -- pick the one that shows your own address:', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 					<ul style="margin-top:0;">
 						<?php foreach ( $sources as $source => $label ) : ?>
-							<li><?php echo esc_html( $label ); ?>: <code><?php echo esc_html( '' !== $seen[ $source ] ? $seen[ $source ] : __( 'not set', 'donations-for-planetstudio-payment-gateway' ) ); ?></code></li>
+							<li><?php echo esc_html( $label ); ?>: <code><?php echo esc_html( '' !== $seen[ $source ] ? $seen[ $source ] : __( 'not set', 'joedavtian-donations-for-planetstudio-payment-gateway' ) ); ?></code></li>
 						<?php endforeach; ?>
 					</ul>
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Cloudflare Turnstile', 'donations-for-planetstudio-payment-gateway' ); ?></th>
+				<th scope="row"><?php esc_html_e( 'Cloudflare Turnstile', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
 				<td>
-					<label><input type="checkbox" name="turnstile" value="1" <?php checked( '1' === (string) get_option( 'pspgd_turnstile', '0' ) ); ?>> <?php esc_html_e( 'Ask donors to pass a Turnstile check before donating', 'donations-for-planetstudio-payment-gateway' ); ?></label>
+					<label><input type="checkbox" name="turnstile" value="1" <?php checked( '1' === (string) get_option( 'pspgd_turnstile', '0' ) ); ?>> <?php esc_html_e( 'Ask donors to pass a Turnstile check before donating', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label>
 					<?php if ( $available ) : ?>
-						<p class="description"><?php esc_html_e( 'Uses the Turnstile keys saved in PlanetStudio Payment Gateway. If Cloudflare cannot be reached the donation is refused, so make a test donation after switching this on.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Uses the Turnstile keys saved in PlanetStudio Payment Gateway. If Cloudflare cannot be reached the donation is refused, so make a test donation after switching this on.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 					<?php else : ?>
-						<p class="description"><?php echo wp_kses( sprintf( /* translators: %s: link to the PSPG Tools screen. */ __( 'No Turnstile keys are saved yet, so the check is not shown even when ticked. Enter them under %s; this form uses the same keys.', 'donations-for-planetstudio-payment-gateway' ), '<a href="' . esc_url( admin_url( 'admin.php?page=pspg-tools' ) ) . '">' . esc_html__( 'PlanetStudio Payment Gateway > Tools', 'donations-for-planetstudio-payment-gateway' ) . '</a>' ), array( 'a' => array( 'href' => array() ) ) ); ?></p>
+						<p class="description"><?php echo wp_kses( sprintf( /* translators: %s: link to the PSPG Tools screen. */ __( 'No Turnstile keys are saved yet, so the check is not shown even when ticked. Enter them under %s; this form uses the same keys.', 'joedavtian-donations-for-planetstudio-payment-gateway' ), '<a href="' . esc_url( admin_url( 'admin.php?page=pspg-tools' ) ) . '">' . esc_html__( 'PlanetStudio Payment Gateway > Tools', 'joedavtian-donations-for-planetstudio-payment-gateway' ) . '</a>' ), array( 'a' => array( 'href' => array() ) ) ); ?></p>
 					<?php endif; ?>
 				</td>
 			</tr>
@@ -279,7 +279,7 @@ final class PSPGD_Admin_Form_Settings {
 
 	public static function save_form_settings(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to change these settings.', 'donations-for-planetstudio-payment-gateway' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to change these settings.', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 		check_admin_referer( 'pspgd_save_form_settings' );
 

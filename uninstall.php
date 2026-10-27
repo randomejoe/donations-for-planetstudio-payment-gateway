@@ -1,6 +1,6 @@
 <?php
 /**
- * Uninstall handler for Donations for PlanetStudio Payment Gateway.
+ * Uninstall handler for Joedavtian Donations for PlanetStudio Payment Gateway.
  *
  * WordPress runs this file ONLY when the plugin is deleted from the Plugins
  * screen (Deactivate + Delete) — never on a plain deactivate, and never on

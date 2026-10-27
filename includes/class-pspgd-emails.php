@@ -338,13 +338,13 @@ final class PSPGD_Emails {
 	 */
 	public static function social_networks(): array {
 		return array(
-			'facebook'  => __( 'Facebook', 'donations-for-planetstudio-payment-gateway' ),
-			'instagram' => __( 'Instagram', 'donations-for-planetstudio-payment-gateway' ),
-			'linkedin'  => __( 'LinkedIn', 'donations-for-planetstudio-payment-gateway' ),
-			'youtube'   => __( 'YouTube', 'donations-for-planetstudio-payment-gateway' ),
-			'telegram'  => __( 'Telegram', 'donations-for-planetstudio-payment-gateway' ),
-			'x'         => __( 'X', 'donations-for-planetstudio-payment-gateway' ),
-			'tiktok'    => __( 'TikTok', 'donations-for-planetstudio-payment-gateway' ),
+			'facebook'  => __( 'Facebook', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			'instagram' => __( 'Instagram', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			'linkedin'  => __( 'LinkedIn', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			'youtube'   => __( 'YouTube', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			'telegram'  => __( 'Telegram', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			'x'         => __( 'X', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			'tiktok'    => __( 'TikTok', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 		);
 	}
 
@@ -728,7 +728,7 @@ final class PSPGD_Emails {
 			'amount'                => number_format( $sample_amount, 2, '.', '' ),
 			'amount_formatted'      => PSPGD_I18n::format_amount( $sample_amount, $currency ),
 			'currency'              => $currency,
-			'campaign_title'        => __( 'Sample campaign', 'donations-for-planetstudio-payment-gateway' ),
+			'campaign_title'        => __( 'Sample campaign', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			'campaign_outcome'      => PSPGD_I18n::t( 'campaign_outcome_goal', 'reached its goal', $locale ),
 			'interval'              => PSPGD_I18n::email_label( 'monthly', $locale ),
 			'next_payment_at'       => self::format_date( PSPGD_Clock::local_mysql( PSPGD_Clock::now() + ( 30 * DAY_IN_SECONDS ) ) ),
@@ -757,7 +757,7 @@ final class PSPGD_Emails {
 		return self::send_email(
 			$email,
 			/* translators: %s: the email's own subject line. */
-			sprintf( __( '[Test] %s', 'donations-for-planetstudio-payment-gateway' ), $composed['subject'] ),
+			sprintf( __( '[Test] %s', 'joedavtian-donations-for-planetstudio-payment-gateway' ), $composed['subject'] ),
 			$composed['html']
 		);
 	}

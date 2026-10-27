@@ -39,7 +39,7 @@ final class PSPGD_Admin {
 		if ( $missing ) {
 			$message = sprintf(
 				/* translators: 1: PlanetStudio Payment Gateway version, 2: comma-separated list of PHP function and class names. */
-				__( 'This version of PlanetStudio Payment Gateway (%1$s) is missing parts this plugin relies on: %2$s. Payments may not be confirmed, checked or cancelled correctly. Update both plugins, and check the donation log before relying on it.', 'donations-for-planetstudio-payment-gateway' ),
+				__( 'This version of PlanetStudio Payment Gateway (%1$s) is missing parts this plugin relies on: %2$s. Payments may not be confirmed, checked or cancelled correctly. Update both plugins, and check the donation log before relying on it.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				defined( 'PSPG_VERSION' ) ? (string) PSPG_VERSION : '?',
 				implode( ', ', $missing )
 			);
@@ -51,9 +51,9 @@ final class PSPGD_Admin {
 		}
 
 		if ( ! function_exists( 'pspg_create_payment' ) ) {
-			$message = __( 'PlanetStudio Payment Gateway is not active, so donations cannot be taken. Install and activate it, or switch on test mode to try the form.', 'donations-for-planetstudio-payment-gateway' );
+			$message = __( 'PlanetStudio Payment Gateway is not active, so donations cannot be taken. Install and activate it, or switch on test mode to try the form.', 'joedavtian-donations-for-planetstudio-payment-gateway' );
 		} elseif ( '' === PSPGD_PSPG::bank_id() ) {
-			$message = __( 'Choose the bank that takes donations under Donations > Form Settings. Until then the form refuses donations.', 'donations-for-planetstudio-payment-gateway' );
+			$message = __( 'Choose the bank that takes donations under Donations > Form Settings. Until then the form refuses donations.', 'joedavtian-donations-for-planetstudio-payment-gateway' );
 		} else {
 			return;
 		}
@@ -63,8 +63,8 @@ final class PSPGD_Admin {
 
 	public static function register_menu(): void {
 		add_menu_page(
-			__( 'Donations for PlanetStudio Payment Gateway', 'donations-for-planetstudio-payment-gateway' ),
-			__( 'Donations', 'donations-for-planetstudio-payment-gateway' ),
+			__( 'Joedavtian Donations for PlanetStudio Payment Gateway', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			__( 'Donations', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			PSPGD_Capability::MANAGE_DONATIONS,
 			'pspgd',
 			array( 'PSPGD_Admin_Donations', 'render_donations_page' ),
@@ -73,32 +73,32 @@ final class PSPGD_Admin {
 		);
 		add_submenu_page(
 			'pspgd',
-			__( 'Donation Log', 'donations-for-planetstudio-payment-gateway' ),
-			__( 'Donation Log', 'donations-for-planetstudio-payment-gateway' ),
+			__( 'Donation Log', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			__( 'Donation Log', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			PSPGD_Capability::MANAGE_DONATIONS,
 			'pspgd',
 			array( 'PSPGD_Admin_Donations', 'render_donations_page' )
 		);
 		add_submenu_page(
 			'pspgd',
-			__( 'Recurring Donations', 'donations-for-planetstudio-payment-gateway' ),
-			__( 'Recurring Donations', 'donations-for-planetstudio-payment-gateway' ),
+			__( 'Recurring Donations', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			__( 'Recurring Donations', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			PSPGD_Capability::MANAGE_DONATIONS,
 			'pspgd-recurring',
 			array( 'PSPGD_Admin_Recurring', 'render_recurring_page' )
 		);
 		add_submenu_page(
 			'pspgd',
-			__( 'Donation Form Settings', 'donations-for-planetstudio-payment-gateway' ),
-			__( 'Form Settings', 'donations-for-planetstudio-payment-gateway' ),
+			__( 'Donation Form Settings', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			__( 'Form Settings', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			'manage_options',
 			'pspgd-form-settings',
 			array( 'PSPGD_Admin_Form_Settings', 'render_form_settings_page' )
 		);
 		add_submenu_page(
 			'pspgd',
-			__( 'Email Templates', 'donations-for-planetstudio-payment-gateway' ),
-			__( 'Emails', 'donations-for-planetstudio-payment-gateway' ),
+			__( 'Email Templates', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+			__( 'Emails', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			'manage_options',
 			'pspgd-email-settings',
 			array( 'PSPGD_Admin_Email_Settings', 'render_email_settings_page' )
@@ -118,14 +118,14 @@ final class PSPGD_Admin {
 		?>
 		<p class="pspgd-pager" style="margin:12px 0;">
 			<?php if ( $current_page > 1 ) : ?>
-				<a class="button" href="<?php echo esc_url( add_query_arg( $query_arg, $current_page - 1, $base_url ) ); ?>"><?php esc_html_e( 'Previous', 'donations-for-planetstudio-payment-gateway' ); ?></a>
+				<a class="button" href="<?php echo esc_url( add_query_arg( $query_arg, $current_page - 1, $base_url ) ); ?>"><?php esc_html_e( 'Previous', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></a>
 			<?php endif; ?>
 			<span style="margin:0 8px;">
 				<?php
 				echo esc_html(
 					sprintf(
 						/* translators: 1: current page, 2: total pages, 3: total item count. */
-						__( 'Page %1$d of %2$d (%3$s total)', 'donations-for-planetstudio-payment-gateway' ),
+						__( 'Page %1$d of %2$d (%3$s total)', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 						$current_page,
 						$total_pages,
 						number_format_i18n( $total_items )
@@ -134,7 +134,7 @@ final class PSPGD_Admin {
 				?>
 			</span>
 			<?php if ( $current_page < $total_pages ) : ?>
-				<a class="button" href="<?php echo esc_url( add_query_arg( $query_arg, $current_page + 1, $base_url ) ); ?>"><?php esc_html_e( 'Next', 'donations-for-planetstudio-payment-gateway' ); ?></a>
+				<a class="button" href="<?php echo esc_url( add_query_arg( $query_arg, $current_page + 1, $base_url ) ); ?>"><?php esc_html_e( 'Next', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></a>
 			<?php endif; ?>
 		</p>
 		<?php

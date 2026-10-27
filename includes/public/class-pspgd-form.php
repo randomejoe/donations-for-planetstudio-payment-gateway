@@ -211,12 +211,12 @@ final class PSPGD_Form {
 
 			<?php // Left empty by a person, filled in by a bot that submits every field it finds. ?>
 			<div class="pspgd-donation-form__hp" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
-				<label><?php esc_html_e( 'Leave this field empty', 'donations-for-planetstudio-payment-gateway' ); ?><input type="text" name="pspgd_website" value="" tabindex="-1" autocomplete="off"></label>
+				<label><?php esc_html_e( 'Leave this field empty', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?><input type="text" name="pspgd_website" value="" tabindex="-1" autocomplete="off"></label>
 			</div>
 
 			<div class="pspgd-donation-form__error" data-role="error" role="alert" aria-live="assertive" <?php echo '' === $returned['message'] ? 'hidden' : ''; ?>><?php echo esc_html( $returned['message'] ); ?></div>
 
-			<div class="pspgd-donation-form__progress" aria-label="<?php esc_attr_e( 'Donation steps', 'donations-for-planetstudio-payment-gateway' ); ?>">
+			<div class="pspgd-donation-form__progress" aria-label="<?php esc_attr_e( 'Donation steps', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>">
 				<span class="is-active" data-step-indicator="1">1. <?php echo esc_html( $t( 'amount', 'Amount' ) ); ?></span>
 				<span data-step-indicator="2">2. <?php echo esc_html( $t( 'details', 'Your details' ) ); ?></span>
 				<span data-step-indicator="3">3. <?php echo esc_html( $t( 'review', 'Review' ) ); ?></span>
@@ -584,7 +584,7 @@ final class PSPGD_Form {
 		if ( '' !== $detail && current_user_can( PSPGD_Capability::MANAGE_DONATIONS ) ) {
 			$message .= ' ' . sprintf(
 				/* translators: %s: the error message the payment gateway returned. */
-				__( '(Shown to staff only: the gateway said "%s".)', 'donations-for-planetstudio-payment-gateway' ),
+				__( '(Shown to staff only: the gateway said "%s".)', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				$detail
 			);
 		}

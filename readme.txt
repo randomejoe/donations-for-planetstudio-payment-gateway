@@ -1,11 +1,11 @@
-=== Donations for PlanetStudio Payment Gateway ===
+=== Joedavtian Donations for PlanetStudio Payment Gateway ===
 Contributors: joedavtian
 Tags: donations, recurring donations, fundraising, campaigns, armenian banks
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: planetstudio-payment-gateway
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -13,7 +13,7 @@ Donation form, fundraising campaigns and recurring donations on saved cards, pai
 
 == Description ==
 
-Donations for PlanetStudio Payment Gateway adds a three-step donation form, fundraising campaigns and monthly or weekly recurring donations to any WordPress site. Payments go through [PlanetStudio Payment Gateway](https://www.planetstudio.am) (PSPG) and whichever bank you have configured there. It keeps its own donor, donation and recurring-donation records, so it does not need GiveWP or WooCommerce.
+Joedavtian Donations for PlanetStudio Payment Gateway adds a three-step donation form, fundraising campaigns and monthly or weekly recurring donations to any WordPress site. Payments go through [PlanetStudio Payment Gateway](https://www.planetstudio.am) (PSPG) and whichever bank you have configured there. It keeps its own donor, donation and recurring-donation records, so it does not need GiveWP or WooCommerce.
 
 This is an independent add-on. It is not made or supported by PlanetStudio.
 
@@ -93,7 +93,7 @@ Attributes:
 
 Available properties: `--pspgd-primary`, `--pspgd-accent`, `--pspgd-ink`, `--pspgd-font`, `--pspgd-radius`.
 
-**Languages.** Donor-facing wording (form labels, error messages and email templates) can be edited per language on the settings screens. Donor languages follow Polylang when it is installed, otherwise the site language, or the list you enter in Form Settings. English and Armenian are built in. To add another language, copy `includes/locales/hy.php` to e.g. `includes/locales/de.php` and translate it, or supply the same array from your own plugin with the `pspgd_locale_pack` filter. Admin screens are translated the usual way with the `donations-for-planetstudio-payment-gateway` text domain. WPML is not supported directly; list your languages under Donor languages instead.
+**Languages.** Donor-facing wording (form labels, error messages and email templates) can be edited per language on the settings screens. Donor languages follow Polylang when it is installed, otherwise the site language, or the list you enter in Form Settings. English and Armenian are built in. To add another language, copy `includes/locales/hy.php` to e.g. `includes/locales/de.php` and translate it, or supply the same array from your own plugin with the `pspgd_locale_pack` filter. Admin screens are translated the usual way with the `joedavtian-donations-for-planetstudio-payment-gateway` text domain. WPML is not supported directly; list your languages under Donor languages instead.
 
 **Actions.**
 
@@ -182,6 +182,12 @@ Yes, activated on one site or for the whole network. Each site has its own donat
 7. Form settings: bank, currencies, test mode and recurring giving.
 
 == Changelog ==
+
+= 1.0.3 =
+* Renamed to Joedavtian Donations for PlanetStudio Payment Gateway, with the slug and text domain `joedavtian-donations-for-planetstudio-payment-gateway`, for the WordPress.org directory. Coming from an earlier zip, which used the folder `donations-for-planetstudio-payment-gateway`: install this one, deactivate and delete the old one (leave **Delete all donation data when the plugin is deleted** unticked), then activate this one. Settings and donations carry over.
+* Exchange rates are now off until you tick **Combine currencies with daily exchange rates** in Form Settings. Until then nothing is downloaded and campaigns show each currency separately. Sites that offer more than one currency and want one combined progress figure should tick it after updating.
+* A form label reworded with a percent sign in it (for example "100% of gifts help") no longer breaks the form or the campaign page.
+* A font name in quotes in Form Settings now reaches the form's inputs and buttons.
 
 = 1.0.2 =
 * Prepared for WordPress.org: screenshots in the readme, and every Plugin Check warning reviewed and explained in the code. No change in how the plugin behaves.

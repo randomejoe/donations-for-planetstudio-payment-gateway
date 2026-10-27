@@ -22,7 +22,7 @@ function version_test_read( string $file ): string {
 	return (string) file_get_contents( dirname( __DIR__ ) . '/' . $file );
 }
 
-$main    = version_test_read( 'donations-for-planetstudio-payment-gateway.php' );
+$main    = version_test_read( 'joedavtian-donations-for-planetstudio-payment-gateway.php' );
 $readme  = version_test_read( 'readme.txt' );
 $version = version_test_header( $main, 'Version' );
 

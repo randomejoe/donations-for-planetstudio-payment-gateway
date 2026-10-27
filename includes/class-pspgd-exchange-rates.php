@@ -74,7 +74,7 @@ final class PSPGD_Exchange_Rates {
 
 		$rate = self::rate( $from, $to );
 		if ( $rate <= 0 ) {
-			return array( 'ok' => false, 'message' => __( 'Unable to retrieve the current exchange rate. Please try again shortly.', 'donations-for-planetstudio-payment-gateway' ) );
+			return array( 'ok' => false, 'message' => __( 'Unable to retrieve the current exchange rate. Please try again shortly.', 'joedavtian-donations-for-planetstudio-payment-gateway' ) );
 		}
 
 		return array( 'ok' => true, 'amount' => round( $amount * $rate, 2 ), 'rate' => $rate );

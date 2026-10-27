@@ -255,7 +255,7 @@ run_tests(
 
 		'only PSPGD_Payments changes a donation status' => static function (): void {
 			$root    = dirname( __DIR__ ) . '/';
-			$sources = array( 'donations-for-planetstudio-payment-gateway.php', 'uninstall.php' );
+			$sources = array( 'joedavtian-donations-for-planetstudio-payment-gateway.php', 'uninstall.php' );
 			$items   = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $root . 'includes', FilesystemIterator::SKIP_DOTS ) );
 			foreach ( $items as $file ) {
 				if ( '.php' === substr( (string) $file, -4 ) ) {

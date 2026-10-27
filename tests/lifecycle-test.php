@@ -145,7 +145,7 @@ run_tests(
 			lifecycle_schedule_everything();
 			update_option( 'pspgd_delete_data_on_uninstall', '0' );
 
-			define( 'WP_UNINSTALL_PLUGIN', 'donations-for-planetstudio-payment-gateway/donations-for-planetstudio-payment-gateway.php' );
+			define( 'WP_UNINSTALL_PLUGIN', 'joedavtian-donations-for-planetstudio-payment-gateway/joedavtian-donations-for-planetstudio-payment-gateway.php' );
 			include dirname( __DIR__ ) . '/uninstall.php';
 
 			assert_same( array(), $GLOBALS['test_cron'], 'Keeping the donation records does not mean keeping the jobs.' );

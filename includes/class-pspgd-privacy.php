@@ -24,7 +24,7 @@ final class PSPGD_Privacy {
 	public static function register_exporter( $exporters ): array {
 		$exporters                = is_array( $exporters ) ? $exporters : array();
 		$exporters[ self::GROUP ] = array(
-			'exporter_friendly_name' => __( 'Donations for PlanetStudio Payment Gateway', 'donations-for-planetstudio-payment-gateway' ),
+			'exporter_friendly_name' => __( 'Joedavtian Donations for PlanetStudio Payment Gateway', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			'callback'               => array( __CLASS__, 'export' ),
 		);
 
@@ -35,7 +35,7 @@ final class PSPGD_Privacy {
 	public static function register_eraser( $erasers ): array {
 		$erasers                = is_array( $erasers ) ? $erasers : array();
 		$erasers[ self::GROUP ] = array(
-			'eraser_friendly_name' => __( 'Donations for PlanetStudio Payment Gateway', 'donations-for-planetstudio-payment-gateway' ),
+			'eraser_friendly_name' => __( 'Joedavtian Donations for PlanetStudio Payment Gateway', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			'callback'             => array( __CLASS__, 'erase' ),
 		);
 
@@ -54,14 +54,14 @@ final class PSPGD_Privacy {
 		$export = array(
 			array(
 				'group_id'    => self::GROUP . '-donor',
-				'group_label' => __( 'Donor record', 'donations-for-planetstudio-payment-gateway' ),
+				'group_label' => __( 'Donor record', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				'item_id'     => 'pspgd-donor-' . (int) $donor->id,
 				'data'        => array(
-					array( 'name' => __( 'First name', 'donations-for-planetstudio-payment-gateway' ), 'value' => $donor->first_name ),
-					array( 'name' => __( 'Last name', 'donations-for-planetstudio-payment-gateway' ), 'value' => $donor->last_name ),
-					array( 'name' => __( 'Email', 'donations-for-planetstudio-payment-gateway' ), 'value' => $donor->email ),
-					array( 'name' => __( 'Language', 'donations-for-planetstudio-payment-gateway' ), 'value' => $donor->language ),
-					array( 'name' => __( 'First seen', 'donations-for-planetstudio-payment-gateway' ), 'value' => $donor->created_at ),
+					array( 'name' => __( 'First name', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $donor->first_name ),
+					array( 'name' => __( 'Last name', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $donor->last_name ),
+					array( 'name' => __( 'Email', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $donor->email ),
+					array( 'name' => __( 'Language', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $donor->language ),
+					array( 'name' => __( 'First seen', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $donor->created_at ),
 				),
 			),
 		);
@@ -69,14 +69,14 @@ final class PSPGD_Privacy {
 		foreach ( PSPGD_Repository::donations_for_donor( (int) $donor->id ) as $donation ) {
 			$export[] = array(
 				'group_id'    => self::GROUP . '-donations',
-				'group_label' => __( 'Donations', 'donations-for-planetstudio-payment-gateway' ),
+				'group_label' => __( 'Donations', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				'item_id'     => 'pspgd-donation-' . (int) $donation->id,
 				'data'        => array(
-					array( 'name' => __( 'Date', 'donations-for-planetstudio-payment-gateway' ), 'value' => $donation->created_at ),
-					array( 'name' => __( 'Amount', 'donations-for-planetstudio-payment-gateway' ), 'value' => PSPGD_I18n::format_amount( (float) $donation->amount, (string) $donation->currency ) ),
-					array( 'name' => __( 'Type', 'donations-for-planetstudio-payment-gateway' ), 'value' => $donation->type ),
-					array( 'name' => __( 'Status', 'donations-for-planetstudio-payment-gateway' ), 'value' => $donation->status ),
-					array( 'name' => __( 'Bank reference', 'donations-for-planetstudio-payment-gateway' ), 'value' => $donation->transaction_reference ),
+					array( 'name' => __( 'Date', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $donation->created_at ),
+					array( 'name' => __( 'Amount', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => PSPGD_I18n::format_amount( (float) $donation->amount, (string) $donation->currency ) ),
+					array( 'name' => __( 'Type', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $donation->type ),
+					array( 'name' => __( 'Status', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $donation->status ),
+					array( 'name' => __( 'Bank reference', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $donation->transaction_reference ),
 				),
 			);
 		}
@@ -84,14 +84,14 @@ final class PSPGD_Privacy {
 		foreach ( PSPGD_Repository::subscriptions_for_donor( (int) $donor->id ) as $subscription ) {
 			$export[] = array(
 				'group_id'    => self::GROUP . '-subscriptions',
-				'group_label' => __( 'Recurring donations', 'donations-for-planetstudio-payment-gateway' ),
+				'group_label' => __( 'Recurring donations', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				'item_id'     => 'pspgd-subscription-' . (int) $subscription->id,
 				'data'        => array(
-					array( 'name' => __( 'Started', 'donations-for-planetstudio-payment-gateway' ), 'value' => $subscription->created_at ),
-					array( 'name' => __( 'Amount', 'donations-for-planetstudio-payment-gateway' ), 'value' => PSPGD_I18n::format_amount( (float) $subscription->amount, (string) $subscription->currency ) ),
-					array( 'name' => __( 'Frequency', 'donations-for-planetstudio-payment-gateway' ), 'value' => $subscription->interval_key ),
-					array( 'name' => __( 'Status', 'donations-for-planetstudio-payment-gateway' ), 'value' => $subscription->status ),
-					array( 'name' => __( 'Next payment', 'donations-for-planetstudio-payment-gateway' ), 'value' => $subscription->next_payment_at ),
+					array( 'name' => __( 'Started', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $subscription->created_at ),
+					array( 'name' => __( 'Amount', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => PSPGD_I18n::format_amount( (float) $subscription->amount, (string) $subscription->currency ) ),
+					array( 'name' => __( 'Frequency', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $subscription->interval_key ),
+					array( 'name' => __( 'Status', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $subscription->status ),
+					array( 'name' => __( 'Next payment', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 'value' => $subscription->next_payment_at ),
 				),
 			);
 		}
@@ -127,7 +127,7 @@ final class PSPGD_Privacy {
 		foreach ( PSPGD_Repository::subscriptions_for_donor( (int) $donor->id ) as $subscription ) {
 			if ( 'active' === $subscription->status ) {
 				$response['items_retained'] = true;
-				$response['messages'][]     = __( 'This donor has a recurring donation that is still active. Cancel it first -- erasing the record would leave a saved card being charged with no way to contact them about it.', 'donations-for-planetstudio-payment-gateway' );
+				$response['messages'][]     = __( 'This donor has a recurring donation that is still active. Cancel it first -- erasing the record would leave a saved card being charged with no way to contact them about it.', 'joedavtian-donations-for-planetstudio-payment-gateway' );
 
 				return $response;
 			}
@@ -136,7 +136,7 @@ final class PSPGD_Privacy {
 		PSPGD_Repository::anonymize_donor( (int) $donor->id );
 
 		$response['items_removed'] = true;
-		$response['messages'][]    = __( 'The donor record was anonymised. Donation amounts and dates are kept as financial records, with nothing identifying the donor.', 'donations-for-planetstudio-payment-gateway' );
+		$response['messages'][]    = __( 'The donor record was anonymised. Donation amounts and dates are kept as financial records, with nothing identifying the donor.', 'joedavtian-donations-for-planetstudio-payment-gateway' );
 
 		return $response;
 	}

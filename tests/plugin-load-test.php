@@ -19,7 +19,7 @@ $wpdb = new PSPGD_Test_WPDB();
 
 /** The includes/ paths the main plugin file requires, in order. @return string[] */
 function load_test_required_files(): array {
-	$main = (string) file_get_contents( dirname( __DIR__ ) . '/donations-for-planetstudio-payment-gateway.php' );
+	$main = (string) file_get_contents( dirname( __DIR__ ) . '/joedavtian-donations-for-planetstudio-payment-gateway.php' );
 	preg_match_all( "/require_once PSPGD_DIR \. '([^']+)'/", $main, $matches );
 
 	return $matches[1];
@@ -76,7 +76,7 @@ run_tests(
 				$declared = array_merge( $declared, $matches[1] );
 			}
 
-			$sources = array( 'donations-for-planetstudio-payment-gateway.php', 'uninstall.php' );
+			$sources = array( 'joedavtian-donations-for-planetstudio-payment-gateway.php', 'uninstall.php' );
 			$sources = array_merge( $sources, load_test_include_files() );
 			foreach ( $sources as $file ) {
 				preg_match_all( '/\b(PSPGD_[A-Z]\w*)\s*::|new\s+(PSPGD_[A-Z]\w*)/', (string) file_get_contents( $root . $file ), $matches );
@@ -139,7 +139,7 @@ run_tests(
 			$lines     = file( (string) $method->getFileName() );
 			$uninstall = implode( '', array_slice( $lines, $method->getStartLine() - 1, $method->getEndLine() - $method->getStartLine() + 1 ) );
 
-			foreach ( array_merge( array( 'donations-for-planetstudio-payment-gateway.php' ), load_test_include_files() ) as $file ) {
+			foreach ( array_merge( array( 'joedavtian-donations-for-planetstudio-payment-gateway.php' ), load_test_include_files() ) as $file ) {
 				// Options written directly, and those the settings screens
 				// collect in an $options map before saving.
 				preg_match_all( "/(?:(?:get|update|add)_option\\(\\s*|\\\$options\\[\\s*)'(pspgd_[a-z_]+)'/", (string) file_get_contents( $root . $file ), $matches );
@@ -154,7 +154,7 @@ run_tests(
 		},
 
 		'an update is applied on the next request, not only in wp-admin' => static function (): void {
-			$main = (string) file_get_contents( dirname( __DIR__ ) . '/donations-for-planetstudio-payment-gateway.php' );
+			$main = (string) file_get_contents( dirname( __DIR__ ) . '/joedavtian-donations-for-planetstudio-payment-gateway.php' );
 
 			assert_contains( 'PSPGD_Installer::maybe_upgrade();', $main, 'The tables are brought up to date wherever the plugin loads.' );
 			assert_not_contains( "'admin_init'", $main, 'A donor must not wait for an administrator to log in.' );

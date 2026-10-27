@@ -17,7 +17,7 @@ final class PSPGD_Admin_Recurring {
 	 */
 	public static function render_recurring_page(): void {
 		if ( ! current_user_can( PSPGD_Capability::MANAGE_DONATIONS ) ) {
-			wp_die( esc_html__( 'You do not have permission to view this page.', 'donations-for-planetstudio-payment-gateway' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to view this page.', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 
 		// A subscription row exists before the donor reaches the bank, so a
@@ -36,33 +36,33 @@ final class PSPGD_Admin_Recurring {
 		$flagged_sub_ids = PSPGD_Repository::subscriptions_with_flagged_redirect_url( wp_list_pluck( $subscriptions, 'id' ) );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Recurring Donations', 'donations-for-planetstudio-payment-gateway' ); ?></h1>
-			<p><?php esc_html_e( 'All recurring donation subscriptions and their saved-card (binding) status.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+			<h1><?php esc_html_e( 'Recurring Donations', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h1>
+			<p><?php esc_html_e( 'All recurring donation subscriptions and their saved-card (binding) status.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 
 			<?php if ( $show_incomplete ) : ?>
 				<p>
-					<?php esc_html_e( 'Including unfinished payment attempts: a donor opened the payment page and has not completed it. These are discarded automatically 24 hours after they are started.', 'donations-for-planetstudio-payment-gateway' ); ?>
-					<a href="<?php echo esc_url( $panel_url ); ?>"><?php esc_html_e( 'Hide them', 'donations-for-planetstudio-payment-gateway' ); ?></a>
+					<?php esc_html_e( 'Including unfinished payment attempts: a donor opened the payment page and has not completed it. These are discarded automatically 24 hours after they are started.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>
+					<a href="<?php echo esc_url( $panel_url ); ?>"><?php esc_html_e( 'Hide them', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></a>
 				</p>
 			<?php elseif ( $incomplete_count > 0 ) : ?>
 				<p>
 					<?php
 					printf(
 						/* translators: %s: number of unfinished payment attempts. */
-						esc_html( _n( '%s unfinished payment attempt is hidden.', '%s unfinished payment attempts are hidden.', $incomplete_count, 'donations-for-planetstudio-payment-gateway' ) ),
+						esc_html( _n( '%s unfinished payment attempt is hidden.', '%s unfinished payment attempts are hidden.', $incomplete_count, 'joedavtian-donations-for-planetstudio-payment-gateway' ) ),
 						esc_html( number_format_i18n( $incomplete_count ) )
 					);
 					?>
-					<a href="<?php echo esc_url( add_query_arg( 'show_incomplete', '1', $panel_url ) ); ?>"><?php esc_html_e( 'Show them', 'donations-for-planetstudio-payment-gateway' ); ?></a>
+					<a href="<?php echo esc_url( add_query_arg( 'show_incomplete', '1', $panel_url ) ); ?>"><?php esc_html_e( 'Show them', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></a>
 				</p>
 			<?php endif; ?>
 
 			<?php if ( isset( $_GET['pspgd_notice'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Set by this plugin's own redirect; it only picks a notice from a fixed list. ?>
 				<?php
 				$notice_map = array(
-					'cancelled'      => array( 'success', __( 'Subscription cancelled.', 'donations-for-planetstudio-payment-gateway' ) ),
-					'cancel_failed'  => array( 'error', __( 'Could not cancel the subscription at the gateway. See the event log for details.', 'donations-for-planetstudio-payment-gateway' ) ),
-					'not_found'      => array( 'error', __( 'Subscription not found.', 'donations-for-planetstudio-payment-gateway' ) ),
+					'cancelled'      => array( 'success', __( 'Subscription cancelled.', 'joedavtian-donations-for-planetstudio-payment-gateway' ) ),
+					'cancel_failed'  => array( 'error', __( 'Could not cancel the subscription at the gateway. See the event log for details.', 'joedavtian-donations-for-planetstudio-payment-gateway' ) ),
+					'not_found'      => array( 'error', __( 'Subscription not found.', 'joedavtian-donations-for-planetstudio-payment-gateway' ) ),
 				);
 				$notice_key = sanitize_key( wp_unslash( (string) $_GET['pspgd_notice'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- As above.
 				if ( isset( $notice_map[ $notice_key ] ) ) :
@@ -75,24 +75,24 @@ final class PSPGD_Admin_Recurring {
 			<table class="widefat striped">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'ID', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Donor', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Language', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Amount', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Interval', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Campaign', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Status', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Binding', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Next Payment', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Last Payment', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Failures', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Alerts', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Actions', 'donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'ID', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Donor', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Language', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Amount', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Interval', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Campaign', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Status', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Binding', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Next Payment', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Last Payment', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Failures', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Alerts', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Actions', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php if ( empty( $subscriptions ) ) : ?>
-						<tr><td colspan="13"><?php esc_html_e( 'No recurring donations yet.', 'donations-for-planetstudio-payment-gateway' ); ?></td></tr>
+						<tr><td colspan="13"><?php esc_html_e( 'No recurring donations yet.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></td></tr>
 					<?php endif; ?>
 					<?php foreach ( $subscriptions as $subscription ) : ?>
 						<tr>
@@ -108,14 +108,14 @@ final class PSPGD_Admin_Recurring {
 							<td>
 								<?php echo esc_html( $subscription->status ); ?>
 								<?php if ( ! empty( $subscription->is_test ) ) : ?>
-									<br><span class="pspgd-test-chip" style="display:inline-block;margin-top:3px;padding:1px 6px;background:#f0f0f1;border:1px solid #c3c4c7;border-radius:2px;font-size:11px;" title="<?php esc_attr_e( 'Created while test mode was on. Its saved card is simulated, so it is never charged automatically.', 'donations-for-planetstudio-payment-gateway' ); ?>"><?php esc_html_e( 'Test', 'donations-for-planetstudio-payment-gateway' ); ?></span>
+									<br><span class="pspgd-test-chip" style="display:inline-block;margin-top:3px;padding:1px 6px;background:#f0f0f1;border:1px solid #c3c4c7;border-radius:2px;font-size:11px;" title="<?php esc_attr_e( 'Created while test mode was on. Its saved card is simulated, so it is never charged automatically.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>"><?php esc_html_e( 'Test', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span>
 								<?php endif; ?>
 							</td>
 							<td>
 								<?php if ( ! empty( $subscription->binding_id ) ) : ?>
-									<span class="dashicons dashicons-yes" style="color:#46b450;" title="<?php esc_attr_e( 'Saved card active', 'donations-for-planetstudio-payment-gateway' ); ?>"></span>
+									<span class="dashicons dashicons-yes" style="color:#46b450;" title="<?php esc_attr_e( 'Saved card active', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>"></span>
 								<?php else : ?>
-									<span class="dashicons dashicons-warning" style="color:#dba617;" title="<?php esc_attr_e( 'No saved card yet', 'donations-for-planetstudio-payment-gateway' ); ?>"></span>
+									<span class="dashicons dashicons-warning" style="color:#dba617;" title="<?php esc_attr_e( 'No saved card yet', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>"></span>
 								<?php endif; ?>
 							</td>
 							<td><?php echo esc_html( $subscription->next_payment_at ?: '-' ); ?></td>
@@ -123,17 +123,17 @@ final class PSPGD_Admin_Recurring {
 							<td><?php echo esc_html( (string) $subscription->failed_payment_count ); ?></td>
 							<td>
 								<?php if ( in_array( (int) $subscription->id, $flagged_sub_ids, true ) ) : ?>
-									<span class="dashicons dashicons-warning" style="color:#d63638;" title="<?php esc_attr_e( 'The bank returned a payment page URL with an unusual merchant path on a recent charge for this subscription. It may 404 for the donor. See the event log below for details.', 'donations-for-planetstudio-payment-gateway' ); ?>"></span>
-									<?php esc_html_e( 'Check payment URL', 'donations-for-planetstudio-payment-gateway' ); ?>
+									<span class="dashicons dashicons-warning" style="color:#d63638;" title="<?php esc_attr_e( 'The bank returned a payment page URL with an unusual merchant path on a recent charge for this subscription. It may 404 for the donor. See the event log below for details.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>"></span>
+									<?php esc_html_e( 'Check payment URL', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>
 								<?php endif; ?>
 							</td>
 							<td>
 								<?php if ( 'cancelled' !== $subscription->status ) : ?>
-									<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-block;margin-right:4px;" onsubmit="return confirm('<?php echo esc_js( __( 'Cancel this recurring donation?', 'donations-for-planetstudio-payment-gateway' ) ); ?>');">
+									<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-block;margin-right:4px;" onsubmit="return confirm('<?php echo esc_js( __( 'Cancel this recurring donation?', 'joedavtian-donations-for-planetstudio-payment-gateway' ) ); ?>');">
 										<input type="hidden" name="action" value="pspgd_cancel_subscription">
 										<input type="hidden" name="subscription_id" value="<?php echo esc_attr( (string) $subscription->id ); ?>">
 										<?php wp_nonce_field( 'pspgd_cancel_subscription_' . $subscription->id ); ?>
-										<button type="submit" class="button"><?php esc_html_e( 'Cancel', 'donations-for-planetstudio-payment-gateway' ); ?></button>
+										<button type="submit" class="button"><?php esc_html_e( 'Cancel', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></button>
 									</form>
 								<?php endif; ?>
 							</td>
@@ -153,7 +153,7 @@ final class PSPGD_Admin_Recurring {
 	 */
 	public static function handle_cancel_subscription(): void {
 		if ( ! current_user_can( PSPGD_Capability::MANAGE_DONATIONS ) ) {
-			wp_die( esc_html__( 'You do not have permission to do this.', 'donations-for-planetstudio-payment-gateway' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 
 		$subscription_id = absint( $_POST['subscription_id'] ?? 0 );

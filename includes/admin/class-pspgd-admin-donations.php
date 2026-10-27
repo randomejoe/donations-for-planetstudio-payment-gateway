@@ -11,7 +11,7 @@ final class PSPGD_Admin_Donations {
 
 	public static function render_donations_page(): void {
 		if ( ! current_user_can( PSPGD_Capability::MANAGE_DONATIONS ) ) {
-			wp_die( esc_html__( 'You do not have permission to view this page.', 'donations-for-planetstudio-payment-gateway' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to view this page.', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 
 		$filters        = self::donation_filters();
@@ -28,34 +28,34 @@ final class PSPGD_Admin_Donations {
 		$events      = PSPGD_Repository::list_recent_events( PSPGD_Admin::PER_PAGE, ( $event_page - 1 ) * PSPGD_Admin::PER_PAGE );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Donations for PlanetStudio Payment Gateway', 'donations-for-planetstudio-payment-gateway' ); ?></h1>
+			<h1><?php esc_html_e( 'Joedavtian Donations for PlanetStudio Payment Gateway', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h1>
 
 			<?php self::render_stat_band(); ?>
 
-			<p><?php esc_html_e( 'Recent donation payments created through PSPG.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+			<p><?php esc_html_e( 'Recent donation payments created through PSPG.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 
 			<?php self::render_donation_filters( $filters, $donation_total ); ?>
 
 			<table class="widefat striped">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'ID', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Donor', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Language', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Anonymous', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Amount', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Type', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Campaign', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Status', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Bank', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Bank reference', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'PSPG Order', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Created', 'donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'ID', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Donor', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Language', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Anonymous', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Amount', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Type', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Campaign', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Status', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Bank', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Bank reference', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'PSPG Order', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Created', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php if ( empty( $donations ) ) : ?>
-						<tr><td colspan="12"><?php echo esc_html( self::has_donation_filters( $filters ) ? __( 'No donations match these filters.', 'donations-for-planetstudio-payment-gateway' ) : __( 'No donations yet.', 'donations-for-planetstudio-payment-gateway' ) ); ?></td></tr>
+						<tr><td colspan="12"><?php echo esc_html( self::has_donation_filters( $filters ) ? __( 'No donations match these filters.', 'joedavtian-donations-for-planetstudio-payment-gateway' ) : __( 'No donations yet.', 'joedavtian-donations-for-planetstudio-payment-gateway' ) ); ?></td></tr>
 					<?php endif; ?>
 					<?php foreach ( $donations as $donation ) : ?>
 						<tr>
@@ -65,7 +65,7 @@ final class PSPGD_Admin_Donations {
 								<a href="mailto:<?php echo esc_attr( $donation->email ); ?>"><?php echo esc_html( $donation->email ); ?></a>
 							</td>
 							<td><?php echo esc_html( strtoupper( PSPGD_I18n::normalize_locale( (string) ( $donation->language ?? '' ) ) ) ); ?></td>
-							<td><?php echo ! empty( $donation->is_anonymous ) ? esc_html__( 'Yes', 'donations-for-planetstudio-payment-gateway' ) : esc_html__( 'No', 'donations-for-planetstudio-payment-gateway' ); ?></td>
+							<td><?php echo ! empty( $donation->is_anonymous ) ? esc_html__( 'Yes', 'joedavtian-donations-for-planetstudio-payment-gateway' ) : esc_html__( 'No', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></td>
 							<td><?php echo esc_html( $donation->amount . ' ' . $donation->currency ); ?></td>
 							<td><?php echo esc_html( $donation->type ); ?></td>
 							<td><?php echo esc_html( $donation->campaign_title ?: '-' ); ?></td>
@@ -73,13 +73,13 @@ final class PSPGD_Admin_Donations {
 								<?php echo esc_html( $donation->status ); ?>
 								<?php if ( 'review' === $donation->status ) : ?>
 									<?php // Held by PSPGD_PSPG::hold_for_review(). A refund in PSPG marks it refunded; see handle_admin_refund(). ?>
-									<br><span class="description"><?php esc_html_e( 'Held: the bank reported a different amount. Left out of every total. Compare the order with your bank, and refund it in PSPG if it should not stand.', 'donations-for-planetstudio-payment-gateway' ); ?></span>
+									<br><span class="description"><?php esc_html_e( 'Held: the bank reported a different amount. Left out of every total. Compare the order with your bank, and refund it in PSPG if it should not stand.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span>
 									<?php if ( (int) $donation->pspg_order_id > 0 ) : ?>
-										<br><a href="<?php echo esc_url( add_query_arg( array( 'page' => 'pspg', 'orderNumber' => (int) $donation->pspg_order_id ), admin_url( 'admin.php' ) ) ); ?>"><?php esc_html_e( 'Open the PSPG order', 'donations-for-planetstudio-payment-gateway' ); ?></a>
+										<br><a href="<?php echo esc_url( add_query_arg( array( 'page' => 'pspg', 'orderNumber' => (int) $donation->pspg_order_id ), admin_url( 'admin.php' ) ) ); ?>"><?php esc_html_e( 'Open the PSPG order', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></a>
 									<?php endif; ?>
 								<?php endif; ?>
 								<?php if ( ! empty( $donation->is_test ) ) : ?>
-									<br><span class="pspgd-test-chip" style="display:inline-block;margin-top:3px;padding:1px 6px;background:#f0f0f1;border:1px solid #c3c4c7;border-radius:2px;font-size:11px;" title="<?php esc_attr_e( 'Taken while test mode was on. No money moved, so it is left out of the figures above and of campaign totals.', 'donations-for-planetstudio-payment-gateway' ); ?>"><?php esc_html_e( 'Test', 'donations-for-planetstudio-payment-gateway' ); ?></span>
+									<br><span class="pspgd-test-chip" style="display:inline-block;margin-top:3px;padding:1px 6px;background:#f0f0f1;border:1px solid #c3c4c7;border-radius:2px;font-size:11px;" title="<?php esc_attr_e( 'Taken while test mode was on. No money moved, so it is left out of the figures above and of campaign totals.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>"><?php esc_html_e( 'Test', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span>
 								<?php endif; ?>
 							</td>
 							<td><?php echo esc_html( $donation->bank_id ); ?></td>
@@ -92,21 +92,21 @@ final class PSPGD_Admin_Donations {
 			</table>
 			<?php PSPGD_Admin::render_pager( 'd_page', $donation_page, $donation_pages, $donation_total ); ?>
 
-			<h2><?php esc_html_e( 'Event log', 'donations-for-planetstudio-payment-gateway' ); ?></h2>
-			<p><?php esc_html_e( 'Recent payment, recurring setup, and email events.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+			<h2><?php esc_html_e( 'Event log', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></h2>
+			<p><?php esc_html_e( 'Recent payment, recurring setup, and email events.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 			<table class="widefat striped">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Time', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Event', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Record', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Message', 'donations-for-planetstudio-payment-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Details', 'donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Time', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Event', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Record', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Message', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Details', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php if ( empty( $events ) ) : ?>
-						<tr><td colspan="5"><?php esc_html_e( 'No events yet.', 'donations-for-planetstudio-payment-gateway' ); ?></td></tr>
+						<tr><td colspan="5"><?php esc_html_e( 'No events yet.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></td></tr>
 					<?php endif; ?>
 					<?php foreach ( $events as $event ) : ?>
 						<tr>
@@ -116,7 +116,7 @@ final class PSPGD_Admin_Donations {
 							<td><?php echo esc_html( $event->message ); ?></td>
 							<td>
 								<?php if ( ! empty( $event->context ) ) : ?>
-									<details><summary><?php esc_html_e( 'View', 'donations-for-planetstudio-payment-gateway' ); ?></summary><pre style="white-space:pre-wrap;max-width:560px"><?php echo esc_html( $event->context ); ?></pre></details>
+									<details><summary><?php esc_html_e( 'View', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></summary><pre style="white-space:pre-wrap;max-width:560px"><?php echo esc_html( $event->context ); ?></pre></details>
 								<?php endif; ?>
 							</td>
 						</tr>
@@ -188,36 +188,36 @@ final class PSPGD_Admin_Donations {
 		<form method="get" action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>" style="margin:0 0 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;">
 			<input type="hidden" name="page" value="pspgd">
 
-			<label><span class="screen-reader-text"><?php esc_html_e( 'Status', 'donations-for-planetstudio-payment-gateway' ); ?></span>
+			<label><span class="screen-reader-text"><?php esc_html_e( 'Status', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span>
 				<select name="f_status">
-					<option value=""><?php esc_html_e( 'Any status', 'donations-for-planetstudio-payment-gateway' ); ?></option>
+					<option value=""><?php esc_html_e( 'Any status', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></option>
 					<?php foreach ( PSPGD_Repository::distinct_donation_values( 'status' ) as $value ) : ?>
 						<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $filters['status'], $value ); ?>><?php echo esc_html( $value ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</label>
 
-			<label><span class="screen-reader-text"><?php esc_html_e( 'Type', 'donations-for-planetstudio-payment-gateway' ); ?></span>
+			<label><span class="screen-reader-text"><?php esc_html_e( 'Type', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span>
 				<select name="f_type">
-					<option value=""><?php esc_html_e( 'Any type', 'donations-for-planetstudio-payment-gateway' ); ?></option>
+					<option value=""><?php esc_html_e( 'Any type', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></option>
 					<?php foreach ( PSPGD_Repository::distinct_donation_values( 'type' ) as $value ) : ?>
 						<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $filters['type'], $value ); ?>><?php echo esc_html( $value ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</label>
 
-			<label><span class="screen-reader-text"><?php esc_html_e( 'Currency', 'donations-for-planetstudio-payment-gateway' ); ?></span>
+			<label><span class="screen-reader-text"><?php esc_html_e( 'Currency', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span>
 				<select name="f_currency">
-					<option value=""><?php esc_html_e( 'Any currency', 'donations-for-planetstudio-payment-gateway' ); ?></option>
+					<option value=""><?php esc_html_e( 'Any currency', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></option>
 					<?php foreach ( PSPGD_PSPG::allowed_currencies() as $value ) : ?>
 						<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $filters['currency'], $value ); ?>><?php echo esc_html( $value ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</label>
 
-			<label><span class="screen-reader-text"><?php esc_html_e( 'Language', 'donations-for-planetstudio-payment-gateway' ); ?></span>
+			<label><span class="screen-reader-text"><?php esc_html_e( 'Language', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span>
 				<select name="f_language">
-					<option value=""><?php esc_html_e( 'Any language', 'donations-for-planetstudio-payment-gateway' ); ?></option>
+					<option value=""><?php esc_html_e( 'Any language', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></option>
 					<?php foreach ( PSPGD_I18n::supported_locales() as $value ) : ?>
 						<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $filters['language'], $value ); ?>><?php echo esc_html( strtoupper( $value ) ); ?></option>
 					<?php endforeach; ?>
@@ -225,9 +225,9 @@ final class PSPGD_Admin_Donations {
 			</label>
 
 			<?php if ( $campaigns ) : ?>
-				<label><span class="screen-reader-text"><?php esc_html_e( 'Campaign', 'donations-for-planetstudio-payment-gateway' ); ?></span>
+				<label><span class="screen-reader-text"><?php esc_html_e( 'Campaign', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span>
 					<select name="f_campaign">
-						<option value=""><?php esc_html_e( 'Any campaign', 'donations-for-planetstudio-payment-gateway' ); ?></option>
+						<option value=""><?php esc_html_e( 'Any campaign', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></option>
 						<?php foreach ( $campaigns as $campaign ) : ?>
 							<option value="<?php echo esc_attr( (string) $campaign->ID ); ?>" <?php selected( $filters['campaign_id'], (string) $campaign->ID ); ?>><?php echo esc_html( $campaign->post_title ); ?></option>
 						<?php endforeach; ?>
@@ -235,20 +235,20 @@ final class PSPGD_Admin_Donations {
 				</label>
 			<?php endif; ?>
 
-			<label><?php esc_html_e( 'From', 'donations-for-planetstudio-payment-gateway' ); ?>
+			<label><?php esc_html_e( 'From', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>
 				<input type="date" name="f_from" value="<?php echo esc_attr( $filters['date_from'] ); ?>">
 			</label>
-			<label><?php esc_html_e( 'To', 'donations-for-planetstudio-payment-gateway' ); ?>
+			<label><?php esc_html_e( 'To', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>
 				<input type="date" name="f_to" value="<?php echo esc_attr( $filters['date_to'] ); ?>">
 			</label>
 
-			<label><span class="screen-reader-text"><?php esc_html_e( 'Search donors', 'donations-for-planetstudio-payment-gateway' ); ?></span>
-				<input type="search" name="f_search" value="<?php echo esc_attr( $filters['search'] ); ?>" placeholder="<?php esc_attr_e( 'Name, email or bank reference', 'donations-for-planetstudio-payment-gateway' ); ?>">
+			<label><span class="screen-reader-text"><?php esc_html_e( 'Search donors', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></span>
+				<input type="search" name="f_search" value="<?php echo esc_attr( $filters['search'] ); ?>" placeholder="<?php esc_attr_e( 'Name, email or bank reference', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?>">
 			</label>
 
-			<button type="submit" class="button"><?php esc_html_e( 'Filter', 'donations-for-planetstudio-payment-gateway' ); ?></button>
+			<button type="submit" class="button"><?php esc_html_e( 'Filter', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></button>
 			<?php if ( self::has_donation_filters( $filters ) ) : ?>
-				<a class="button-link" href="<?php echo esc_url( add_query_arg( array( 'page' => 'pspgd' ), admin_url( 'admin.php' ) ) ); ?>"><?php esc_html_e( 'Clear', 'donations-for-planetstudio-payment-gateway' ); ?></a>
+				<a class="button-link" href="<?php echo esc_url( add_query_arg( array( 'page' => 'pspgd' ), admin_url( 'admin.php' ) ) ); ?>"><?php esc_html_e( 'Clear', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></a>
 			<?php endif; ?>
 		</form>
 
@@ -264,7 +264,7 @@ final class PSPGD_Admin_Donations {
 				<?php
 				printf(
 					/* translators: %s: number of donations. */
-					esc_html( _n( 'Export %s donation to CSV', 'Export %s donations to CSV', $total, 'donations-for-planetstudio-payment-gateway' ) ),
+					esc_html( _n( 'Export %s donation to CSV', 'Export %s donations to CSV', $total, 'joedavtian-donations-for-planetstudio-payment-gateway' ) ),
 					esc_html( number_format_i18n( $total ) )
 				);
 				?>
@@ -282,7 +282,7 @@ final class PSPGD_Admin_Donations {
 	 */
 	public static function handle_export_csv(): void {
 		if ( ! current_user_can( PSPGD_Capability::MANAGE_DONATIONS ) ) {
-			wp_die( esc_html__( 'You do not have permission to export donations.', 'donations-for-planetstudio-payment-gateway' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to export donations.', 'joedavtian-donations-for-planetstudio-payment-gateway' ), 403 );
 		}
 		check_admin_referer( 'pspgd_export_csv' );
 
@@ -310,24 +310,24 @@ final class PSPGD_Admin_Donations {
 		fputcsv(
 			$out,
 			array(
-				__( 'Donation ID', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Created', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Status', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Type', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Amount', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Currency', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'First name', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Last name', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Email', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Language', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Anonymous', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Campaign', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Bank reference', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'PSPG order', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Subscription ID', 'donations-for-planetstudio-payment-gateway' ),
+				__( 'Donation ID', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Created', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Status', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Type', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Amount', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Currency', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'First name', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Last name', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Email', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Language', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Anonymous', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Campaign', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Bank reference', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'PSPG order', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Subscription ID', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				// Last, so a sheet built against an earlier export keeps its
 				// column positions.
-				__( 'Test', 'donations-for-planetstudio-payment-gateway' ),
+				__( 'Test', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			)
 		);
 
@@ -382,45 +382,45 @@ final class PSPGD_Admin_Donations {
 
 		$tiles = array(
 			array(
-				'label' => __( 'Raised this month', 'donations-for-planetstudio-payment-gateway' ),
+				'label' => __( 'Raised this month', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				'lines' => self::money_lines( $stats['money'], 'month' ),
 				'note'  => sprintf(
 					/* translators: %s: number of donations. */
-					_n( '%s donation', '%s donations', $stats['paid_month'], 'donations-for-planetstudio-payment-gateway' ),
+					_n( '%s donation', '%s donations', $stats['paid_month'], 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 					number_format_i18n( $stats['paid_month'] )
 				),
 			),
 			array(
-				'label' => __( 'Raised all time', 'donations-for-planetstudio-payment-gateway' ),
+				'label' => __( 'Raised all time', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				'lines' => self::money_lines( $stats['money'], 'total' ),
 				'note'  => sprintf(
 					/* translators: %s: number of donations. */
-					_n( '%s donation', '%s donations', $stats['paid_total'], 'donations-for-planetstudio-payment-gateway' ),
+					_n( '%s donation', '%s donations', $stats['paid_total'], 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 					number_format_i18n( $stats['paid_total'] )
 				),
 			),
 			array(
-				'label' => __( 'Active supporters', 'donations-for-planetstudio-payment-gateway' ),
+				'label' => __( 'Active supporters', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				'lines' => array( number_format_i18n( $stats['supporters'] ) ),
-				'note'  => __( 'gave in the last 12 months', 'donations-for-planetstudio-payment-gateway' ),
+				'note'  => __( 'gave in the last 12 months', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			),
 			array(
-				'label' => __( 'Recurring donations', 'donations-for-planetstudio-payment-gateway' ),
+				'label' => __( 'Recurring donations', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				'lines' => array( number_format_i18n( $stats['recurring'] ) ),
 				'note'  => $stats['committed']
 					? sprintf(
 						/* translators: %s: committed amounts per currency. */
-						__( '%s per month', 'donations-for-planetstudio-payment-gateway' ),
+						__( '%s per month', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 						implode( ' · ', self::committed_lines( $stats['committed'] ) )
 					)
-					: __( 'none active yet', 'donations-for-planetstudio-payment-gateway' ),
+					: __( 'none active yet', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			),
 			array(
-				'label' => __( 'Completed payments', 'donations-for-planetstudio-payment-gateway' ),
+				'label' => __( 'Completed payments', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 				'lines' => array( null === $stats['completion'] ? '—' : number_format_i18n( $stats['completion'], 1 ) . '%' ),
 				'note'  => sprintf(
 					/* translators: 1: failed count, 2: abandoned count. */
-					__( '%1$s failed · %2$s abandoned', 'donations-for-planetstudio-payment-gateway' ),
+					__( '%1$s failed · %2$s abandoned', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 					number_format_i18n( (int) ( $stats['outcomes']['failed'] ?? 0 ) ),
 					number_format_i18n( (int) ( $stats['outcomes']['abandoned'] ?? 0 ) )
 				),
@@ -442,7 +442,7 @@ final class PSPGD_Admin_Donations {
 		if ( PSPGD_PSPG::donations_test_mode() ) {
 			// Said out loud while test mode is on, so a test donation that
 			// does not show up here reads as intended rather than as a bug.
-			echo '<p style="margin:-16px 0 24px;color:#646970;font-size:12px;">' . esc_html__( 'Test mode is on. Donations taken while it is on are marked Test and left out of these figures and of campaign totals.', 'donations-for-planetstudio-payment-gateway' ) . '</p>';
+			echo '<p style="margin:-16px 0 24px;color:#646970;font-size:12px;">' . esc_html__( 'Test mode is on. Donations taken while it is on are marked Test and left out of these figures and of campaign totals.', 'joedavtian-donations-for-planetstudio-payment-gateway' ) . '</p>';
 		}
 	}
 

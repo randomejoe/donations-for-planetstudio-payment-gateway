@@ -10,7 +10,7 @@ set -eu
 
 repo=$(cd "$(dirname "$0")/../.." && pwd)
 dir=$1
-slug=donations-for-planetstudio-payment-gateway
+slug=joedavtian-donations-for-planetstudio-payment-gateway
 
 # Unpacking WordPress needs more than PHP's usual 128M.
 wp_bin=$(command -v wp)

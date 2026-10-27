@@ -251,8 +251,8 @@ final class PSPGD_PSPG {
 			return array(
 				'ok'      => false,
 				'message' => '' === self::bank_id()
-					? __( 'Online donations are not set up yet. Please try again later.', 'donations-for-planetstudio-payment-gateway' )
-					: __( 'PlanetStudio Payment Gateway is not available.', 'donations-for-planetstudio-payment-gateway' ),
+					? __( 'Online donations are not set up yet. Please try again later.', 'joedavtian-donations-for-planetstudio-payment-gateway' )
+					: __( 'PlanetStudio Payment Gateway is not available.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			);
 		}
 
@@ -351,7 +351,7 @@ final class PSPGD_PSPG {
 		if ( ! function_exists( 'pspg_charge_saved_card' ) ) {
 			return array(
 				'ok'      => false,
-				'message' => __( 'Recurring payments are not available.', 'donations-for-planetstudio-payment-gateway' ),
+				'message' => __( 'Recurring payments are not available.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			);
 		}
 
@@ -409,7 +409,7 @@ final class PSPGD_PSPG {
 		if ( ! $bank || ! method_exists( $bank, 'unbind_saved_card' ) || empty( $subscription->binding_id ) ) {
 			return array(
 				'ok'      => false,
-				'message' => __( 'The saved card could not be revoked at the gateway.', 'donations-for-planetstudio-payment-gateway' ),
+				'message' => __( 'The saved card could not be revoked at the gateway.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			);
 		}
 
@@ -557,7 +557,7 @@ final class PSPGD_PSPG {
 			return array(
 				'ok'      => false,
 				'status'  => 'pending',
-				'message' => __( 'PSPG status sync is not available.', 'donations-for-planetstudio-payment-gateway' ),
+				'message' => __( 'PSPG status sync is not available.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			);
 		}
 
@@ -569,7 +569,7 @@ final class PSPGD_PSPG {
 			return array(
 				'ok'      => false,
 				'status'  => 'pending',
-				'message' => __( 'No bank order reference is stored for this donation.', 'donations-for-planetstudio-payment-gateway' ),
+				'message' => __( 'No bank order reference is stored for this donation.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			);
 		}
 
@@ -910,16 +910,16 @@ final class PSPGD_PSPG {
 	private static function render_return_status( string $status ): void {
 		$messages = array(
 			'paid'    => array(
-				__( 'Thank you for your donation.', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'Your payment has been confirmed. A receipt has been sent to your email address.', 'donations-for-planetstudio-payment-gateway' ),
+				__( 'Thank you for your donation.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'Your payment has been confirmed. A receipt has been sent to your email address.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			),
 			'failed'  => array(
-				__( 'Your payment was not completed.', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'No donation has been confirmed. Please try again or contact us if you need help.', 'donations-for-planetstudio-payment-gateway' ),
+				__( 'Your payment was not completed.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'No donation has been confirmed. Please try again or contact us if you need help.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			),
 			'default' => array(
-				__( 'Your payment is being confirmed.', 'donations-for-planetstudio-payment-gateway' ),
-				__( 'We will email your receipt once the bank confirms the donation.', 'donations-for-planetstudio-payment-gateway' ),
+				__( 'Your payment is being confirmed.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
+				__( 'We will email your receipt once the bank confirms the donation.', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 			),
 		);
 		$message = $messages[ $status ] ?? $messages['default'];
@@ -942,7 +942,7 @@ final class PSPGD_PSPG {
 			esc_html(
 				sprintf(
 					/* translators: %s: the site name. */
-					__( 'Return to %s', 'donations-for-planetstudio-payment-gateway' ),
+					__( 'Return to %s', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 					wp_specialchars_decode( (string) get_bloginfo( 'name' ), ENT_QUOTES )
 				)
 			),

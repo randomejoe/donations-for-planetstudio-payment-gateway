@@ -59,7 +59,7 @@ final class PSPGD_Reconciliation {
 
 		$schedules[ self::SCHEDULE ] = array(
 			'interval' => 15 * MINUTE_IN_SECONDS,
-			'display'  => __( 'Every 15 minutes (Donations for PlanetStudio Payment Gateway)', 'donations-for-planetstudio-payment-gateway' ),
+			'display'  => __( 'Every 15 minutes (Joedavtian Donations for PlanetStudio Payment Gateway)', 'joedavtian-donations-for-planetstudio-payment-gateway' ),
 		);
 
 		return $schedules;

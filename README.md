@@ -1,4 +1,4 @@
-# Donations for PlanetStudio Payment Gateway
+# Joedavtian Donations for PlanetStudio Payment Gateway
 
 A WordPress plugin for a donation form, fundraising campaigns and monthly or weekly recurring donations on saved cards, paid through [PlanetStudio Payment Gateway](https://www.planetstudio.am) (PSPG) and whichever bank you have configured there. It keeps its own donor, donation and recurring-donation records, so it does not need GiveWP or WooCommerce.
 
@@ -13,7 +13,7 @@ This is an independent add-on. It is not made or supported by PlanetStudio.
 
 ## Installing
 
-1. Download `donations-for-planetstudio-payment-gateway-<version>.zip` from [Releases](../../releases). Use that zip, not GitHub's "Source code" download, which unpacks to a folder with the version in its name, so each update would install as a separate plugin.
+1. Download `joedavtian-donations-for-planetstudio-payment-gateway-<version>.zip` from [Releases](../../releases). Use that zip, not GitHub's "Source code" download, which unpacks to a folder with the version in its name, so each update would install as a separate plugin.
 2. In WordPress, go to **Plugins > Add New > Upload Plugin**, choose the zip and activate it.
 3. Go to **Donations > Form Settings**, choose the bank and currencies, and switch test mode on.
 4. Put `[pspgd_donation_form]` on a page, or create a campaign under **Donations > Campaigns**.
@@ -46,7 +46,7 @@ To build the release zip:
 sh tools/build-zip.sh
 ```
 
-It packs the last commit, not the working tree, into `dist/`, and leaves out everything marked `export-ignore` in `.gitattributes` (tests, tools, this README). `python3 tools/make-pot.py` regenerates `languages/donations-for-planetstudio-payment-gateway.pot` after changing translatable strings.
+It packs the last commit, not the working tree, into `dist/`, and leaves out everything marked `export-ignore` in `.gitattributes` (tests, tools, this README). `python3 tools/make-pot.py` regenerates `languages/joedavtian-donations-for-planetstudio-payment-gateway.pot` after changing translatable strings.
 
 [RELEASING.md](RELEASING.md) has the steps for a new version.
 

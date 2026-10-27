@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Regenerate languages/donations-for-planetstudio-payment-gateway.pot.
+"""Regenerate languages/joedavtian-donations-for-planetstudio-payment-gateway.pot.
 
 Run from the plugin root:
 
     python3 tools/make-pot.py
 
 Scans the plugin's PHP for __(), _e(), esc_html__(), esc_html_e(),
-esc_attr__(), esc_attr_e() and _n() calls carrying the donations-for-planetstudio-payment-gateway
+esc_attr__(), esc_attr_e() and _n() calls carrying the joedavtian-donations-for-planetstudio-payment-gateway
 text domain. Tests and the languages folder itself are skipped.
 
 WP-CLI's `wp i18n make-pot` does the same job more thoroughly if it is
@@ -21,7 +21,7 @@ import re
 
 SINGLE = re.compile(
     r"\b(?:__|_e|esc_html__|esc_html_e|esc_attr__|esc_attr_e)\(\s*"
-    r"(['\"])(?P<text>(?:\\.|(?!\1).)*)\1\s*,\s*'donations-for-planetstudio-payment-gateway'\s*\)"
+    r"(['\"])(?P<text>(?:\\.|(?!\1).)*)\1\s*,\s*'joedavtian-donations-for-planetstudio-payment-gateway'\s*\)"
 )
 PLURAL = re.compile(
     r"\b_n\(\s*(['\"])(?P<one>(?:\\.|(?!\1).)*)\1\s*,\s*(['\"])(?P<many>(?:\\.|(?!\3).)*)\3\s*,"
@@ -71,16 +71,16 @@ def render(entries):
     now = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M+0000')
     out = [
         '# Copyright (C) Joe Davtian',
-        '# This file is distributed under the same licence as the Donations for PlanetStudio Payment Gateway plugin.',
+        '# This file is distributed under the same licence as the Joedavtian Donations for PlanetStudio Payment Gateway plugin.',
         'msgid ""',
         'msgstr ""',
-        '"Project-Id-Version: Donations for PlanetStudio Payment Gateway\\n"',
+        '"Project-Id-Version: Joedavtian Donations for PlanetStudio Payment Gateway\\n"',
         '"POT-Creation-Date: %s\\n"' % now,
         '"MIME-Version: 1.0\\n"',
         '"Content-Type: text/plain; charset=UTF-8\\n"',
         '"Content-Transfer-Encoding: 8bit\\n"',
         '"Plural-Forms: nplurals=2; plural=(n != 1);\\n"',
-        '"X-Domain: donations-for-planetstudio-payment-gateway\\n"',
+        '"X-Domain: joedavtian-donations-for-planetstudio-payment-gateway\\n"',
         '',
     ]
 
@@ -102,5 +102,5 @@ def render(entries):
 if __name__ == '__main__':
     found = collect('.')
     os.makedirs('languages', exist_ok=True)
-    io.open('languages/donations-for-planetstudio-payment-gateway.pot', 'w', encoding='utf-8').write(render(found))
-    print('Wrote languages/donations-for-planetstudio-payment-gateway.pot with %d strings' % len(found))
+    io.open('languages/joedavtian-donations-for-planetstudio-payment-gateway.pot', 'w', encoding='utf-8').write(render(found))
+    print('Wrote languages/joedavtian-donations-for-planetstudio-payment-gateway.pot with %d strings' % len(found))

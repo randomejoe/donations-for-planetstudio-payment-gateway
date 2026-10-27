@@ -99,12 +99,12 @@ jobs:
       - name: Build the shipped tree
         run: |
           mkdir -p build
-          git archive --format=tar --prefix=donations-for-planetstudio-payment-gateway/ HEAD | tar -x -C build
+          git archive --format=tar --prefix=joedavtian-donations-for-planetstudio-payment-gateway/ HEAD | tar -x -C build
 
       # Errors and warnings both fail the job. Every warning the code raised
       # was checked and is ignored where it is raised, with the reason, so a
       # new one is something to look at before WordPress.org's reviewers do.
       - uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: build/donations-for-planetstudio-payment-gateway
+          build-dir: build/joedavtian-donations-for-planetstudio-payment-gateway
           ignore-warnings: false

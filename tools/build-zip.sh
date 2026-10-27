@@ -8,7 +8,7 @@ set -eu
 
 cd "$(dirname "$0")/.."
 
-slug=donations-for-planetstudio-payment-gateway
+slug=joedavtian-donations-for-planetstudio-payment-gateway
 version=$(sed -n 's/^ \* Version: *//p' "$slug.php")
 zip="dist/$slug-$version.zip"
 
