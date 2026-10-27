@@ -38,6 +38,9 @@ function rates_reset(): void {
 	test_reset_filters();
 	test_reset_cron();
 	$GLOBALS['wpdb']->inserts = array();
+	// Every test below is about a site that has opted in, except the ones
+	// that switch it off again.
+	update_option( 'pspgd_exchange_rates', '1' );
 }
 
 /** @return array<int, array<string, mixed>> */
@@ -184,6 +187,32 @@ run_tests(
 			assert_true( (bool) $combined['ok'], 'No foreign currency means nothing to convert.' );
 			assert_same( 50000.0, (float) $combined['total'], 'The AMD subtotal is already the total.' );
 			assert_false( (bool) $combined['converted'], 'Nothing was converted, so no rate note belongs on the page.' );
+		},
+
+		'nothing is downloaded or scheduled until an administrator opts in' => static function (): void {
+			rates_reset();
+			delete_option( 'pspgd_exchange_rates' );
+			rates_seed( array( 'usd' => 400.0, 'eur' => 440.0 ) );
+
+			PSPGD_Exchange_Rates::ensure_schedule();
+			PSPGD_Exchange_Rates::refresh_rates();
+			PSPGD_Exchange_Rates::maybe_refresh();
+
+			assert_same( 0, count( test_http_requests() ), 'A fresh install must not contact the rate source.' );
+			assert_false( (bool) wp_next_scheduled( 'pspgd_refresh_exchange_rates' ), 'Nor schedule a daily download.' );
+			assert_same( 0.0, PSPGD_Exchange_Rates::rate( 'USD', 'AMD' ), 'Rates cached before it was switched off are not used either.' );
+			assert_false( (bool) PSPGD_Exchange_Rates::combine( array( 'USD' => array( 'total' => 10.0 ) ), 'AMD' )['ok'], 'So campaigns list their currencies separately.' );
+		},
+
+		'switching it off removes the daily job' => static function (): void {
+			rates_reset();
+			PSPGD_Exchange_Rates::ensure_schedule();
+			assert_true( (bool) wp_next_scheduled( 'pspgd_refresh_exchange_rates' ), 'Opted in, the job is there.' );
+
+			update_option( 'pspgd_exchange_rates', '0' );
+			PSPGD_Exchange_Rates::ensure_schedule();
+
+			assert_false( (bool) wp_next_scheduled( 'pspgd_refresh_exchange_rates' ), 'The next request takes it away.' );
 		},
 
 		'the daily job is scheduled once and starts immediately' => static function (): void {

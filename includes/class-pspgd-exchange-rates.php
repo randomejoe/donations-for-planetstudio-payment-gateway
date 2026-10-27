@@ -17,7 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Rates are fetched by a daily cron job and read from the options table on
  * every request. The provider is free and unauthenticated, so it is asked at
- * most once per currency per day.
+ * most once per currency per day -- and not at all until an administrator
+ * ticks "Combine currencies with daily exchange rates" in Form Settings.
  */
 final class PSPGD_Exchange_Rates {
 	public const CRON_HOOK = 'pspgd_refresh_exchange_rates';
@@ -94,6 +95,12 @@ final class PSPGD_Exchange_Rates {
 			return 1.0;
 		}
 
+		// Switched off: no rate, so campaigns list their currencies apart,
+		// even if rates were cached before it was switched off.
+		if ( ! self::enabled() ) {
+			return 0.0;
+		}
+
 		$from_pivot = self::rate_to_pivot( $from );
 		$to_pivot   = self::rate_to_pivot( $to );
 
@@ -165,6 +172,10 @@ final class PSPGD_Exchange_Rates {
 			return true;
 		}
 
+		if ( ! self::enabled() ) {
+			return false;
+		}
+
 		foreach ( self::supported_currencies() as $currency ) {
 			if ( self::rate_to_pivot( $currency ) <= 0 ) {
 				return false;
@@ -190,9 +201,10 @@ final class PSPGD_Exchange_Rates {
 
 	/** Fetch all supported rates once and persist them in the WordPress database. */
 	public static function refresh_rates(): void {
-		// A site offering one currency has nothing to combine, so it never
-		// calls the rate source at all.
-		if ( ! self::needs_rates() ) {
+		// A site offering one currency has nothing to combine, and a site
+		// that has not opted in has asked not to, so neither ever calls the
+		// rate source.
+		if ( ! self::enabled() ) {
 			return;
 		}
 
@@ -222,7 +234,7 @@ final class PSPGD_Exchange_Rates {
 	 * requests: a visitor should never wait on an outbound HTTP call.
 	 */
 	public static function maybe_refresh(): void {
-		if ( self::rates_available() || get_transient( self::retry_lock_key() ) ) {
+		if ( ! self::enabled() || self::rates_available() || get_transient( self::retry_lock_key() ) ) {
 			return;
 		}
 
@@ -230,6 +242,15 @@ final class PSPGD_Exchange_Rates {
 	}
 
 	public static function ensure_schedule(): void {
+		if ( ! self::enabled() ) {
+			// Nothing to fetch, so no daily job either. Cleared here so
+			// switching the setting off takes the job away on the next request.
+			if ( wp_next_scheduled( self::CRON_HOOK ) ) {
+				self::clear_schedule();
+			}
+			return;
+		}
+
 		if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
 			// Start now rather than in 24 hours, so a fresh install has
 			// rates on the next request instead of tomorrow.
@@ -252,6 +273,17 @@ final class PSPGD_Exchange_Rates {
 	/** Whether this site has more than one currency to combine. */
 	public static function needs_rates(): bool {
 		return count( self::supported_currencies() ) > 1;
+	}
+
+	/**
+	 * Whether rates are fetched and used: only when the site has currencies
+	 * to combine and an administrator has opted in. The
+	 * `pspgd_fetch_exchange_rates` filter can still switch it off.
+	 */
+	public static function enabled(): bool {
+		return self::needs_rates()
+			&& PSPGD_Settings::exchange_rates()
+			&& (bool) apply_filters( 'pspgd_fetch_exchange_rates', true );
 	}
 
 	/**
@@ -303,16 +335,11 @@ final class PSPGD_Exchange_Rates {
 	/**
 	 * Ask the public rate source for one currency's rate against the pivot.
 	 *
-	 * This is the plugin's only call to a third-party service. It sends no
-	 * donor or site data -- just a request for a published JSON file -- and
-	 * can be switched off with the `pspgd_fetch_exchange_rates` filter, or
-	 * pointed elsewhere with `pspgd_exchange_rate_sources`.
+	 * Only reached once an administrator has opted in (see enabled()). It
+	 * sends no donor or site data -- just a request for a published JSON
+	 * file -- and can be pointed elsewhere with `pspgd_exchange_rate_sources`.
 	 */
 	private static function fetch_and_store_rate( string $currency ): bool {
-		if ( ! apply_filters( 'pspgd_fetch_exchange_rates', true ) ) {
-			return false;
-		}
-
 		$currency = strtolower( $currency );
 		$pivot    = strtolower( self::PIVOT );
 		$path     = '/v1/currencies/' . $currency . '.min.json';

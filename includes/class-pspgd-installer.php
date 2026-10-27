@@ -138,6 +138,7 @@ final class PSPGD_Installer {
 			'pspgd_radius',
 			'pspgd_client_ip_source',
 			'pspgd_turnstile',
+			'pspgd_exchange_rates',
 			'pspgd_staff_notify_emails',
 			'pspgd_delete_data_on_uninstall',
 		);

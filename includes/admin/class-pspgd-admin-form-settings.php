@@ -82,7 +82,14 @@ final class PSPGD_Admin_Form_Settings {
 									<option value="<?php echo esc_attr( $currency ); ?>" <?php selected( PSPGD_Settings::goal_currency(), $currency ); ?>><?php echo esc_html( $currency ); ?></option>
 								<?php endforeach; ?>
 							</select>
-							<p class="description"><?php esc_html_e( 'New campaign goals are entered in this currency, and donations in other currencies are converted into it for the progress bar. A campaign keeps the currency it was created with if this is changed later.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+							<p class="description"><?php esc_html_e( 'New campaign goals are entered in this currency. A campaign keeps the currency it was created with if this is changed later.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Exchange rates', 'donations-for-planetstudio-payment-gateway' ); ?></th>
+						<td>
+							<label><input type="checkbox" name="exchange_rates" value="1" <?php checked( PSPGD_Settings::exchange_rates() ); ?>> <?php esc_html_e( 'Combine currencies with daily exchange rates', 'donations-for-planetstudio-payment-gateway' ); ?></label>
+							<p class="description"><?php esc_html_e( 'When ticked and you offer more than one currency, campaign progress bars convert every donation into the goal currency. Once a day your site downloads public exchange rates from the free currency-api project (cdn.jsdelivr.net, with currency-api.pages.dev as a fallback); no donor, donation or site data is sent. Left unticked, nothing is downloaded and campaigns show each currency separately.', 'donations-for-planetstudio-payment-gateway' ); ?></p>
 						</td>
 					</tr>
 				</table>
@@ -316,6 +323,7 @@ final class PSPGD_Admin_Form_Settings {
 		$options['pspgd_currencies']       = $currencies;
 		$options['pspgd_default_currency'] = strtoupper( sanitize_text_field( $text( 'default_currency' ) ) );
 		$options['pspgd_goal_currency']    = strtoupper( sanitize_text_field( $text( 'goal_currency' ) ) );
+		$options['pspgd_exchange_rates']   = empty( $post['exchange_rates'] ) ? '0' : '1';
 
 		$intervals                  = array_map( 'sanitize_key', array_filter( $list( 'intervals' ), 'is_scalar' ) );
 		$options['pspgd_intervals'] = array_values( array_intersect( array( 'monthly', 'weekly' ), $intervals ) );

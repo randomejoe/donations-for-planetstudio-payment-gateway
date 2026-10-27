@@ -51,6 +51,7 @@ function closing_reset(): void {
 	$wpdb->result_sets = array();
 	$wpdb->rows        = array();
 	test_set_now( '2026-08-23 12:00:00' );
+	update_option( 'pspgd_exchange_rates', '1' );
 }
 
 function closing_seed_rates(): void {

@@ -51,6 +51,8 @@ run_tests(
 			$options = settings_form( array( 'test_mode' => '1', 'turnstile' => '0', 'delete_data_on_uninstall' => 'on' ) );
 
 			assert_same( array( '1', '0', '0', '1' ), array( $options['pspgd_test_mode'], $options['pspgd_turnstile'], $options['pspgd_recurring_enabled'], $options['pspgd_delete_data_on_uninstall'] ), 'Ticked, posted as 0, missing, and ticked.' );
+			assert_same( '0', $options['pspgd_exchange_rates'], 'Exchange rates stay off unless ticked.' );
+			assert_same( '1', settings_form( array( 'exchange_rates' => '1' ) )['pspgd_exchange_rates'], 'And are stored when ticked.' );
 		},
 
 		'only known currencies and frequencies are stored' => static function (): void {

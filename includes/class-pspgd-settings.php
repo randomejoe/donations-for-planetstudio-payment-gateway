@@ -98,6 +98,15 @@ final class PSPGD_Settings {
 		return '1' === (string) get_option( 'pspgd_newsletter_optin', '0' );
 	}
 
+	/**
+	 * Combine currencies with daily exchange rates. Off until an
+	 * administrator switches it on, because it downloads rates from a third
+	 * party; see PSPGD_Exchange_Rates.
+	 */
+	public static function exchange_rates(): bool {
+		return '1' === (string) get_option( 'pspgd_exchange_rates', '0' );
+	}
+
 	/** Show the list of supporters (first name and initial) on campaign pages. */
 	public static function show_supporters(): bool {
 		return '0' !== (string) get_option( 'pspgd_show_supporters', '1' );

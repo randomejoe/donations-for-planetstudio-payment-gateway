@@ -30,7 +30,7 @@ This is an independent add-on. It is not made or supported by PlanetStudio.
 **Campaigns**
 
 * A Campaign post type with a goal, an end date, a progress bar and an optional supporters list.
-* Donations in several currencies are combined into one progress figure using a daily exchange rate. Visitors can switch the figure between currencies.
+* Optionally, donations in several currencies are combined into one progress figure using a daily exchange rate. Visitors can switch the figure between currencies.
 * A campaign closes when its end date passes. Tick "Stop taking donations when the goal is reached" on a campaign to also close it at its goal; otherwise it keeps taking donations past 100%.
 * When a campaign closes, its recurring donations are ended, the bank is asked to release the saved cards, and the donors are emailed.
 
@@ -119,9 +119,9 @@ Available properties: `--pspgd-primary`, `--pspgd-accent`, `--pspgd-ink`, `--psp
 
 == External services ==
 
-**Exchange rates.** To combine a campaign's donations in different currencies into one progress figure, the plugin downloads public exchange rates once a day from the free [currency-api](https://github.com/fawazahmed0/exchange-api) project, served from `cdn.jsdelivr.net` with `currency-api.pages.dev` as a fallback. The request is a plain download of a published JSON file. No donor, donation or site data is sent. See the [jsDelivr privacy policy](https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net) and [Cloudflare privacy policy](https://www.cloudflare.com/privacypolicy/).
+**Exchange rates.** Off by default. When you tick **Combine currencies with daily exchange rates** in Form Settings and offer more than one currency, the plugin combines a campaign's donations in different currencies into one progress figure. To do that it downloads public exchange rates once a day from the free [currency-api](https://github.com/fawazahmed0/exchange-api) project, served from `cdn.jsdelivr.net` with `currency-api.pages.dev` as a fallback. The request is a plain download of a published JSON file. No donor, donation or site data is sent. See the [jsDelivr privacy policy](https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net) and [Cloudflare privacy policy](https://www.cloudflare.com/privacypolicy/).
 
-Rates are only fetched when the site offers more than one currency. To switch it off entirely, return `false` from the `pspgd_fetch_exchange_rates` filter; campaigns then list each currency separately.
+Until you tick it, or on a site with one currency, nothing is downloaded and campaigns list each currency separately. The `pspgd_fetch_exchange_rates` filter can also switch it off.
 
 **Cloudflare Turnstile.** Off by default. When you switch it on under Form Settings > Spam protection, the donor's browser loads Cloudflare's Turnstile script from `challenges.cloudflare.com` on pages that show the form, and Cloudflare checks the browser to tell people from scripts. When the donor submits, your site sends Cloudflare the resulting token, your Turnstile secret key and the donor's IP address to confirm the check. No name, email or donation details are sent. See [Cloudflare's Turnstile privacy addendum](https://www.cloudflare.com/turnstile-privacy-policy/) and [website terms](https://www.cloudflare.com/website-terms/).
 

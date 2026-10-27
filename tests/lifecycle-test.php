@@ -77,6 +77,9 @@ function lifecycle_jobs_per_site(): array {
 /** Schedule every job the way the running plugin does on its first request. */
 function lifecycle_schedule_everything(): void {
 	test_reset_cron();
+	// The rate job exists only on a multi-currency site that opted in.
+	update_option( 'pspgd_currencies', array( 'AMD', 'USD' ) );
+	update_option( 'pspgd_exchange_rates', '1' );
 	PSPGD_Exchange_Rates::ensure_schedule();
 	PSPGD_Recurring::ensure_schedule();
 	PSPGD_Recurring::schedule_continuation();

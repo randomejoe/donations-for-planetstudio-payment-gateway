@@ -31,6 +31,7 @@ $wpdb = new PSPGD_Test_WPDB();
 
 /** Seed the rate cache the way a successful daily refresh would have left it. */
 function campaign_seed_rates( array $rates ): void {
+	update_option( 'pspgd_exchange_rates', '1' );
 	foreach ( $rates as $currency => $rate ) {
 		update_option(
 			'pspgd_exchange_rate_' . strtolower( (string) $currency ) . '_amd_last_known',
