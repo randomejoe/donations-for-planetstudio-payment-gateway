@@ -566,7 +566,7 @@ final class PSPGD_Campaigns {
 				if ( empty( $converted_goal['ok'] ) ) {
 					continue;
 				}
-				$goal_label = sprintf(
+				$goal_label = PSPGD_I18n::fill(
 					PSPGD_I18n::t( 'campaign_goal', 'of %s goal' ),
 					PSPGD_I18n::format_amount( (float) $converted_goal['amount'], $currency )
 				);
@@ -616,13 +616,13 @@ final class PSPGD_Campaigns {
 		}
 		$campaign_status = self::status( $campaign_id );
 		$donors       = PSPGD_Settings::show_supporters() ? PSPGD_Repository::campaign_donors( $campaign_ids ) : array();
-		$deadline_text = $deadline ? sprintf( PSPGD_I18n::t( 'campaign_end', 'Campaign ends %s' ), mysql2date( (string) get_option( 'date_format' ), $deadline ) ) : __( 'Ongoing campaign', 'donations-for-planetstudio-payment-gateway' );
+		$deadline_text = $deadline ? PSPGD_I18n::fill( PSPGD_I18n::t( 'campaign_end', 'Campaign ends %s' ), mysql2date( (string) get_option( 'date_format' ), $deadline ) ) : __( 'Ongoing campaign', 'donations-for-planetstudio-payment-gateway' );
 		if ( ! $campaign_status['open'] ) {
 			$deadline_text = 'goal_reached' === $campaign_status['reason']
 				? PSPGD_I18n::t( 'campaign_eyebrow_goal', 'Goal reached' )
 				: PSPGD_I18n::t( 'campaign_eyebrow_ended', 'Campaign closed' );
 		}
-		$form_label    = sprintf( PSPGD_I18n::t( 'campaign_support', 'Support %s' ), get_the_title( $campaign_id ) );
+		$form_label    = PSPGD_I18n::fill( PSPGD_I18n::t( 'campaign_support', 'Support %s' ), get_the_title( $campaign_id ) );
 
 		ob_start();
 		?>
@@ -638,8 +638,8 @@ final class PSPGD_Campaigns {
 				<?php endif; ?>
 				<div class="pspgd-campaign__numbers"><strong data-pspgd-campaign-raised><?php echo esc_html( (string) $figures['raised_label'] ); ?></strong><span data-pspgd-campaign-goal><?php echo esc_html( (string) $figures['goal_label'] ); ?></span></div>
 				<div class="pspgd-campaign__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $view['percent'] ); ?>"><span style="width:<?php echo esc_attr( (string) $view['percent'] ); ?>%"></span></div>
-				<?php if ( $view['other'] ) : ?><p class="pspgd-campaign__other-currencies"><?php echo esc_html( sprintf( PSPGD_I18n::t( 'campaign_also_raised', 'Also raised: %s' ), implode( ' · ', $view['other'] ) ) ); ?></p><?php endif; ?>
-				<p class="pspgd-campaign__count"><?php echo esc_html( sprintf( PSPGD_I18n::t( 'campaign_donations', '%s donations' ), number_format_i18n( $progress['donation_count'] ) ) ); ?></p>
+				<?php if ( $view['other'] ) : ?><p class="pspgd-campaign__other-currencies"><?php echo esc_html( PSPGD_I18n::fill( PSPGD_I18n::t( 'campaign_also_raised', 'Also raised: %s' ), implode( ' · ', $view['other'] ) ) ); ?></p><?php endif; ?>
+				<p class="pspgd-campaign__count"><?php echo esc_html( PSPGD_I18n::fill( PSPGD_I18n::t( 'campaign_donations', '%s donations' ), number_format_i18n( $progress['donation_count'] ) ) ); ?></p>
 			</div>
 			<?php if ( has_post_thumbnail( $campaign_id ) ) : ?><figure class="pspgd-campaign__image"><?php echo get_the_post_thumbnail( $campaign_id, 'large', array( 'loading' => 'eager' ) ); ?></figure><?php endif; ?>
 			<?php // Already through the_content's own filters (blocks, embeds, paragraphs, shortcodes) and safe as WordPress itself would print it. ?>

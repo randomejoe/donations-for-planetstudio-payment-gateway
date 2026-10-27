@@ -264,7 +264,7 @@ final class PSPGD_Emails {
 			return '';
 		}
 
-		return sprintf( PSPGD_I18n::email_label( 'greeting', $locale ), $first_name );
+		return PSPGD_I18n::fill( PSPGD_I18n::email_label( 'greeting', $locale ), $first_name );
 	}
 
 	/**
@@ -426,7 +426,7 @@ final class PSPGD_Emails {
 			: '';
 
 		$footer = self::social_markup()
-			. '<p class="fd-footer" style="margin:0 0 6px;color:#6b7280;">' . esc_html( sprintf( PSPGD_I18n::email_label( 'footer_thanks', $locale ), $site_name ) ) . '</p>'
+			. '<p class="fd-footer" style="margin:0 0 6px;color:#6b7280;">' . esc_html( PSPGD_I18n::fill( PSPGD_I18n::email_label( 'footer_thanks', $locale ), $site_name ) ) . '</p>'
 			. '<p class="fd-footer" style="margin:0;color:#6b7280;">' . esc_html( PSPGD_I18n::email_label( 'footer_contact', $locale ) ) . '</p>';
 
 		return '<!doctype html><html><head><meta charset="utf-8">'

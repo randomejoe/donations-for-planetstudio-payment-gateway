@@ -127,11 +127,11 @@
 			}
 			if ( minimum > 0 && amount < minimum ) {
 				return ( labels.errorMinimum || 'The smallest donation we can accept is %s.' )
-					.replace( '%s', formatAmount( minimum, currency ) );
+					.replace( /%(?:1\$)?s/, function () { return formatAmount( minimum, currency ); } );
 			}
 			if ( maximum > 0 && amount > maximum ) {
 				return ( labels.errorMaximum || 'The largest donation we can accept online is %s.' )
-					.replace( '%s', formatAmount( maximum, currency ) );
+					.replace( /%(?:1\$)?s/, function () { return formatAmount( maximum, currency ); } );
 			}
 			return '';
 		}

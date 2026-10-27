@@ -189,7 +189,7 @@ final class PSPGD_Form {
 
 		ob_start();
 		?>
-		<form class="pspgd-donation-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-amount-presets="<?php echo esc_attr( wp_json_encode( $amount_presets ) ); ?>" data-min-amounts="<?php echo esc_attr( wp_json_encode( PSPGD_I18n::min_amounts() ) ); ?>" data-max-amounts="<?php echo esc_attr( wp_json_encode( PSPGD_I18n::max_amounts() ) ); ?>" data-campaign-support-label="<?php echo esc_attr( $atts['campaign_id'] ? sprintf( PSPGD_I18n::t( 'campaign_support', 'Support %s' ), get_the_title( (int) $atts['campaign_id'] ) ) : '' ); ?>" data-recurring-enabled="<?php echo esc_attr( $recurring_enabled ? '1' : '0' ); ?>" data-restore-amount="<?php echo esc_attr( (string) ( $values['amount'] ?? '' ) ); ?>" data-restore-currency="<?php echo esc_attr( (string) ( $values['currency'] ?? '' ) ); ?>" data-restore-type="<?php echo esc_attr( (string) ( $values['donation_type'] ?? '' ) ); ?>">
+		<form class="pspgd-donation-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-amount-presets="<?php echo esc_attr( wp_json_encode( $amount_presets ) ); ?>" data-min-amounts="<?php echo esc_attr( wp_json_encode( PSPGD_I18n::min_amounts() ) ); ?>" data-max-amounts="<?php echo esc_attr( wp_json_encode( PSPGD_I18n::max_amounts() ) ); ?>" data-campaign-support-label="<?php echo esc_attr( $atts['campaign_id'] ? PSPGD_I18n::fill( PSPGD_I18n::t( 'campaign_support', 'Support %s' ), get_the_title( (int) $atts['campaign_id'] ) ) : '' ); ?>" data-recurring-enabled="<?php echo esc_attr( $recurring_enabled ? '1' : '0' ); ?>" data-restore-amount="<?php echo esc_attr( (string) ( $values['amount'] ?? '' ) ); ?>" data-restore-currency="<?php echo esc_attr( (string) ( $values['currency'] ?? '' ) ); ?>" data-restore-type="<?php echo esc_attr( (string) ( $values['donation_type'] ?? '' ) ); ?>">
 			<input type="hidden" name="action" value="pspgd_donation_submit">
 			<input type="hidden" name="amount" value="">
 			<input type="hidden" name="campaign_id" value="<?php echo esc_attr( (string) absint( $atts['campaign_id'] ) ); ?>">
@@ -517,13 +517,13 @@ final class PSPGD_Form {
 		$min_amounts = PSPGD_I18n::min_amounts();
 		$min_amount  = isset( $min_amounts[ $currency ] ) ? (float) $min_amounts[ $currency ] : 0.0;
 		if ( $min_amount > 0 && $amount < $min_amount ) {
-			return $refuse( 'error_min', sprintf( self::translate( 'error_min', 'The smallest donation we can accept is %s.', $language ), PSPGD_I18n::format_amount( $min_amount, $currency ) ) );
+			return $refuse( 'error_min', PSPGD_I18n::fill( self::translate( 'error_min', 'The smallest donation we can accept is %s.', $language ), PSPGD_I18n::format_amount( $min_amount, $currency ) ) );
 		}
 
 		$max_amounts = PSPGD_I18n::max_amounts();
 		$max_amount  = isset( $max_amounts[ $currency ] ) ? (float) $max_amounts[ $currency ] : 0.0;
 		if ( $max_amount > 0 && $amount > $max_amount ) {
-			return $refuse( 'error_max', sprintf( self::translate( 'error_max', 'The largest donation we can accept online is %s.', $language ), PSPGD_I18n::format_amount( $max_amount, $currency ) ) );
+			return $refuse( 'error_max', PSPGD_I18n::fill( self::translate( 'error_max', 'The largest donation we can accept online is %s.', $language ), PSPGD_I18n::format_amount( $max_amount, $currency ) ) );
 		}
 
 		$email = sanitize_email( $field( 'email' ) );

@@ -153,6 +153,24 @@ final class PSPGD_I18n {
 		return $defaults[ $key ] ?? $fallback;
 	}
 
+	/**
+	 * Put a value into a label's %s placeholder.
+	 *
+	 * Labels can be reworded by the site, so they are never used as a
+	 * sprintf() format: a stray "%" typed into one (say "100% of %s") would
+	 * make sprintf() throw and break the page or the submission. Only %s and
+	 * %1$s are replaced; anything else is left exactly as typed.
+	 */
+	public static function fill( string $label, string $value ): string {
+		return (string) preg_replace_callback(
+			'/%(?:1\$)?s/',
+			static function () use ( $value ): string {
+				return $value;
+			},
+			$label
+		);
+	}
+
 	/** @return array<string, string> English wording for every form and campaign label. */
 	public static function english_labels(): array {
 		return array(

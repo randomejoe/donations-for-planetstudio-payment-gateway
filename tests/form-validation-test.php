@@ -150,6 +150,18 @@ run_tests(
 			assert_contains( '500', (string) $check['message'], 'The donor is told what the minimum is.' );
 		},
 
+		'a reworded limit message with a stray percent sign still works' => static function (): void {
+			form_reset();
+			$en = PSPGD_I18n::normalize_locale( 'en' );
+			update_option( 'pspgd_form_labels', array( $en => array( 'error_min' => '100% of gifts help. Minimum: %s (%d %z)' ) ) );
+
+			$check = PSPGD_Form::validate_submission( form_post( array( 'amount' => '100' ) ), 'en' );
+			assert_same( 'error_min', (string) $check['error'], 'It is still refused for the minimum.' );
+			assert_contains( '100% of gifts help. Minimum: ', (string) $check['message'], 'The wording is kept as typed.' );
+			assert_contains( '500', (string) $check['message'], 'The amount still goes into %s.' );
+			assert_contains( '(%d %z)', (string) $check['message'], 'Other percent sequences are left alone, not formatted.' );
+		},
+
 		'a receipt address and consent are required' => static function (): void {
 			form_reset();
 
