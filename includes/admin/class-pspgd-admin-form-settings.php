@@ -89,7 +89,7 @@ final class PSPGD_Admin_Form_Settings {
 						<th scope="row"><?php esc_html_e( 'Exchange rates', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></th>
 						<td>
 							<label><input type="checkbox" name="exchange_rates" value="1" <?php checked( PSPGD_Settings::exchange_rates() ); ?>> <?php esc_html_e( 'Combine currencies with daily exchange rates', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></label>
-							<p class="description"><?php esc_html_e( 'When ticked and you offer more than one currency, campaign progress bars convert every donation into the goal currency. Once a day your site downloads public exchange rates from the free currency-api project (cdn.jsdelivr.net, with currency-api.pages.dev as a fallback); no donor, donation or site data is sent. Left unticked, nothing is downloaded and campaigns show each currency separately.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
+							<p class="description"><?php esc_html_e( 'When ticked and you offer more than one currency, campaign progress bars convert every donation into the goal currency. Once a day your site downloads public exchange rates from the free currency-api project; no donor, donation or site data is sent. See External services in the readme for details. Left unticked, nothing is downloaded and campaigns show each currency separately.', 'joedavtian-donations-for-planetstudio-payment-gateway' ); ?></p>
 						</td>
 					</tr>
 				</table>

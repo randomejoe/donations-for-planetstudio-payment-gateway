@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Joedavtian Donations for PlanetStudio Payment Gateway\n"
-"POT-Creation-Date: 2026-10-27 08:50+0000\n"
+"POT-Creation-Date: 2026-10-27 08:52+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1267,7 +1267,7 @@ msgid "What each source holds for your own visit right now -- pick the one that 
 msgstr ""
 
 #: includes/admin/class-pspgd-admin-form-settings.php:92
-msgid "When ticked and you offer more than one currency, campaign progress bars convert every donation into the goal currency. Once a day your site downloads public exchange rates from the free currency-api project (cdn.jsdelivr.net, with currency-api.pages.dev as a fallback); no donor, donation or site data is sent. Left unticked, nothing is downloaded and campaigns show each currency separately."
+msgid "When ticked and you offer more than one currency, campaign progress bars convert every donation into the goal currency. Once a day your site downloads public exchange rates from the free currency-api project; no donor, donation or site data is sent. See External services in the readme for details. Left unticked, nothing is downloaded and campaigns show each currency separately."
 msgstr ""
 
 #: includes/admin/class-pspgd-admin-email-settings.php:61

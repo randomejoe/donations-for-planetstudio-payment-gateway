@@ -693,6 +693,7 @@ it_run(
 				'pspgd_currencies'               => array( 'AMD', 'USD', 'EUR' ),
 				'pspgd_default_currency'         => 'USD',
 				'pspgd_goal_currency'            => 'EUR',
+				'pspgd_exchange_rates'           => '1',
 				'pspgd_intervals'                => array( 'monthly' ),
 				'pspgd_newsletter_optin'         => '1',
 				'pspgd_show_supporters'          => '0',
